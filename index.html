@@ -2,678 +2,270 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<title>Akan Yazı</title>
-<!-- viewport-fit=cover: içerik çentik/ada ve ev çubuğu altına kadar uzanır -->
+<title>Hikaye masası</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#000000">
 <meta name="color-scheme" content="dark">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Akan Yazı">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="icons/icon-192.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <style>
-  :root { --bg: #000000; }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  /* Safe area boşluğu YOK: env(safe-area-inset-*) bilerek kullanılmadı */
-  html, body {
-    width: 100%;
-    height: var(--full-h, 100%);
-    min-height: 100%;
-    background: var(--bg);
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    overscroll-behavior: none;
-    touch-action: manipulation;
-  }
-
-  /* Oyun sahnesi: şimdilik saf siyah, yazı yok. Kartlar buraya gelecek. */
-  .stage {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: var(--full-h, 100%);
-    overflow: hidden;
-    background: var(--bg);
-  }
-
-  /* ---- Kart ---- */
-  :root { --cw: min(70vw, 290px); --ch: calc(var(--cw) * 4 / 3); }
-  .stage { display: flex; align-items: center; justify-content: center; pointer-events: none; }
-
-  .card {
-    position: relative; z-index: 2; pointer-events: auto;
-    width: var(--cw); aspect-ratio: 3 / 4;
-    padding: 10px;
-    display: flex; flex-direction: column;
-    border-radius: 24px;
-    background: #efeae0;
-    transform-origin: 50% 130%;          /* kart elde tutuluyormuş gibi alttan sallanır */
-    touch-action: none;
-    cursor: grab;
-    will-change: transform, opacity;
-    opacity: 0;
-  }
-  .card * { pointer-events: none; }
-  .card.dragging { cursor: grabbing; }
-
-  .art { position: relative; flex: 1; overflow: hidden; border-radius: 16px; background: #b5573f; }
-  .art i {
-    position: absolute; left: 50%; bottom: -24%;
-    width: 78%; aspect-ratio: 1; border-radius: 50%;
-    transform: translateX(-50%); background: #c8705a;
-  }
-  .meta { padding: 14px 10px 8px; font-family: Georgia, 'Times New Roman', serif; color: #2a2520; }
-  .spk { display: block; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; opacity: .5; margin-bottom: 7px; }
-  .txt { font-size: 16px; line-height: 1.35; }
-
-  /* Seçenekler: arka planın tamamı o tarafın rengine süzülür, seçenek metni kartın üstünde belirir */
-  .side { position: absolute; inset: 0; z-index: 0; opacity: 0; pointer-events: none; will-change: opacity; }
-  .side.left {
-    background:
-      radial-gradient(95% 75% at 0% 55%, rgba(84,122,146,.55), rgba(84,122,146,.12) 62%, transparent 100%),
-      linear-gradient(90deg, rgba(84,122,146,.16), transparent 75%);
-  }
-  .side.right {
-    background:
-      radial-gradient(95% 75% at 100% 55%, rgba(200,108,82,.55), rgba(200,108,82,.12) 62%, transparent 100%),
-      linear-gradient(270deg, rgba(200,108,82,.16), transparent 75%);
-  }
-  .opt {
-    position: absolute; left: 26px; right: 26px;
-    bottom: calc(50% + var(--ch) / 2 + 28px);
-    font: 30px/1.15 Georgia, 'Times New Roman', serif; color: #f1ebe0;
-    opacity: 0; will-change: transform, opacity;
-  }
-  .side.left .opt { text-align: left; }
-  .side.right .opt { text-align: right; }
-
-  .end {
-    position: absolute; inset: 0; z-index: 3;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
-    text-align: center; padding: 0 32px;
-    font-family: Georgia, 'Times New Roman', serif; color: #f1ebe0;
-    opacity: 0; transition: opacity .9s ease; pointer-events: none;
-  }
-  .end.show { opacity: 1; pointer-events: auto; }
-  .end p { font-size: 26px; line-height: 1.25; }
-  .end small { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; opacity: .45; }
-
-  /* ---- Kare kart ---- */
-  :root { --cw: min(78vw, 340px); --ch: var(--cw); --drop: 56px; }
-  .stage { padding-bottom: calc(var(--drop) * 2); }
-  .card { aspect-ratio: 1 / 1; padding: 0; background: none; border-radius: 30px; display: block; }
-  .art { position:absolute; inset:0; border-radius:30px; background:#1b2127; overflow:hidden;
-    box-shadow: 0 18px 40px rgba(0,0,0,.6); }
-  .art svg { display:block; width:100%; height:100%; }
-  .meta { position:absolute; left:-6px; right:-6px; top:calc(100% + 30px); padding:0; text-align:center; color:#efe9dc; }
-  .spk { font-size:11px; letter-spacing:.26em; opacity:.5; margin-bottom:10px; }
-  .txt { font-size:18px; line-height:1.4; }
-  .opt { bottom: calc(50% + var(--drop) + var(--ch) / 2 + 28px); }
-  .deck { position:absolute; left:50%; top:calc(50% - var(--drop)); width:var(--cw); aspect-ratio:1; transform:translate(-50%,-50%); z-index:1; pointer-events:none; }
-  .deck i { position:absolute; inset:0; border-radius:30px; background-color:#171c21; box-shadow: inset 0 0 0 1px rgba(255,255,255,.07);
-    background-image: linear-gradient(45deg, rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(-45deg, rgba(255,255,255,.05) 1px, transparent 1px);
-    background-size: 16px 16px; }
-  .deck i::after { content:''; position:absolute; inset:14px; border-radius:20px; border:1px solid rgba(255,255,255,.09); }
-  .deck i:nth-child(1) { transform:translate(-10px,8px) rotate(-4deg); background-color:#101418; }
-  .deck i:nth-child(2) { transform:translate(9px,5px) rotate(3deg); background-color:#13181c; }
-
-  /* ---- v4: sabit üst metin, düzenli deste ---- */
-  :root { --drop: 0px; }
-  .meta { position:absolute; left:26px; right:26px; top:auto; bottom:calc(50% + var(--drop) + var(--ch) / 2 + 30px); z-index:2; pointer-events:none;
-    text-align:center; color:#efe9dc; font-family:Georgia,'Times New Roman',serif; }
-  .meta .spk { display:block; font-size:11px; letter-spacing:.28em; text-transform:uppercase; opacity:.5; margin-bottom:10px; }
-  .meta .txt { font-size:20px; line-height:1.38; }
-  .opt { bottom:auto; top:calc(50% - var(--drop) + var(--ch) / 2 + 58px); }
-  .deck i:nth-child(1) { transform:translateY(34px) scale(.88); background-color:#0d1115; }
-  .deck i:nth-child(2) { transform:translateY(17px) scale(.94); background-color:#11161a; }
-  .deck i:nth-child(3) { transform:none; background-color:#161b20; }
+:root{--bg:#000;--s:#0f0f10;--s2:#1b1b1d;--line:rgba(255,255,255,.09);--ink:#f7f7f5;--dim:#8e8e93;--acc:#cf5238;--blue:#4378a6;--green:#3f8870;--amber:#e0a43a;--ease:cubic-bezier(.32,.72,0,1);--serif:Georgia,'Times New Roman',serif}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--ink);font:16px/1.4 -apple-system,BlinkMacSystemFont,"Inter",system-ui,sans-serif;overflow:hidden;overscroll-behavior:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;transition:transform .15s var(--ease),background .2s,color .2s}
+button:active{transform:scale(.95)}
+input,textarea{font:inherit;color:var(--ink);background:var(--s2);border:1.5px solid transparent;border-radius:14px;padding:12px 14px;width:100%;outline:0;transition:border-color .2s;-webkit-user-select:text;user-select:text}
+input:focus,textarea:focus{border-color:rgba(207,82,56,.7)}
+textarea{resize:none;min-height:96px;font-family:var(--serif);font-size:1.05rem;line-height:1.45}
+#app{position:absolute;inset:0;display:flex;flex-direction:column}
+header{flex:none;padding:max(16px,env(safe-area-inset-top)) 20px 8px;display:flex;align-items:flex-end;justify-content:space-between}
+header h1{font-size:1.9rem;font-weight:750;letter-spacing:-.035em;line-height:1.1}
+header small{display:block;color:var(--dim);font-size:.9rem;margin-top:4px}
+.pill{height:36px;padding:0 15px;border-radius:18px;background:var(--s2);font-weight:600;font-size:.92rem}
+main{flex:1;position:relative;min-height:0}
+.view{position:absolute;inset:0;overflow-y:auto;padding:12px 20px 130px;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .35s var(--ease),transform .35s var(--ease)}
+.view.on{opacity:1;transform:none;pointer-events:auto}
+h2{font-size:1.15rem;font-weight:700;letter-spacing:-.02em;margin:26px 0 12px}
+.rise{animation:rise .5s var(--ease) both;animation-delay:calc(var(--i,0)*40ms)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+/* alt çubuk */
+nav{position:absolute;left:20px;right:20px;bottom:max(18px,env(safe-area-inset-bottom));height:56px;display:grid;grid-template-columns:repeat(3,1fr);background:rgba(27,27,29,.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:28px;border:1px solid var(--line);z-index:5}
+nav i{position:absolute;top:5px;bottom:5px;left:5px;width:calc(33.33% - 3.3px);background:rgba(255,255,255,.1);border-radius:23px;transition:transform .4s var(--ease)}
+nav button{position:relative;z-index:1;font-weight:600;font-size:.95rem;color:var(--dim)}
+nav button.on{color:var(--ink)}
+.fab{position:absolute;right:20px;bottom:90px;width:56px;height:56px;border-radius:50%;background:var(--acc);font-size:1.8rem;font-weight:300;z-index:4;box-shadow:0 10px 26px rgba(207,82,56,.35);transition:transform .15s var(--ease),opacity .3s}
+.fab.off{opacity:0;pointer-events:none;transform:scale(.7)}
+/* kart listesi */
+.ci{display:block;width:100%;text-align:left;background:var(--s);border:1px solid var(--line);border-radius:20px;padding:15px 16px 14px 20px;margin-bottom:10px;position:relative;overflow:hidden}
+.ci::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--ac,var(--acc))}
+.ci small{color:var(--dim);font-size:.78rem;font-weight:600}
+.ci p{font-family:var(--serif);font-size:1.02rem;line-height:1.38;margin:5px 0 10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ch{display:inline-block;font-size:.8rem;font-weight:600;padding:3px 10px;border-radius:12px;margin-right:6px;background:var(--s2);color:var(--dim)}
+.ch.l{color:#8fb4d6}.ch.r{color:#ec8a74}
+/* harita */
+.warn{display:flex;gap:10px;align-items:center;background:var(--s);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:14px;color:var(--dim);font-size:.9rem}
+.warn b{color:var(--amber);font-weight:700}
+.map{position:relative}
+.map svg{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.map path{fill:none;stroke-width:1.6;stroke-linecap:round;opacity:.75;stroke-dasharray:1;stroke-dashoffset:0;animation:draw .9s var(--ease) both}
+@keyframes draw{from{stroke-dashoffset:1}}
+.nd{position:absolute;height:50px;border-radius:15px;background:var(--s2);border:1.5px solid var(--line);padding:6px 10px;text-align:left;overflow:hidden;animation:rise .5s var(--ease) both}
+.nd b{display:block;font-size:.8rem;white-space:nowrap}
+.nd span{display:block;font-size:.72rem;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nd::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ac)}
+.nd.bad{border-color:var(--amber);border-style:dashed}
+.rowlbl{position:absolute;left:0;font-size:.72rem;color:var(--dim)}
+/* alt sayfa */
+.dim{position:absolute;inset:0;background:rgba(0,0,0,.66);opacity:0;pointer-events:none;transition:opacity .3s var(--ease);z-index:10}
+.dim.on{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;max-height:92%;overflow-y:auto;background:var(--bg);border-top:1px solid var(--line);border-radius:28px 28px 0 0;padding:20px 20px max(30px,env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .45s var(--ease);z-index:11}
+.sheet.on{transform:none}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.sh b{font-size:1.25rem;letter-spacing:-.02em}
+.x{width:34px;height:34px;border-radius:50%;background:var(--s2);color:var(--dim)}
+label{display:block;color:var(--dim);font-size:.82rem;font-weight:600;margin:16px 0 7px}
+.seg{position:relative;display:grid;grid-template-columns:repeat(3,1fr);background:var(--s2);border-radius:14px;padding:4px}
+.seg i{position:absolute;top:4px;bottom:4px;left:4px;width:calc(33.33% - 2.7px);background:rgba(255,255,255,.12);border-radius:10px;transition:transform .35s var(--ease)}
+.seg button{position:relative;z-index:1;height:38px;font-weight:600;font-size:.9rem;color:var(--dim)}
+.seg button.on{color:var(--ink)}
+.side{background:var(--s);border:1px solid var(--line);border-radius:20px;padding:4px 16px 16px;margin-top:16px}
+.eff{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ef{background:var(--s2);border-radius:14px;padding:8px 4px;text-align:center}
+.ef small{display:block;color:var(--dim);font-size:.7rem}
+.ef b{display:block;font-size:1.05rem;font-variant-numeric:tabular-nums;margin:1px 0 4px}
+.ef b.p{color:#7ccf9d}.ef b.n{color:#ec8a74}
+.ef button{width:30px;height:26px;border-radius:13px;background:rgba(255,255,255,.08);font-weight:700}
+.row{display:flex;gap:10px;margin-top:12px}
+.btn{flex:1;height:50px;border-radius:16px;background:var(--s2);font-weight:650}
+.btn.p{background:var(--acc)}
+.btn.d{color:#ff5a4d}
+.bad-in{border-color:#ff5a4d!important}
+.prev{font-family:var(--serif);font-size:1.1rem;line-height:1.5;margin-top:10px;color:rgba(247,247,245,.9)}
+/* marker: kalemle çizilmiş gibi */
+mark.hl{color:var(--ink);padding:.12em 7px .1em 0;margin:0 -7px 0 0;border-radius:6px;-webkit-box-decoration-break:clone;box-decoration-break:clone;--c:rgba(207,82,56,.38);background:linear-gradient(var(--c),var(--c)) no-repeat 0 0/100% 100%;box-shadow:-7px 0 0 0 var(--c);animation:wipe .75s .15s cubic-bezier(.3,.7,.2,1) backwards,hs .75s .15s linear backwards}
+@keyframes wipe{from{background-size:0% 100%}}
+@keyframes hs{0%{box-shadow:0 0 0 0 var(--c)}8%{box-shadow:-7px 0 0 0 var(--c)}}
+/* omurga */
+.beat{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.beat .ck{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--dim);display:grid;place-items:center;color:transparent;font-size:.85rem;font-weight:800}
+.beat.done .ck{background:var(--acc);border-color:var(--acc);color:#fff}
+.beat input{background:var(--s)}
+.beat.done input{color:var(--dim);text-decoration:line-through}
+.seed{display:block;width:100%;text-align:left;background:var(--s);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin-bottom:8px;font-family:var(--serif)}
+.seed small{display:block;font-family:-apple-system,system-ui,sans-serif;color:var(--dim);font-size:.75rem;margin-top:5px}
+.note{color:var(--dim);font-size:.9rem}
+.toast{position:absolute;left:50%;bottom:96px;transform:translate(-50%,20px);background:var(--ink);color:#000;padding:10px 18px;border-radius:20px;font-weight:650;font-size:.9rem;opacity:0;pointer-events:none;transition:.35s var(--ease);z-index:20}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div class="stage" id="stage">
-  <div class="side left" id="sideL"><div class="opt" id="optL"></div></div>
-  <div class="side right" id="sideR"><div class="opt" id="optR"></div></div>
-  <div class="meta" id="meta"><span class="spk" id="spk"></span><div class="txt" id="txt"></div></div>
-  <div class="deck"><i></i><i></i><i></i></div>
-  <div class="card" id="card">
-    <div class="art"><svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-<defs>
-<clipPath id="hc"><path d="M154 190Q154 150 200 150Q246 150 246 190V224Q246 262 200 270Q154 262 154 224Z"/></clipPath>
-</defs>
-<rect width="400" height="400" fill="#1c2630"/>
-<rect x="269" y="0" width="2" height="38" fill="#0c1014"/>
-<path d="M246 62L259 38H281L294 62Z" fill="#0c1014"/>
-<polygon points="250,62 290,62 286,67 254,67" fill="#e9e4d4"/>
-<path d="M36 400V362Q36 318 96 306L156 296H244L304 306Q364 318 364 362V400Z" fill="#0c1014"/>
-<rect x="178" y="256" width="44" height="50" fill="#a9765a"/>
-<path d="M178 256H222V272Q200 288 178 272Z" fill="#8a5c46"/>
-<polygon points="166,296 234,296 200,328" fill="#efe7d6"/>
-<path d="M190 314H210L216 352L211 400H189L184 352Z" fill="#b83f28"/>
-<path d="M200 314H210L216 352L211 400H200Z" fill="#cf5238"/>
-<polygon points="150,300 170,294 200,400 178,400" fill="#171e25"/>
-<polygon points="250,300 230,294 200,400 222,400" fill="#171e25"/>
-<path d="M191 300H209L213 314Q200 320 187 314Z" fill="#cf5238"/>
-<path d="M191 300H200V318Q193 317 187 314Z" fill="#b83f28"/>
-<circle cx="154" cy="216" r="10" fill="#c39670"/>
-<circle cx="246" cy="216" r="10" fill="#dcb08a"/>
-<path d="M154 190Q154 150 200 150Q246 150 246 190V224Q246 262 200 270Q154 262 154 224Z" fill="#dcb08a"/>
-<g clip-path="url(#hc)">
- <rect x="150" y="150" width="50" height="124" fill="#c39670"/>
- <polygon points="150,150 250,150 250,174 150,180" fill="#5b3a2c" opacity=".3"/>
-</g>
-<circle cx="184" cy="198" r="3.4" fill="#1b1416"/>
-<circle cx="216" cy="198" r="3.4" fill="#1b1416"/>
-<polygon points="200,210 208,232 200,234" fill="#c39670"/>
-<rect x="187" y="246" width="26" height="4" rx="2" fill="#8a5a4a"/>
-<g transform="rotate(-3 200 160)">
- <path d="M154 164L158 118Q160 100 200 100Q240 100 242 118L246 164Z" fill="#0c1014"/>
- <polygon points="156,138 244,138 245,152 155,152" fill="#c2452d"/>
- <path d="M94 157Q94 151 107 151Q200 156 293 151Q306 151 306 157Q306 165 293 167Q200 178 107 167Q94 165 94 157Z" fill="#0c1014"/>
-</g>
-<polygon points="254,67 286,67 350,400 150,400" fill="#e6edf3" opacity=".055"/>
-<rect x="0" y="372" width="400" height="28" fill="#12171c"/>
-<rect x="0" y="372" width="400" height="2" fill="#232c34"/>
-</svg></div>
-      </div>
-  <div class="end" id="end"><p id="endT"></p><small>Dokun ve yeniden başla</small></div>
+<div id="app">
+  <header><div><h1>Hikaye masası</h1><small id="sub"></small></div><button class="pill" id="ioBtn">Oyun dosyası</button></header>
+  <main>
+    <section class="view on" id="v0"></section>
+    <section class="view" id="v1"></section>
+    <section class="view" id="v2"></section>
+    <button class="fab off" id="fab" aria-label="Yeni kart">+</button>
+    <nav><i id="ni"></i><button class="on">Harita</button><button>Kartlar</button><button>Omurga</button></nav>
+  </main>
+  <div class="dim" id="dim"></div>
+  <div class="sheet" id="sheet"></div>
+  <div class="toast" id="toast"></div>
+  <input type="file" id="file" accept=".html,text/html" hidden>
 </div>
-
 <script>
-/* Kart verisi — hikaye burada yazılır, motor (game.js) bunu okur.
- *
- * Kart şeması:
- * {
- *   id:       benzersiz anahtar
- *   speaker:  konuşan karakter
- *   text:     kartın metni
- *   left / right: {                      // sola / sağa kaydırma seçimi
- *     label:   seçim etiketi
- *     effects: { faith, people, army, wealth }   // + / - değişim
- *     set:     ['bayrak', ...]           // hikaye bayrakları koy
- *     unset:   ['bayrak', ...]           // hikaye bayraklarını kaldır
- *     next:    ['kartId', ...]           // sıradaki kartları zincirle
- *   }
- *   requires: { flags:[], notFlags:[], stat:{ army:{min:30,max:80} }, minTurn:0 }
- *   weight:   çekilme ağırlığı (varsayılan 1)
- *   once:     true ise bir kez çıkar
- * }
- */
-window.CARDS = [
-  { id:'q1', speaker:'Uğultu', clarity:0.04, text:'…uyan… Beni du…yu…yor musun? Gözlerini aç.',
-    left:  { label:'Sus', effects:{}, next: ['q2'] },
-    right: { label:'Evet', effects:{}, next: ['q2'] } },
-  { id:'q2', speaker:'Boğuk bir ses', clarity:0.15, text:'Dur. Adını söyle bana.',
-    left:  { label:'Hatırlamıyorum', effects:{}, next: ['q3'] },
-    right: { label:'Söylemem', effects:{}, next: ['q3'] } },
-  { id:'q3', speaker:'Boğuk bir ses', clarity:0.3, text:'Dün gece… neredeydin? Düşün.',
-    left:  { label:'Hayır', effects:{}, next: ['q4'] },
-    right: { label:'Hatırlıyorum', effects:{}, next: ['q4'], set:['hatirliyor'] } },
-  { id:'q4', speaker:'Bir erkek sesi', clarity:0.5, text:'Yanındaki adam kimdi? Bana onu anlat.',
-    left:  { label:'Tanımıyorum', effects:{}, next: ['q5'] },
-    right: { label:'Anlatırım', effects:{}, next: ['q5'] } },
-  { id:'q5', speaker:'Bir gölge', clarity:0.7, text:'Bir şey saklıyorsun. Gözlerinden belli.',
-    left:  { label:'Saklamıyorum', effects:{}, next: ['q6'] },
-    right: { label:'Saklıyorum', effects:{}, next: ['q6'] } },
-  { id:'q6', speaker:'???', clarity:0.88, text:'Bana bak. Şimdi söyle: beni tanıdın mı?',
-    left:  { label:'Hayır', effects:{}, next: ['q7'] },
-    right: { label:'Belki', effects:{}, next: ['q7'] } },
-  { id:'q7', speaker:'???', clarity:1, text:'Işık kısılıyor. Yarın devam ederiz.',
-    left:  { label:'…', effects:{} },
-    right: { label:'…', effects:{} } }
-];
+var STATS={faith:'İnanç',people:'Halk',army:'Ordu',wealth:'Servet'};
+var ARCS={ana:['Ana hikaye','#cf5238'],yan:['Yan görev','#4378a6'],dal:['Dal','#3f8870']};
+var KEY='hikaye-masasi-v1';
+function seed(){
+  var T=[['q1','Uğultu',.04,'…uyan… Beni du…yu…yor musun? Gözlerini aç.','Sus','Evet'],['q2','Boğuk bir ses',.15,'Dur. Adını söyle bana.','Hatırlamıyorum','Söylemem'],['q3','Boğuk bir ses',.3,'Dün gece… neredeydin? Düşün.','Hayır','Hatırlıyorum'],['q4','Bir erkek sesi',.5,'Yanındaki adam kimdi? Bana onu anlat.','Tanımıyorum','Anlatırım'],['q5','Bir gölge',.7,'Bir şey saklıyorsun. Gözlerinden belli.','Saklamıyorum','Saklıyorum'],['q6','???',.88,'Bana bak. Şimdi söyle: beni tanıdın mı?','Hayır','Belki'],['q7','???',1,'Işık kısılıyor. Yarın devam ederiz.','…','…']];
+  return{cards:T.map(function(t,i){var n=i<6?['q'+(i+2)]:[];return{id:t[0],speaker:t[1],clarity:t[2],text:t[3],arc:'ana',left:{label:t[4],effects:{},next:n},right:Object.assign({label:t[5],effects:{},next:n},t[0]==='q3'?{set:['hatirliyor']}:{})}}),
+    ending:'Sabit son: ',beats:[{t:'Uyanış ve sorgu',d:1},{t:'İlk büyük ifşa',d:0},{t:'Dönüm noktası',d:0}]};
+}
+var S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!S||!S.cards)S=seed();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+var $=function(s){return document.querySelector(s)};
+function esc(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function mk(t){return esc(t).replace(/==([^=]+)==/g,'<mark class="hl">$1</mark>')}
+function byId(id){return S.cards.filter(function(c){return c.id===id})[0]}
+function nexts(c){return[].concat(c.left&&c.left.next||[],c.right&&c.right.next||[])}
+function toast(m){var t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove('on')},1700)}
 
-/* Oyun sonları: bir istatistik 0'a ya da 100'e değince tetiklenir. */
-window.ENDINGS = {
-  faith:  { low: { id: 'end_faith_low',  text: 'İnancın söndü.' },
-            high: { id: 'end_faith_high', text: 'Din, tahtı yuttu.' } },
-  people: { low: { id: 'end_people_low',  text: 'Halk ayaklandı.' },
-            high: { id: 'end_people_high', text: 'Halk seni tahttan indirdi.' } },
-  army:   { low: { id: 'end_army_low',  text: 'Ordu dağıldı.' },
-            high: { id: 'end_army_high', text: 'Generaller darbe yaptı.' } },
-  wealth: { low: { id: 'end_wealth_low',  text: 'Hazine boşaldı.' },
-            high: { id: 'end_wealth_high', text: 'Servet, seni yozlaştırdı.' } }
-};
-
-/* Oyun çekirdeği (Reigns tarzı): durum, deste, seçim, son kontrolü, kaydırma girişi.
- * Arayüz yok — ileride render katmanı Game olaylarını dinleyerek kartı çizecek.
- *
- * Olaylar (stage üzerinde CustomEvent):
- *   'card'   → { card }                 yeni kart çekildi
- *   'choice' → { card, dir, result }    seçim yapıldı
- *   'end'    → { ending }               oyun bitti
- *   'swipe'  → { dir, dx }              ham kaydırma (left | right)
- *   'drag'   → { dx, ratio }            sürükleme sırasında (-1..1)
- */
-(function () {
-  var STATS = ['faith', 'people', 'army', 'wealth'];
-  var SAVE_KEY = 'akan-yazi-save-v2';
-  var SWIPE_MIN = 60; // px
-
-  var Game = {
-    el: null,
-    state: null,
-    current: null,
-
-    init: function (el) {
-      this.el = el;
-      this.state = this.load() || this.fresh();
-      this.bindInput();
-      if (!this.state.over) this.draw();
-    },
-
-    fresh: function () {
-      var s = { turn: 0, stats: {}, flags: {}, seen: {}, queue: [], over: false, ending: null };
-      STATS.forEach(function (k) { s.stats[k] = 50; });
-      return s;
-    },
-
-    reset: function () {
-      this.state = this.fresh();
-      this.save();
-      this.draw();
-    },
-
-    // --- Deste -------------------------------------------------------------
-    // Koşul kontrolü 
-    meets: function (r) {
-      var s = this.state; r = r || {};
-      if (r.minTurn && s.turn < r.minTurn) return false;
-      if (r.flags && !r.flags.every(function (f) { return s.flags[f]; })) return false;
-      if (r.notFlags && r.notFlags.some(function (f) { return s.flags[f]; })) return false;
-      if (r.stat) {
-        for (var k in r.stat) {
-          var v = s.stats[k], c = r.stat[k];
-          if (c.min != null && v < c.min) return false;
-          if (c.max != null && v > c.max) return false;
-        }
-      }
-      return true;
-    },
-
-    eligible: function (card) {
-      if (card.once && this.state.seen[card.id]) return false;
-      return this.meets(card.requires);
-    },
-
-    byId: function (id) {
-      return window.CARDS.filter(function (c) { return c.id === id; })[0] || null;
-    },
-
-    pick: function () {
-      var s = this.state, card = null;
-      while (s.queue.length && !card) {          // zincirlenen kartlar önce
-        var q = this.byId(s.queue.shift());
-        if (q && this.eligible(q)) card = q;
-      }
-      if (card) return card;
-      var pool = window.CARDS.filter(this.eligible, this);
-      if (!pool.length) return null;
-      var total = pool.reduce(function (a, c) { return a + (c.weight || 1); }, 0);
-      var roll = Math.random() * total;
-      for (var i = 0; i < pool.length; i++) {
-        roll -= (pool[i].weight || 1);
-        if (roll <= 0) return pool[i];
-      }
-      return pool[pool.length - 1];
-    },
-
-    draw: function () {
-      this.current = this.pick();
-      if (this.current) this.emit('card', { card: this.current });
-      return this.current;
-    },
-
-    // --- Seçim -------------------------------------------------------------
-    choose: function (dir) {
-      if (this.state.over || !this.current) return null;
-      var card = this.current, opt = card[dir];
-      if (!opt) return null;
-      var s = this.state;
-
-      var e = opt.effects || {};
-      STATS.forEach(function (k) {
-        if (e[k]) s.stats[k] = Math.max(0, Math.min(100, s.stats[k] + e[k]));
-      });
-      (opt.set || []).forEach(function (f) { s.flags[f] = true; });
-      (opt.unset || []).forEach(function (f) { delete s.flags[f]; });
-      (opt.next || []).forEach(function (id) { s.queue.push(id); });
-      s.seen[card.id] = true;
-      s.turn++;
-
-      var ending = this.checkEnd();
-      var result = { stats: JSON.parse(JSON.stringify(s.stats)), ending: ending };
-      this.emit('choice', { card: card, dir: dir, result: result });
-
-      if (ending) {
-        s.over = true; s.ending = ending;
-        this.current = null;
-        this.save();
-        this.emit('end', { ending: ending });
-      } else {
-        this.save();
-        this.draw();
-      }
-      return result;
-    },
-
-    checkEnd: function () {
-      var s = this.state;
-      for (var i = 0; i < STATS.length; i++) {
-        var k = STATS[i], v = s.stats[k];
-        if (v <= 0) return window.ENDINGS[k].low;
-        if (v >= 100) return window.ENDINGS[k].high;
-      }
-      return null;
-    },
-
-    // --- Kayıt -------------------------------------------------------------
-    save: function () {
-      try { localStorage.setItem(SAVE_KEY, JSON.stringify(this.state)); } catch (e) {}
-    },
-    load: function () {
-      try { return JSON.parse(localStorage.getItem(SAVE_KEY)); } catch (e) { return null; }
-    },
-
-    // --- Giriş: sola / sağa kaydırma --------------------------------------
-    bindInput: function () {
-      var self = this, el = this.el, x0 = null, dx = 0;
-      window.__swiped = false;
-
-      el.addEventListener('pointerdown', function (e) {
-        x0 = e.clientX; dx = 0; window.__swiped = false;
-      });
-      el.addEventListener('pointermove', function (e) {
-        if (x0 === null) return;
-        dx = e.clientX - x0;
-        self.emit('drag', { dx: dx, ratio: Math.max(-1, Math.min(1, dx / (window.innerWidth / 2))) });
-      });
-      function up() {
-        if (x0 === null) return;
-        if (Math.abs(dx) >= SWIPE_MIN) {
-          var dir = dx < 0 ? 'left' : 'right';
-          window.__swiped = true;
-          self.emit('swipe', { dir: dir, dx: dx });
-          self.choose(dir);
-        }
-        x0 = null; dx = 0;
-        self.emit('drag', { dx: 0, ratio: 0 });
-      }
-      el.addEventListener('pointerup', up);
-      el.addEventListener('pointercancel', up);
-      // Klavye (test için)
-      window.addEventListener('keydown', function (e) {
-        if (e.key === 'ArrowLeft') self.choose('left');
-        if (e.key === 'ArrowRight') self.choose('right');
-      });
-    },
-
-    emit: function (name, detail) {
-      this.el.dispatchEvent(new CustomEvent(name, { detail: detail }));
-    }
-  };
-
-  window.Game = Game;
-})();
-</script>
-<script>
-(function () {
-  function setFullHeight() {
-    var portrait = window.innerHeight >= window.innerWidth;
-    var screenH = portrait ? Math.max(screen.height, screen.width) : Math.min(screen.height, screen.width);
-    var h = Math.max(window.innerHeight, document.documentElement.clientHeight, screenH);
-    document.documentElement.style.setProperty('--full-h', h + 'px');
-  }
-  document.addEventListener('touchmove', function (e) { e.preventDefault(); }, { passive: false });
-  window.addEventListener('scroll', function () { window.scrollTo(0, 0); });
-
-  if (location.hash === '#debug') {
-    var dbg = document.createElement('div');
-    dbg.style.cssText = 'position:absolute;top:60px;left:8px;z-index:9;font:12px monospace;color:#0f0;background:#000a;padding:4px';
-    document.body.appendChild(dbg);
-    setInterval(function () {
-      dbg.textContent = 'inner ' + innerWidth + 'x' + innerHeight + ' | screen ' + screen.width + 'x' + screen.height + ' | doc ' + document.documentElement.clientHeight;
-    }, 500);
-  }
-
-  setFullHeight();
-  window.addEventListener('resize', setFullHeight);
-  window.addEventListener('orientationchange', function () { setTimeout(setFullHeight, 250); });
-
-  // Dokununca duraklat / devam et (durum sınıfı olarak tutulur)
-  document.body.addEventListener('click', function () {
-    document.body.classList.toggle('paused');
+/* --- analiz --- */
+function analyze(){
+  var depth={},q=[],first=S.cards[0],bad={};
+  if(first){depth[first.id]=0;q.push(first.id)}
+  while(q.length){var id=q.shift(),c=byId(id);if(!c)continue;nexts(c).forEach(function(n){if(byId(n)&&depth[n]==null){depth[n]=depth[id]+1;q.push(n)}})}
+  var issues=[];
+  S.cards.forEach(function(c){
+    if(depth[c.id]==null){bad[c.id]=1;issues.push(c.id+': hiçbir yerden ulaşılmıyor')}
+    ['left','right'].forEach(function(d){((c[d]||{}).next||[]).forEach(function(n){if(!byId(n)){bad[c.id]=1;issues.push(c.id+': "'+n+'" diye kart yok')}})});
+    if(!nexts(c).length&&c!==S.cards[S.cards.length-1]){bad[c.id]=1;issues.push(c.id+': devamı yok')}
   });
+  return{depth:depth,bad:bad,issues:issues};
+}
 
-  // Oyun çekirdeğini başlat (arayüz henüz yok; kaydırma olayları dinleniyor)
-  Game.init(document.getElementById('stage'));
+/* --- harita --- */
+function renderMap(){
+  var A=analyze(),rows=[],un=[],W=Math.min(innerWidth,820)-40,H=50,G=46;
+  S.cards.forEach(function(c){var d=A.depth[c.id];if(d==null)un.push(c);else(rows[d]=rows[d]||[]).push(c)});
+  if(un.length)rows.push(un);
+  var pos={},html='',y=0;
+  rows.forEach(function(r,ri){
+    r=r||[];var w=Math.min(158,(W-(r.length-1)*10)/r.length),x0=(W-(r.length*w+(r.length-1)*10))/2;
+    r.forEach(function(c,i){pos[c.id]={x:x0+i*(w+10),y:y,w:w};
+      html+='<button class="nd'+(A.bad[c.id]?' bad':'')+'" data-open="'+c.id+'" style="left:'+pos[c.id].x+'px;top:'+y+'px;width:'+w+'px;--ac:'+(ARCS[c.arc]||ARCS.ana)[1]+';animation-delay:'+(ri*70+i*40)+'ms"><b>'+esc(c.id)+'</b><span>'+esc(c.speaker||'')+'</span></button>'});
+    y+=H+G});
+  var svg='';
+  S.cards.forEach(function(c){var p=pos[c.id];if(!p)return;
+    ['left','right'].forEach(function(d){((c[d]||{}).next||[]).forEach(function(n,k){var t=pos[n];if(!t)return;
+      var x1=p.x+p.w*(d==='left'?.3:.7),y1=p.y+H,x2=t.x+t.w/2,y2=t.y,m=(y1+y2)/2;
+      svg+='<path pathLength="1" d="M'+x1+' '+y1+'C'+x1+' '+m+' '+x2+' '+m+' '+x2+' '+y2+'" stroke="'+(d==='left'?'#4378a6':'#cf5238')+'" style="animation-delay:'+(300+k*60)+'ms"/>'})})});
+  $('#v0').innerHTML=
+    '<div class="warn rise">'+(A.issues.length?'<b>'+A.issues.length+' uyarı</b><span>'+esc(A.issues.slice(0,3).join(' · '))+(A.issues.length>3?' …':'')+'</span>':'<span>Sorun yok. Her kart ulaşılabilir ve devamı var.</span>')+'</div>'+
+    '<div class="note rise" style="margin-bottom:14px"><span style="color:#8fb4d6">Mavi</span> çizgi sol seçimi, <span style="color:#ec8a74">kırmızı</span> çizgi sağ seçimi gösterir. Karta dokun, düzenle.</div>'+
+    '<div class="map" style="height:'+Math.max(y,60)+'px"><svg width="'+W+'" height="'+y+'">'+svg+'</svg>'+html+'</div>';
+  $('#sub').textContent=S.cards.length+' kart'+(A.issues.length?' · '+A.issues.length+' uyarı':'');
+}
 
-  // Service worker (HTTPS gerekir)
-  if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
-    navigator.serviceWorker.register('sw.js').catch(function () {});
-  }
-})();
-</script>
-<script>
-/* Kart içeriğini çizer. (clarity alanı veride duruyor, animasyonlar şimdilik kapalı.) */
-window.Scene = {
-  render: function (c, spk, txt) {
-    spk.textContent = c.speaker || '';
-    txt.textContent = c.text || '';
-  }
-};
-</script>
-<script>
-/* Kart: sürükleme, seçim bölgesi ve seçenek animasyonları.
- *  - Kart parmağı birebir takip eder.
- *  - Kart sağ/sol seçim bölgesindeyken bırakılırsa süzülerek çıkar ve seçenek uygulanır.
- *    Parmak kalkmadan hiçbir şey gönderilmez; bölgeden geri çekilirse seçim iptal olur.
- *  - Sürükledikçe arka plan o seçeneğin rengine yumuşakça geçer, seçenek metni belirir.
- *  - Bölgeye girmeden bırakılırsa kart sekmeden merkeze döner.
- * Her karede yalnızca transform / opacity yazılır. */
-(function () {
-  var stage = document.getElementById('stage'), card = document.getElementById('card');
-  var spk = document.getElementById('spk'), txt = document.getElementById('txt');
-  var sideL = document.getElementById('sideL'), sideR = document.getElementById('sideR');
-  var optL = document.getElementById('optL'), optR = document.getElementById('optR');
-  var endEl = document.getElementById('end'), endT = document.getElementById('endT');
+/* --- kartlar --- */
+function renderCards(){
+  $('#v1').innerHTML=S.cards.map(function(c,i){
+    var L=c.left||{},R=c.right||{};
+    return'<button class="ci rise" data-open="'+esc(c.id)+'" style="--i:'+i+';--ac:'+(ARCS[c.arc]||ARCS.ana)[1]+'"><small>'+esc(c.id)+' · '+esc(c.speaker||'Konuşan yok')+'</small><p>'+(mk(c.text)||'<span style="color:#8e8e93">Boş kart</span>')+'</p><span class="ch l">← '+esc(L.label||'—')+'</span><span class="ch r">'+esc(R.label||'—')+' →</span></button>'}).join('');
+}
 
-  var x = 0, y = 0, vx = 0, vy = 0, s = 1, o = 0;        // kartın durumu
-  var mode = 'idle';                                       // idle | drag | settle | exit | gap | enter
-  var t0 = 0, dir = 0, zone = 105;
-  var pl = 0, pr = 0;                                      // görünen arka plan ilerlemesi (sol / sağ)
-  var dragging = false, ox = 0, oy = 0, trail = [];
-  var raf = 0, last = 0;
-  var pending = null, ended = null, locked = false, nextL = null, nextR = null;
+/* --- omurga --- */
+function renderSpine(){
+  var seeds=[];S.cards.forEach(function(c){String(c.text).replace(/==([^=]+)==/g,function(_,m){seeds.push([c.id,m])})});
+  $('#v2').innerHTML=
+    '<h2 class="rise" style="margin-top:6px">Sabit son</h2><textarea id="end" class="rise" placeholder="Hikayenin değişmeyen sonu, tek paragraf…">'+esc(S.ending)+'</textarea>'+
+    '<h2>Ana duraklar</h2><p class="note" style="margin:-6px 0 12px">Hangi yoldan gidilirse gidilsin herkesin geçeceği kırılma noktaları.</p>'+
+    S.beats.map(function(b,i){return'<div class="beat rise'+(b.d?' done':'')+'" style="--i:'+i+'"><button class="ck" data-bt="'+i+'">✓</button><input data-bi="'+i+'" value="'+esc(b.t)+'" placeholder="Durak"><button class="x" data-bd="'+i+'">×</button></div>'}).join('')+
+    '<button class="btn" id="addBeat" style="width:100%;margin-top:6px">Durak ekle</button>'+
+    '<h2>Tohumlar</h2><p class="note" style="margin:-6px 0 12px">Kart metninde bir ifadeyi marker ile işaretlersen buraya düşer. Sonda karşılığını vereceğin ipuçları.</p>'+
+    (seeds.length?seeds.map(function(s,i){return'<button class="seed rise" data-open="'+esc(s[0])+'" style="--i:'+i+'"><mark class="hl">'+esc(s[1])+'</mark><small>'+esc(s[0])+' kartında</small></button>'}).join(''):'<div class="note">Henüz tohum yok.</div>');
+}
 
-  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
-  function smooth(v) { v = clamp(v, 0, 1); return v * v * (3 - 2 * v); }
-  function calcZone() { zone = clamp(window.innerWidth * 0.27, 90, 130); }
-  function prog(px) { return smooth((Math.abs(px) - 6) / (zone - 6)); }
+/* --- kart düzenleyici --- */
+var cur=null;
+function sideHTML(d){
+  var o=cur[d]||(cur[d]={label:'',effects:{}}),e=o.effects||{};
+  return'<div class="side"><label>'+(d==='left'?'← Sola kaydırınca':'Sağa kaydırınca →')+'</label><input data-p="'+d+'.label" value="'+esc(o.label)+'" placeholder="Seçim etiketi">'+
+    '<label>Etkiler</label><div class="eff">'+Object.keys(STATS).map(function(k){var v=e[k]||0;return'<div class="ef"><small>'+STATS[k]+'</small><b class="'+(v>0?'p':v<0?'n':'')+'">'+(v>0?'+':'')+v+'</b><button data-e="'+d+'.'+k+'" data-d="-5">−</button><button data-e="'+d+'.'+k+'" data-d="5">+</button></div>'}).join('')+'</div>'+
+    '<label>Bayrak koy (virgülle)</label><input data-l="'+d+'.set" value="'+esc((o.set||[]).join(', '))+'" placeholder="hatirliyor">'+
+    '<label>Sıradaki kartlar (virgülle)</label><input data-l="'+d+'.next" class="'+((o.next||[]).some(function(n){return!byId(n)})?'bad-in':'')+'" value="'+esc((o.next||[]).join(', '))+'" placeholder="q2, q3"></div>';
+}
+function openSheet(id){
+  cur=byId(id);if(!cur)return;
+  var a=Object.keys(ARCS),i=Math.max(0,a.indexOf(cur.arc||'ana'));
+  $('#sheet').innerHTML='<div class="sh"><b>'+esc(cur.id)+'</b><button class="x" data-close>×</button></div>'+
+    '<div class="seg"><i style="transform:translateX('+i*100+'%)"></i>'+a.map(function(k){return'<button data-arc="'+k+'" class="'+(k===(cur.arc||'ana')?'on':'')+'">'+ARCS[k][0]+'</button>'}).join('')+'</div>'+
+    '<label>Konuşan</label><input data-p="speaker" value="'+esc(cur.speaker)+'">'+
+    '<label>Metin</label><textarea id="txt" data-p="text">'+esc(cur.text)+'</textarea>'+
+    '<div class="row"><button class="btn" id="mkBtn">Marker ile işaretle</button></div><div class="prev" id="prev">'+mk(cur.text)+'</div>'+
+    sideHTML('left')+sideHTML('right')+
+    '<div class="row" style="margin-top:20px"><button class="btn d" data-del>Kartı sil</button></div>';
+  $('#dim').classList.add('on');$('#sheet').classList.add('on');$('#sheet').scrollTop=0;
+}
+function closeSheet(){$('#dim').classList.remove('on');$('#sheet').classList.remove('on');cur=null;refresh()}
+function setPath(p,v){var k=p.split('.'),o=cur;while(k.length>1){o=o[k.shift()]=o[k[0]]||{}}o[k[0]]=v;save()}
+function list(v){return v.split(',').map(function(x){return x.trim()}).filter(Boolean)}
 
-  function draw() {
-    var r = clamp(x / 280, -1.6, 1.6) * 8;
-    card.style.transform = 'translate3d(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px,0) rotate(' + r.toFixed(3) + 'deg) scale(' + s.toFixed(4) + ')';
-    card.style.opacity = o.toFixed(3);
-    sideL.style.opacity = pl.toFixed(3);
-    sideR.style.opacity = pr.toFixed(3);
-    var lo = clamp((pl - .15) / .6, 0, 1), ro = clamp((pr - .15) / .6, 0, 1);
-    optL.style.opacity = lo.toFixed(3);  optL.style.transform = 'translate3d(' + (-(1 - lo) * 26).toFixed(1) + 'px,0,0)';
-    optR.style.opacity = ro.toFixed(3);  optR.style.transform = 'translate3d(' + ((1 - ro) * 26).toFixed(1) + 'px,0,0)';
-  }
+/* --- oyun dosyası --- */
+var ioMode='';
+function code(){return'/* CARDS:BEGIN */\nwindow.CARDS = '+JSON.stringify(S.cards,null,2)+';\n/* CARDS:END */'}
+function openIO(){
+  $('#sheet').innerHTML='<div class="sh"><b>Oyun dosyası</b><button class="x" data-close>×</button></div>'+
+  '<p class="note">Oyunun index.html dosyasını seç. Kartları içeri alırsın ya da yaptığın değişiklikleri sadece kart bölümüne işleyip güncel dosyayı indirirsin. Oyunun kodu ve çizimler bozulmaz.</p>'+
+  '<div class="row"><button class="btn" data-io="in">Kartları oyundan al</button></div><div class="row"><button class="btn p" data-io="out">Oyuna işle ve indir</button></div><div class="row"><button class="btn" data-io="copy">Sadece kart kodunu kopyala</button></div>';
+  $('#dim').classList.add('on');$('#sheet').classList.add('on');
+}
+function between(h){var b=h.indexOf('/* CARDS:BEGIN */'),e=h.indexOf('/* CARDS:END */');
+  if(b>-1&&e>b)return[b,e+'/* CARDS:END */'.length];
+  b=h.indexOf('window.CARDS = [');e=h.indexOf('\n];',b);return b>-1&&e>b?[b,e+3]:null}
+$('#file').addEventListener('change',function(ev){
+  var f=ev.target.files[0];ev.target.value='';if(!f)return;
+  var r=new FileReader();r.onload=function(){
+    var h=String(r.result),rg=between(h);if(!rg)return toast('Dosyada kart bölümü bulunamadı');
+    if(ioMode==='in'){
+      try{var t=h.slice(rg[0],rg[1]).replace('/* CARDS:BEGIN */','').replace('/* CARDS:END */','').replace('window.CARDS =','').trim().replace(/;$/,'');
+        var cs=new Function('return '+t)();cs.forEach(function(c){c.arc=c.arc||'ana'});S.cards=cs;save();closeSheet();toast(cs.length+' kart alındı')}catch(e){toast('Kartlar okunamadı')}
+    }else{
+      var out=h.slice(0,rg[0])+code()+h.slice(rg[1]),a=document.createElement('a');
+      a.href=URL.createObjectURL(new Blob([out],{type:'text/html'}));a.download='index.html';document.body.appendChild(a);a.click();a.remove();toast('Güncel dosya indirildi')}
+  };r.readAsText(f)});
 
-  function applyLabels() {                                 // metin, görünmezken değişir (geçiş sırasında göz yanılmaz)
-    if (nextL !== null && pl < .15) { optL.textContent = nextL; nextL = null; }
-    if (nextR !== null && pr < .15) { optR.textContent = nextR; nextR = null; }
-  }
-
-  function renderCard(c) {
-    Scene.render(c, spk, txt);
-    nextL = c.left ? c.left.label : '';
-    nextR = c.right ? c.right.label : '';
-    applyLabels();
-  }
-
-  function startEnter() {
-    x = y = vx = vy = 0; s = .95; o = 0;
-    mode = 'enter'; t0 = performance.now(); locked = true; kick();
-  }
-
-  function showEnd() {
-    endT.textContent = ended ? ended.text : '';
-    endEl.classList.add('show'); document.getElementById('meta').style.opacity = 0;
-  }
-
-  function beginNext() {
-    if (pending) {
-      var c = pending; pending = null;
-      renderCard(c); startEnter();
-    } else {
-      mode = 'idle';
-      if (ended) showEnd();
-    }
-  }
-
-  function approach(cur, target, dt) {
-    var tau = target > cur ? .08 : .11;
-    return cur + (target - cur) * (1 - Math.exp(-dt / tau));
-  }
-
-  function tick(t) {
-    var dt = last ? clamp((t - last) / 1000, .001, .05) : 1 / 60;
-    last = t;
-    var busy = false, n = 4, h = dt / n, i;
-
-    if (mode === 'drag') {
-      busy = true;
-    } else if (mode === 'settle') {                         // kritik sönümlü yay: sekmeden merkeze
-      var k = 120, c = 2 * Math.sqrt(k);
-      for (i = 0; i < n; i++) {
-        vx += (-k * x - c * vx) * h; vy += (-k * y - c * vy) * h;
-        x += vx * h; y += vy * h;
-      }
-      if (Math.abs(x) < .1 && Math.abs(y) < .1 && Math.abs(vx) < 2 && Math.abs(vy) < 2) {
-        x = y = vx = vy = 0; mode = 'idle';
-      } else busy = true;
-    } else if (mode === 'exit') {                           // seçim: kart süzülerek çıkar ve silikleşir
-      var ke = 70, ce = 2 * Math.sqrt(ke) * .9;
-      var far = dir * (window.innerWidth * .5 + card.offsetWidth + 80);
-      for (i = 0; i < n; i++) {
-        vx += (ke * (far - x) - ce * vx) * h; vy -= vy * 3 * h;
-        x += vx * h; y += vy * h;
-      }
-      o = 1 - smooth((Math.abs(x) - zone) / (window.innerWidth * .5));
-      if (o <= .01) { o = 0; mode = 'gap'; t0 = t; }
-      busy = true;
-    } else if (mode === 'gap') {                            // arka plan sakinleşir, sonra yeni kart
-      if (t - t0 > 260) beginNext(); else busy = true;
-    } else if (mode === 'enter') {
-      var kk = clamp((t - t0) / 560, 0, 1), e = 1 - Math.pow(1 - kk, 3);
-      o = e; s = .95 + .05 * e; y = 16 * (1 - e);
-      if (kk >= 1) { mode = 'idle'; locked = false; o = 1; s = 1; y = 0; } else busy = true;
-    }
-
-    var tl = 0, tr = 0;                             // arka plan hedefleri
-    var live = mode === 'drag' || mode === 'settle';
-    if (live || mode === 'exit') {
-      var p = prog(x);
-      if (x > 0) tr = p; else tl = p;
-    }
-    pl = approach(pl, tl, dt); pr = approach(pr, tr, dt);
-    if (Math.abs(pl - tl) > .002 || Math.abs(pr - tr) > .002) busy = true;
-    else { pl = tl; pr = tr; }
-
-    applyLabels();
-    draw();
-    if (busy) raf = requestAnimationFrame(tick); else { raf = 0; last = 0; }
-  }
-  function kick() { if (!raf) { last = 0; raf = requestAnimationFrame(tick); } }
-
-  function commit(name, e) {
-    dragging = false;
-    card.classList.remove('dragging');
-    try { card.releasePointerCapture(e.pointerId); } catch (_) {}
-    var a = trail[0], b = trail[trail.length - 1], dt = (b.t - a.t) / 1000;
-    vx = dt > .01 ? clamp((b.x - a.x) / dt, -1800, 1800) : 0;
-    vy = dt > .01 ? clamp((b.y - a.y) / dt, -1800, 1800) : 0;
-    dir = name === 'right' ? 1 : -1;
-    locked = true; mode = 'exit';
-    if (navigator.vibrate) { try { navigator.vibrate(8); } catch (_) {} }
-    Game.choose(name);                                      // seçenek uygulanır; sıradaki kart 'card' olayıyla gelir
-    kick();
-  }
-
-  card.addEventListener('pointerdown', function (e) {
-    e.stopPropagation();                                    // motorun kendi kaydırma girişi devre dışı
-    if (locked || !Game.current || (mode !== 'idle' && mode !== 'settle')) return;
-    mode = 'drag'; dragging = true;
-    card.classList.add('dragging');
-    card.setPointerCapture(e.pointerId);
-    ox = e.clientX - x; oy = e.clientY - y;
-    trail = [{ x: e.clientX, y: e.clientY, t: e.timeStamp }];
-    kick();
-  });
-
-  card.addEventListener('pointermove', function (e) {
-    if (!dragging) return;
-    x = e.clientX - ox; y = e.clientY - oy;
-    trail.push({ x: e.clientX, y: e.clientY, t: e.timeStamp });
-    while (trail.length > 2 && e.timeStamp - trail[0].t > 80) trail.shift();
-  });
-
-  function release(e) {
-    if (!dragging) return;
-    if (e.type === 'pointerup') {                              // bir seçim bölgesinde bırakıldı: seçenek uygulanır
-      if (Math.abs(x) >= zone) {
-        commit(x > 0 ? 'right' : 'left', e);
-        return;
-      }
-    }
-    dragging = false;
-    card.classList.remove('dragging');
-    try { card.releasePointerCapture(e.pointerId); } catch (_) {}
-    var a = trail[0], b = trail[trail.length - 1], dt = (b.t - a.t) / 1000;
-    vx = vy = 0;
-    if (dt > .01 && e.timeStamp - b.t < 60) {
-      vx = clamp((b.x - a.x) / dt, -1800, 1800);
-      vy = clamp((b.y - a.y) / dt, -1800, 1800);
-    }
-    mode = 'settle'; kick();
-  }
-  card.addEventListener('pointerup', release);
-  card.addEventListener('pointercancel', release);
-  card.addEventListener('click', function (e) { e.stopPropagation(); });
-  card.addEventListener('dragstart', function (e) { e.preventDefault(); });
-  card.addEventListener('contextmenu', function (e) { e.preventDefault(); });
-
-  // Oyun olayları
-  stage.addEventListener('card', function (e) {
-    if (mode === 'idle' && !locked) { renderCard(e.detail.card); startEnter(); }
-    else pending = e.detail.card;
-  });
-  stage.addEventListener('end', function (e) {
-    ended = e.detail.ending;
-    if (mode === 'idle' && !locked) { locked = true; o = 0; draw(); showEnd(); }
-  });
-  endEl.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
-  endEl.addEventListener('click', function (e) {
-    e.stopPropagation();
-    if (!ended) return;
-    ended = null; endEl.classList.remove('show');
-    locked = false; mode = 'idle';
-    Game.reset();
-  });
-
-  window.addEventListener('resize', calcZone);
-  calcZone();
-  if (Game.state && Game.state.over) { ended = Game.state.ending; locked = true; draw(); showEnd(); }
-  else if (Game.current) { renderCard(Game.current); startEnter(); }
-  else draw();
-})();
+/* --- gezinme --- */
+var tab=0;
+function refresh(){renderMap();renderCards();renderSpine()}
+function go(i){tab=i;$('#ni').style.transform='translateX('+i*100+'%)';
+  document.querySelectorAll('nav button').forEach(function(b,k){b.classList.toggle('on',k===i)});
+  [0,1,2].forEach(function(k){$('#v'+k).classList.toggle('on',k===i)});$('#fab').classList.toggle('off',i===2)}
+document.querySelectorAll('nav button').forEach(function(b,i){b.onclick=function(){go(i)}});
+$('#ioBtn').onclick=openIO;$('#dim').onclick=closeSheet;
+$('#fab').onclick=function(){var n=S.cards.length+1,id='k'+n;while(byId(id))id='k'+(++n);S.cards.push({id:id,speaker:'',text:'',arc:'ana',left:{label:'',effects:{},next:[]},right:{label:'',effects:{},next:[]}});save();openSheet(id)};
+document.addEventListener('click',function(e){
+  var t=e.target.closest('button');if(!t)return;
+  if(t.dataset.open)return openSheet(t.dataset.open);
+  if('close'in t.dataset)return closeSheet();
+  if(t.dataset.io){ioMode=t.dataset.io;if(ioMode==='copy'){(navigator.clipboard?navigator.clipboard.writeText(code()):Promise.reject()).then(function(){toast('Kopyalandı')},function(){toast('Kopyalanamadı')});return}return $('#file').click()}
+  if(t.dataset.arc){cur.arc=t.dataset.arc;save();return openSheet(cur.id)}
+  if(t.dataset.e){var p=t.dataset.e.split('.'),o=cur[p[0]].effects=cur[p[0]].effects||{},v=Math.max(-50,Math.min(50,(o[p[1]]||0)+ +t.dataset.d));if(v)o[p[1]]=v;else delete o[p[1]];save();var s=$('#sheet').scrollTop;openSheet(cur.id);$('#sheet').scrollTop=s;return}
+  if('del'in t.dataset){if(confirm(cur.id+' kartı silinsin mi?')){S.cards=S.cards.filter(function(c){return c!==cur});save();closeSheet()}return}
+  if(t.id==='mkBtn'){var x=$('#txt'),a=x.selectionStart,b=x.selectionEnd;if(a===b)return toast('Önce metinde bir ifade seç');x.value=x.value.slice(0,a)+'=='+x.value.slice(a,b)+'=='+x.value.slice(b);cur.text=x.value;save();$('#prev').innerHTML=mk(cur.text);return}
+  if(t.id==='addBeat'){S.beats.push({t:'',d:0});save();renderSpine();return}
+  if(t.dataset.bt!=null){var b=S.beats[+t.dataset.bt];b.d=b.d?0:1;save();t.parentNode.classList.toggle('done',!!b.d);return}
+  if(t.dataset.bd!=null){S.beats.splice(+t.dataset.bd,1);save();renderSpine()}
+});
+document.addEventListener('input',function(e){
+  var t=e.target;
+  if(t.id==='end'){S.ending=t.value;save();return}
+  if(t.dataset.bi!=null){S.beats[+t.dataset.bi].t=t.value;save();return}
+  if(!cur)return;
+  if(t.dataset.p){setPath(t.dataset.p,t.value);if(t.dataset.p==='text')$('#prev').innerHTML=mk(t.value)}
+  if(t.dataset.l){var v=list(t.value),p=t.dataset.l;setPath(p,v);if(/next$/.test(p))t.classList.toggle('bad-in',v.some(function(n){return!byId(n)}))}
+});
+refresh();go(0);
 </script>
 </body>
 </html>
