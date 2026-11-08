@@ -2,10 +2,17 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<title>Hikaye masası</title>
+<title>Akan Yazı Editör</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#000000">
 <meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Yazı Editör">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <style>
 :root{--bg:#000;--s:#0f0f10;--s2:#1b1b1d;--line:rgba(255,255,255,.09);--ink:#f7f7f5;--dim:#8e8e93;--acc:#cf5238;--blue:#4378a6;--green:#3f8870;--amber:#e0a43a;--ease:cubic-bezier(.32,.72,0,1);--serif:Georgia,'Times New Roman',serif}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -265,6 +272,10 @@ document.addEventListener('input',function(e){
   if(t.dataset.p){setPath(t.dataset.p,t.value);if(t.dataset.p==='text')$('#prev').innerHTML=mk(t.value)}
   if(t.dataset.l){var v=list(t.value),p=t.dataset.l;setPath(p,v);if(/next$/.test(p))t.classList.toggle('bad-in',v.some(function(n){return!byId(n)}))}
 });
+// Service worker (HTTPS gerekir)
+if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
+  navigator.serviceWorker.register('sw.js').catch(function(){});
+}
 refresh();go(0);
 </script>
 </body>
