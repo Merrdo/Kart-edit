@@ -51,7 +51,6 @@ b{font-weight:700;font-variant-numeric:tabular-nums}
 /* ---- görünümler ---- */
 .view{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);overflow:hidden;overflow:clip}
 .scroll{flex:1;min-height:0;overflow-x:hidden;overflow-y:auto;touch-action:pan-y;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:4px 20px 28px}
-.scroll.pad-bar{padding-bottom:calc(54px + 12px + 12px + 28px)}
 .top{padding:var(--pt) 20px 14px;display:flex;align-items:center;gap:12px;flex:none}
 .ttl{flex:1;min-width:0}
 .top h1{font-size:1.7rem;letter-spacing:-.03em;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -60,7 +59,6 @@ b{font-weight:700;font-variant-numeric:tabular-nums}
 .icon-btn:active{transform:scale(.9);background:var(--surface2)}
 .icon-btn svg{width:20px;height:20px}
 .icon-btn.acc{background:var(--accent);color:var(--accent-ink)}
-.bar{position:absolute;left:0;right:0;bottom:0;padding:12px 20px 12px;z-index:5;background:var(--bg);border-top:1px solid var(--line)}
 .primary{width:100%;height:54px;border-radius:16px;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:1rem;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 10px 28px -12px rgba(var(--acc-rgb),.55)}
 .primary:active{transform:scale(.975);filter:brightness(.92)}
 .primary.sec{background:var(--surface2);color:var(--ink);box-shadow:none}
@@ -223,9 +221,9 @@ html.kbd .form-foot{padding-bottom:12px}
         <div class="scroll" id="mapBody"></div>
       </div>
       <div class="tpage" role="tabpanel" aria-label="Kartlar">
-        <div class="top"><div class="ttl"><h1>Kartlar</h1><div class="sub" id="subCards"></div></div></div>
-        <div class="scroll pad-bar" id="cardsBody"></div>
-        <div class="bar"><button class="primary" data-new><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Yeni kart</button></div>
+        <div class="top"><div class="ttl"><h1>Kartlar</h1><div class="sub" id="subCards"></div></div>
+          <button class="icon-btn acc" data-new aria-label="Yeni kart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
+        <div class="scroll" id="cardsBody"></div>
       </div>
       <div class="tpage" role="tabpanel" aria-label="Omurga">
         <div class="top"><div class="ttl"><h1>Omurga</h1><div class="sub" id="subSpine"></div></div>
@@ -359,7 +357,7 @@ var filt='all';
 function renderCards(){
   var A=analyze(),keys=Object.keys(ARCS),list=S.cards.map(function(c,i){return{c:c,i:i}}).filter(function(o){return filt==='all'||(o.c.arc||'ana')===filt});
   var h='<div class="filters"><button class="fl-chip'+(filt==='all'?' on':'')+'" data-f="all">Tümü</button>'+keys.map(function(k){return'<button class="fl-chip'+(filt===k?' on':'')+'" data-f="'+k+'">'+ARCS[k][0]+'</button>'}).join('')+'</div>';
-  if(!list.length)h+='<div class="empty"><h2>'+(S.cards.length?'Bu türde kart yok':'Henüz kart yok')+'</h2>Aşağıdaki düğmeyle yeni kart ekle.</div>';
+  if(!list.length)h+='<div class="empty"><h2>'+(S.cards.length?'Bu türde kart yok':'Henüz kart yok')+'</h2>Sağ üstteki + düğmesiyle yeni kart ekle.</div>';
   h+=list.map(function(o){var c=o.c,L=c.left||{},R=c.right||{},col=arcOf(c)[1];
     return'<button class="card" data-open="'+esc(c.id)+'"><span class="tile" style="background:'+col+'29;color:'+col+'">'+(o.i+1)+'</span><span class="bd"><span class="name">'+esc(c.id)+' · '+esc(c.speaker||'Konuşan yok')+(A.bad[c.id]?'<i></i>':'')+'</span><p'+(c.text?'':' class="none"')+'>'+(c.text?mk(c.text):'Boş kart')+'</p><span class="chips"><span class="chip l">← '+esc(L.label||'—')+'</span><span class="chip r">'+esc(R.label||'—')+' →</span></span></span></button>'}).join('');
   $('#cardsBody').innerHTML=h;
