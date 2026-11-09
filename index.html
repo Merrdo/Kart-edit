@@ -152,7 +152,7 @@ mark.hl{color:var(--ink);padding:.12em 7px .1em 0;margin:0 -7px 0 0;border-radiu
 .legend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
 .map{position:relative}
 .map svg{position:absolute;inset:0;pointer-events:none;overflow:visible}
-.map path{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9;vector-effect:non-scaling-stroke}
+.map path{fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;opacity:.65;vector-effect:non-scaling-stroke}
 .map.anim path{animation:fadeIn .8s var(--ease) both}
 @keyframes fadeIn{from{opacity:0}}
 @keyframes draw{from{stroke-dashoffset:1}}
@@ -223,6 +223,7 @@ mark.hl{color:var(--ink);padding:.12em 7px .1em 0;margin:0 -7px 0 0;border-radiu
 @keyframes wob{0%,100%{transform:rotate(0)}25%{transform:rotate(-.9deg)}75%{transform:rotate(.9deg)}}
 .rbar{position:absolute;left:14px;right:14px;bottom:12px;z-index:8;display:none;align-items:center;gap:8px;padding:10px 10px 10px 16px;background:#1b1b1d;border:1px solid rgba(var(--acc-rgb),.5);border-radius:18px;box-shadow:0 12px 32px rgba(0,0,0,.65)}
 html.rmode .rbar{display:flex}
+.rbar.pkbar{display:none}html.pmode .rbar.pkbar{display:flex}html.rmode .rbar.pkbar{display:none}html.pmode .toast{bottom:calc(var(--tbh) + 86px)}
 html.rmode .toast{bottom:calc(var(--tbh) + 86px)}
 .rb-t{flex:1;min-width:0}
 .rb-t b{display:block;font-size:.9rem}
@@ -388,7 +389,7 @@ html.mfull .mfx.show{opacity:1;pointer-events:auto;transform:none}
 #mapBody[data-z="0"] .nd b{font-size:1.7rem;letter-spacing:-.03em;margin-top:6px}
 #mapBody[data-z="0"] .nd.has .cap{padding-top:30px}
 .elb{position:absolute;transform:translateY(-50%);padding:3px 8px;border-radius:10px;background:var(--bg);border:1px solid var(--line);font-size:.72rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;z-index:1}
-.elb.l{color:#8fb4d6;border-color:rgba(91,155,213,.45)}.elb.r{color:#ec8a74;border-color:rgba(224,80,58,.45)}.elb.n{color:#f2c94c;border-color:rgba(242,201,76,.45)}
+.elb.l{color:#8fb4d6;border-color:rgba(91,155,213,.45)}.elb.r{color:#ec8a74;border-color:rgba(224,80,58,.45)}
 #mapBody:not([data-z="2"]) .elb{display:none}
 .bk{position:absolute;display:flex;gap:4px;transform:translateX(-100%);pointer-events:none;z-index:2}
 .bk span{font-size:.64rem;font-weight:750;padding:2px 6px;border-radius:7px;background:rgba(0,0,0,.74);color:#cfcfd2;border:1px solid var(--line);white-space:nowrap}
@@ -400,6 +401,28 @@ html.mfull .mfx.show{opacity:1;pointer-events:auto;transform:none}
 .zc .pct{min-width:50px;text-align:center;font-size:.8rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--dim)}
 html.rmode .zc{display:none}
 html.mfull .zc{bottom:calc(var(--pb) + 8px)}
+
+/* ---- işaretleyici editör ---- */
+.ed{display:block;min-height:210px;padding:20px 18px 10px;font-family:var(--serif);font-size:1.2rem;line-height:1.6;outline:0;caret-color:var(--accent);white-space:pre-wrap;overflow-wrap:anywhere;-webkit-user-select:text;user-select:text}
+.ed.empty::before{content:attr(data-ph);color:var(--ph);pointer-events:none}
+.mkbar{display:flex;align-items:center;gap:12px;padding:10px 12px 10px 18px}
+.mkhint{flex:1;min-width:0;color:var(--dim);font-size:.82rem;line-height:1.35;transition:color .2s}
+.mkbar:has(.mkb.on) .mkhint{color:var(--ink)}
+.mkb{flex:none;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--surface2);color:var(--accent);border:1px solid var(--line);transition:background .25s var(--ease),color .25s,transform .2s var(--ease),box-shadow .3s}
+.mkb svg{width:22px;height:22px}
+.mkb:active{transform:scale(.92)}
+.mkb.on{background:var(--accent);color:#fff;border-color:transparent;box-shadow:0 0 0 5px var(--accent-soft),0 8px 22px -8px rgba(var(--acc-rgb),.8)}
+/* ---- seçim kartları ---- */
+.sidehd{display:flex;align-items:center;gap:8px;padding-right:12px}
+.sidehd .finput{flex:1;font-size:1.25rem;font-weight:650;letter-spacing:-.02em;padding:18px 6px 18px 18px}
+.efbtn{flex:none;width:40px;height:40px;border-radius:50%;background:var(--surface2);color:var(--dim);display:grid;place-items:center;transition:transform .2s var(--ease),background .2s}
+.efbtn svg{width:18px;height:18px}
+.efbtn:active{transform:scale(.9);background:var(--bg)}
+.fcard.sidecard>.efsum{display:flex;flex-wrap:wrap;gap:6px;width:100%;text-align:left;padding:0 18px 16px;margin-top:-6px;border-top:0}
+.ch{padding:4px 10px;border-radius:12px;background:var(--surface2);font-size:.78rem;font-weight:650;color:var(--dim)}
+.ch.p{color:#7ccf9d}.ch.n{color:#ec8a74}.ch.f{color:var(--amber)}
+.ch.none{background:none;padding:4px 0;font-weight:550}
+
 </style>
 </head>
 <body>
@@ -414,6 +437,7 @@ html.mfull .zc{bottom:calc(var(--pb) + 8px)}
         <div class="zc" id="zc"><button id="zOut" aria-label="Uzaklaştır">−</button><span class="pct" id="zPct">100%</span><button id="zIn" aria-label="Yakınlaştır">+</button><button id="zFit" aria-label="Tümünü sığdır"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div>
         <button class="icon-btn sm mfx" id="mapFullExit" aria-label="Tam ekrandan çık"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button>
         <div class="rbar" id="rbar"><span class="rb-t"><b>Sıralama açık</b><small>Kartı tutup başka kartın üstüne sürükle: yerleri anında değişir, bağlar otomatik düzelir</small></span><button class="act s" id="rbUndo" disabled>Geri al</button><button class="act" id="rbDone">Bitti</button></div>
+        <div class="rbar pkbar" id="pkbar"><span class="rb-t"><b>Devam edeceği kartı seç</b><small>Haritada gezinip bir karta dokun</small></span><button class="act" id="pkCancel">Vazgeç</button></div>
       </div>
       <div class="tpage" role="tabpanel" aria-label="Kartlar">
         <div class="top"><div class="ttl"><h1>Kartlar</h1><div class="sub" id="subCards"></div></div>
@@ -474,6 +498,16 @@ html.mfull .zc{bottom:calc(var(--pb) + 8px)}
       <p class="ssub" id="nxSub"></p>
       <div class="sht-list" id="nxList"></div>
       <button class="primary sec" id="nxDone">Tamam</button>
+    </div>
+  </div>
+
+  <!-- Seçim etkileri paneli -->
+  <div class="sht" id="efSheet">
+    <div class="sht-card">
+      <h2 id="efT"></h2>
+      <p class="ssub" id="efSub"></p>
+      <div class="sht-list" id="efList" style="margin:0 0 8px"></div>
+      <button class="primary sec" id="efDone">Tamam</button>
     </div>
   </div>
 
@@ -607,8 +641,8 @@ function artSrc(a){var k=a.id+':'+a.svg.length;return artCache[k]||(artCache[k]=
 I.img='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="9" cy="9.5" r="1.7"/><path d="M4 17l5-4.5 3.5 3L15 13l5 4.5"/></svg>';
 /* ---------- harita ---------- */
 I.edit='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h5l10-10-5-5L4 15z"/><path d="M12.5 6.5l5 5"/></svg>';
-var mapAnim=true,reorder=false,drag=null,undoStack=[],NW=200,NH=108,CG=150,GY=22,DH=8,PADY=24;
-var C_L='#5b9bd5',C_R='#e0503a',C_N='#f2c94c',KMIN=.1,KMAX=2.6;
+var mapAnim=true,reorder=false,drag=null,undoStack=[],NW=200,NH=108,CG=130,GY=22,DH=8,PADY=24;
+var C_L='#5b9bd5',C_R='#e0503a',KMIN=.1,KMAX=2.6;
 var V={x:0,y:0,k:.6,init:0},T={x:0,y:0,k:.6},vAnim=0,Lc=null,mapMoved=false;
 /* bir sütundaki öğeleri istenen yüksekliklerine en yakın şekilde, üst üste binmeden dizer */
 function placeCol(des,hs,gap){
@@ -634,16 +668,16 @@ function layout(){
     for(q=order.length-1;q>=0;q--){var id=order[q];if(lv[id]==null)lv[id]=0;
       kids(byId(id)).forEach(function(n){if(!back[id+'>'+n])lv[n]=Math.max(lv[n]||0,lv[id]+1)})}
   }
-  var items={},cols=[],E=[],backs={},un=[];
+  var items={},cols=[],E=[],backs={},un=[],orph=[];
   function item(key,card,col,o){var it={key:key,c:card,col:col,o:o,x:0,y:0,h:card?NH:DH};items[key]=it;(cols[col]=cols[col]||[]).push(it);return it}
   S.cards.forEach(function(c){if(lv[c.id]!=null)item(c.id,c,lv[c.id],idx[c.id]);else un.push(c)});
   S.cards.forEach(function(c){
-    if(lv[c.id]==null)return;
+    if(lv[c.id]==null){['left','right'].forEach(function(d){side(c,d).forEach(function(n){orph.push({s:c.id,n:n,d:d})})});return}
     var Ls=side(c,'left'),Rs=side(c,'right'),
-        lo=Ls.filter(function(n){return Rs.indexOf(n)<0}),both=Ls.filter(function(n){return Rs.indexOf(n)>-1}),ro=Rs.filter(function(n){return Ls.indexOf(n)<0}),
-        cats=(lo.length?1:0)+(both.length?1:0)+(ro.length?1:0),pos3=cats===1?[.5]:cats===2?[.3,.7]:[.25,.5,.75],pi=0,F={},
+        lo=Ls,ro=Rs,
+        cats=(lo.length?1:0)+(ro.length?1:0),pos3=cats===1?[.5]:[.3,.7],pi=0,F={},
         ll=(c.left||{}).label||'',rl=(c.right||{}).label||'';
-    if(lo.length)F.l=pos3[pi++];if(both.length)F.b=pos3[pi++];if(ro.length)F.r=pos3[pi++];
+    if(lo.length)F.l=pos3[pi++];if(ro.length)F.r=pos3[pi++];
     function add(d,n,k,col,fp,lab){
       if(lv[n]==null||lv[n]<=lv[c.id]||back[c.id+'>'+n]){(backs[c.id]=backs[c.id]||[]).push({d:d,n:n});return}
       var chain=[c.id],r;
@@ -652,7 +686,6 @@ function layout(){
       E.push({chain:chain,col:col,fp:fp,k:k,d:d,src:c.id,dst:n,lab:lab});
     }
     lo.forEach(function(n,k){add('left',n,k,C_L,F.l,ll)});
-    both.forEach(function(n,k){add('both',n,k,C_N,F.b,ll===rl?ll:(ll&&rl?ll+' / '+rl:ll||rl))});
     ro.forEach(function(n,k){add('right',n,k,C_R,F.r,rl)});
   });
   function exitY(it,fp){return it.c?it.y+NH*fp:it.y+DH/2}
@@ -697,10 +730,21 @@ function layout(){
     }
     e.d_=d;
   });
-  return{A:A,pos:pos,items:items,E:E,backs:backs,labels:labels,w:Math.max(w,NW),h:Math.max(h,NH+PADY*2)};
+  return{A:A,pos:pos,items:items,E:E,backs:backs,orph:orph,labels:labels,w:Math.max(w,NW),h:Math.max(h,NH+PADY*2)};
+}
+/* geri dönen ya da akıştan kopuk kartlardan çıkan bağlar: kesikli çizgi */
+function xedge(L,s,t,d,k){
+  var a=L.pos[s],b=L.pos[t];if(!a||!b)return'';
+  var f=d==='left'?.35:.65,sx=a.x+NW,sy=a.y+NH*f,tx=b.x,ty=b.y+NH*f,dd;
+  if(tx>sx+20){var m=(sx+tx)/2;dd='M'+sx+' '+sy+'C'+m+' '+sy+' '+m+' '+ty+' '+tx+' '+ty}
+  else{var ly=Math.max(sy,ty)+NH*1.1+k*12;dd='M'+sx+' '+sy+'C'+(sx+110)+' '+ly+' '+(tx-110)+' '+ly+' '+tx+' '+ty}
+  return'<path d="'+dd+'" stroke="'+(d==='left'?C_L:C_R)+'" style="stroke-dasharray:5 4;animation:none"/>';
 }
 function edgesSVG(L){
   var svg=L.E.map(function(e){return'<path d="'+e.d_+'" stroke="'+e.col+'"/>'}).join('');
+  var xi=0;
+  Object.keys(L.backs).forEach(function(id){L.backs[id].forEach(function(b){svg+=xedge(L,id,b.n,b.d,xi++%4)})});
+  (L.orph||[]).forEach(function(o){svg+=xedge(L,o.s,o.n,o.d,xi++%4)});
   var mc={};
   L.A.issues.forEach(function(s){if(s.t!=='miss')return;var p=L.pos[s.id];if(!p)return;
     var k=mc[s.id+s.side]=(mc[s.id+s.side]||0)+1,x=p.x+NW,y=p.y+NH*(s.side==='left'?.3:.7)+(k-1)*12;
@@ -713,7 +757,7 @@ function linkLabels(L){
   var seen={},h='';
   L.E.forEach(function(e){
     if(!e.lab)return;var s=L.items[e.src],y=s.y+NH*e.fp,key=e.src+'|'+e.fp+'|'+e.lab;if(seen[key])return;seen[key]=1;
-    h+='<div class="elb '+(e.d==='left'?'l':e.d==='right'?'r':'n')+'" style="left:'+(s.x+NW+8)+'px;top:'+y+'px;max-width:'+(CG-26)+'px">'+esc(e.lab)+'</div>'});
+    h+='<div class="elb '+(e.d==='left'?'l':'r')+'" style="left:'+(s.x+NW+8)+'px;top:'+y+'px;max-width:'+(CG-26)+'px">'+esc(e.lab)+'</div>'});
   return h;
 }
 function backsHTML(L){
@@ -837,19 +881,25 @@ $('#dlg').addEventListener('click',function(e){if(e.target===this)$('#dlgNo').on
 /* ---------- kart düzenleyici ----------
    draft=true: kart henüz S.cards içinde değil; "Kartı kaydet"e basılana kadar eklenmez.
    dIn: taslak kartın bağlanacağı yerler ("kartId|left" / "kartId|right") */
-var cur=null,formOpen=false,pushed=false,nxSide='left',draft=false,dIn=[],dEnd=false,dInit='',retId=null;
+var cur=null,formOpen=false,pushed=false,nxSide='left',draft=false,dIn=[],dEnd=false,dIndep=false,dInit='',retId=null;
 function isEnd(){return draft?dEnd:!!(S.ends||{})[cur.id]}
-function snap(){return JSON.stringify([cur,dIn.slice().sort(),dEnd])}
+function snap(){return JSON.stringify([cur,dIn.slice().sort(),dEnd,dIndep])}
 function draftDirty(){return !!(draft&&cur&&snap()!==dInit)}
 function freeId(){var n=S.cards.length+1,id='k'+n;while(byId(id))id='k'+(++n);return id}
 function nm(id,d){return id+(d==='left'?' (sol)':' (sağ)')}
+var CHVUP='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>';
+function efSum(d){
+  var o=cur[d]||{},e=o.effects||{},k=Object.keys(STATS).filter(function(x){return e[x]}),f=(o.set||[]).length;
+  if(!k.length&&!f)return'<span class="ch none">Etki yok · değiştirmek için dokun</span>';
+  return k.map(function(x){return'<span class="ch '+(e[x]>0?'p':'n')+'">'+STATS[x]+' '+(e[x]>0?'+':'−')+Math.abs(e[x])+'</span>'}).join('')+(f?'<span class="ch f">'+f+' bayrak</span>':'');
+}
+function updSum(d){var b=$('#sum-'+d);if(b&&cur)b.innerHTML=efSum(d)}
 function sideSec(d,k,nonx){
-  var o=cur[d]||(cur[d]={label:'',effects:{},next:[]}),e=o.effects||{};
+  var o=cur[d]||(cur[d]={label:'',effects:{},next:[]});
   var cap=d==='left'?'<span class="sidecap"><i style="background:#5b9bd5"></i>Sola kaydırınca</span>':'<span class="sidecap"><i style="background:#e0503a"></i>Sağa kaydırınca</span>';
-  return'<div class="fsec" style="--k:'+k+'"><div class="fcap">'+cap+'</div><div class="fcard">'+
-   '<div class="fcell"><small>Seçim etiketi</small><input class="finput" data-p="'+d+'.label" value="'+esc(o.label)+'" placeholder="Örn. Evet" enterkeyhint="done" autocomplete="off"></div>'+
-   Object.keys(STATS).map(function(s){return'<div class="frow"><span class="fl">'+STATS[s]+'</span>'+stepHTML(d,s,e[s]||0)+'</div>'}).join('')+
-   '<div class="fcell"><small>Bayrak koy (virgülle ayır)</small><input class="finput" data-l="'+d+'.set" value="'+esc((o.set||[]).join(', '))+'" placeholder="hatirliyor" enterkeyhint="done" autocomplete="off" autocapitalize="none"></div>'+
+  return'<div class="fsec" style="--k:'+k+'"><div class="fcap">'+cap+'</div><div class="fcard sidecard">'+
+   '<div class="sidehd"><input class="finput" data-p="'+d+'.label" value="'+esc(o.label)+'" placeholder="'+(d==='left'?'Örn. Hayır':'Örn. Evet')+'" enterkeyhint="done" autocomplete="off"><button type="button" class="efbtn" data-ef="'+d+'" aria-label="Etkileri aç">'+CHVUP+'</button></div>'+
+   '<button type="button" class="efsum" id="sum-'+d+'" data-ef="'+d+'">'+efSum(d)+'</button>'+
    (nonx?'':'<button class="frow lnk" data-nx="'+d+'"><span class="fl">Sıradaki kartlar<small></small></span><span class="chev">'+I.chev+'</span></button>')+
    '</div></div>';
 }
@@ -861,6 +911,7 @@ function updNx(d){
   s.textContent=n.length?n.join(', ')+(bad?' · '+bad+' kart yok':''):'Seçilmedi';
   b.classList.toggle('warnrow',!!bad);updWarn();
 }
+
 function updIn(){
   var s=$('#inSm');if(!s||!cur)return;var r=[];
   if(draft)dIn.forEach(function(k){var p=k.split('|');r.push(nm(p[0],p[1]))});
@@ -872,7 +923,7 @@ function updWarn(){
   if(draft){
     var r=dIn.map(function(k){var p=k.split('|');return esc(p[0])+' kartının '+(p[1]==='left'?'sol':'sağ')+' seçimine'});
     el.innerHTML='<div class="okpill info"><span class="ic">'+I.info+'</span><span>Yeni kart: “Kartı kaydet”e basana kadar eklenmez; geri dönersen yaptıkların kaybolur.'+
-      (r.length?' Kaydedince '+r.join(', ')+' bağlanacak.':(S.cards.length?' Henüz hiçbir karttan buraya geçilmiyor, aşağıdan bağlayabilirsin.':''))+'</span></div>';
+      (r.length?' Kaydedince '+r.join(', ')+' bağlanacak.':(dIndep?' Bağımsız hikâye kartı olarak eklenecek.':(S.cards.length?' Henüz hiçbir karttan buraya geçilmiyor: bağla ya da “Başka hikâyenin kartı”nı seç.':'')))+'</span></div>';
     return}
   var mine=analyze().issues.filter(function(i){return i.id===cur.id});
   el.innerHTML=mine.length?'<div class="iss">'+mine.map(function(i){var m=issInfo(i),K=KIND[i.t];return'<div class="iss-row '+K.c+'"><span class="iss-ic">'+I[K.ic]+'</span><div class="iss-tx"><b>'+m.t+'</b><p>'+m.d+'</p></div></div>'}).join('')+'</div>':'<div class="okpill"><span class="ic">'+I.okc+'</span>Bu kartta sorun yok</div>';
@@ -891,12 +942,10 @@ function showForm(){
    '</div></div>'+
    '<div class="fsec" style="--k:1"><div class="fcap">Bağlantı</div><div class="fcard"><button type="button" class="frow lnk" id="inBtn"><span class="fl">Bu karta nereden geçilir<small id="inSm"></small></span><span class="chev">'+I.chev+'</span></button></div></div>'+
    '<div class="fsec" style="--k:1"><div class="fcap">Metin</div><div class="fcard">'+
-    '<textarea id="txt" class="finput" data-p="text" placeholder="Kartın metni…">'+esc(cur.text)+'</textarea>'+
-    '<button type="button" class="frow lnk lead" id="mkBtn"><span class="in-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h5l10-10-5-5L4 15z"/><path d="M12.5 6.5l5 5"/></svg></span><span class="fl">Seçili ifadeyi işaretle<small>Metinde bir ifade seç, sonra dokun</small></span></button>'+
-    '<div class="prevbox"><small>Önizleme</small><div class="prev" id="prev">'+mk(cur.text)+'</div></div>'+
+    edBlock()+
    '</div></div>'+
    sideSec('left',2)+sideSec('right',3);
-  if(draft)$('#cfBody').innerHTML=wzBody();paintWz();
+  if(draft)$('#cfBody').innerHTML=wzBody();paintWz();edInit();
   updNx('left');updNx('right');updIn();
   $('#cfBody').scrollTop=0;resetDel();
   if(!was){
@@ -910,11 +959,44 @@ function openForm(id){
   cur=c;draft=false;dIn=[];dEnd=false;retId=null;showForm();
 }
 /* yeni (taslak) kart. pid+side verilirse kaydedilince o karta bağlanır */
-function mkDraft(pid,side,ret){
+function mkDraft(pid,side,ret,indep){
   wzStep=0;wzWarned=0;
-  cur=blank(freeId());draft=true;dIn=pid?[pid+'|'+side]:[];dEnd=false;retId=ret||null;dInit=snap();showForm();
+  cur=blank(freeId());draft=true;dIn=pid?[pid+'|'+side]:[];dEnd=false;dIndep=!!indep;retId=ret||null;dInit=snap();showForm();
 }
 function newCard(pid,side){if(formOpen)return;mkDraft(pid,side,null)}
+/* + düğmesi: yeni kart varsayılan olarak bir kartın devamıdır; bağımsız hikâye ayrıca seçilmeli */
+function newCardAsk(){
+  if(formOpen)return;
+  if(!S.cards.length)return mkDraft(null,null,null,true);
+  $('#ndT').textContent='Yeni kart nereye devam etsin?';
+  $('#ndSub').textContent='Yeni kart bir kartın devamı olarak eklenir. Ayrı bir hikâye için son seçeneği kullan.';
+  var last=S.cards[S.cards.length-1];
+  $('#ndList').innerHTML=
+    '<button class="opt" data-nd="pk:'+esc(last.id)+'"><span class="oi">'+esc(last.id)+'</span><span class="ot"><b>Son kartın devamı</b><small>'+esc(last.speaker||'Konuşan yok')+' · '+esc(plain(last.text)||'Boş kart')+'</small></span></button>'+
+    '<button class="opt" data-nd="pkMap"><span class="oi">'+I.plus+'</span><span class="ot"><b>Haritadan kart seç</b><small>Devam edeceği kartı haritada dokunarak seç</small></span></button>'+
+    '<button class="opt" data-nd="pkInd"><span class="oi">'+I.plus+'</span><span class="ot"><b>Başka hikâye için bağımsız kart</b><small>Hiçbir karttan geçilmeyen yeni bir başlangıç</small></span></button>';
+  sheetOpen('#ndSheet');
+}
+var pickMode=false;
+function startPick(){
+  if(reorder)setReorder(false);
+  if(rootEl.classList.contains('mfull'))mapFull(false);
+  tabGo(0,true);pickMode=true;rootEl.classList.add('pmode');
+}
+function endPick(){pickMode=false;rootEl.classList.remove('pmode')}
+$('#pkCancel').onclick=endPick;
+$('#mapBody').addEventListener('click',function(e){
+  if(!pickMode)return;var n=e.target.closest('.nd');if(!n)return;
+  e.stopPropagation();e.preventDefault();if(mapMoved)return;
+  var id=n.dataset.open;endPick();sidePick(id);sheetOpen('#ndSheet');
+},true);
+function sidePick(id){
+  var c=byId(id);if(!c)return;
+  function row(d,t,col){var n=(c[d]||{}).next||[];return'<button class="opt" data-nd="ps:'+esc(id)+':'+d+'"><span class="oi" style="color:'+col+'">'+I.plus+'</span><span class="ot"><b>'+t+'</b><small>'+(n.length?'Şu an: '+esc(n.join(', ')):'Şu an boş')+'</small></span></button>'}
+  $('#ndT').textContent=id+' · hangi cevaba?';
+  $('#ndSub').textContent='Yeni kart bu cevabın devamı olacak.';
+  $('#ndList').innerHTML=row('left','Sola kaydırınca','#8fb4d6')+row('right','Sağa kaydırınca','#ec8a74');
+}
 function saveDraft(){
   var c=cur;S.cards.push(c);
   dIn.forEach(function(k){var p=k.split('|'),par=byId(p[0]);if(!par)return;
@@ -942,7 +1024,7 @@ function requestClose(){
 }
 function doClose(){
   if(!formOpen)return;formOpen=false;
-  $('#cardForm').classList.remove('open');sheetClose('#nxSheet');sheetClose('#fxSheet');
+  $('#cardForm').classList.remove('open');sheetClose('#nxSheet');sheetClose('#fxSheet');sheetClose('#efSheet');
   var a=document.activeElement;if(a&&a.blur)a.blur();
   $('#home').inert=false;cur=null;draft=false;dIn=[];dEnd=false;retId=null;
   setTimeout(function(){if(!formOpen)$('#cardForm').inert=true},450);
@@ -963,6 +1045,7 @@ window.addEventListener('popstate',function(){
 window.addEventListener('beforeunload',function(e){if(formOpen&&draftDirty()){e.preventDefault();e.returnValue=''}});
 document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;
   if($('#dlg').classList.contains('open'))$('#dlgNo').onclick();
+  else if($('#efSheet').classList.contains('open'))closeEf();
   else if($('#fxSheet').classList.contains('open'))closeFx();
   else if($('#nxSheet').classList.contains('open'))sheetClose('#nxSheet');
   else if($('#ndSheet').classList.contains('open'))sheetClose('#ndSheet');
@@ -974,6 +1057,7 @@ $('#cfDone').onclick=function(){
     wzStep++;wzWarned=0;return showForm();
   }
   if(draft){
+    if(!dIn.length&&!dIndep&&S.cards.length)return toast('Kart bir karta bağlı değil. Bağla ya da bağımsız hikâye seç');
     var r=retId,id=cur.id;saveDraft();retId=null;toast(id+' eklendi');
     if(r&&byId(r)){cur=byId(r);showForm();refresh();return}
   }
@@ -990,13 +1074,12 @@ function wzBody(){
     '<p class="wz-p" style="margin-top:12px">Karttaki konuşanın adı. Boş bırakabilirsin.</p>'+
     '<div class="fsec"><div class="fcap">Kart türü</div><div class="fcard"><div class="frow seg-row"><div class="seg" id="arcSeg" style="--n:3;--k:'+ai+'"><i></i>'+keys.map(function(k){return'<button type="button" data-arc="'+k+'" class="'+(k===(cur.arc||'ana')?'on':'')+'">'+ARCS[k][0]+'</button>'}).join('')+'</div></div></div></div>'+'<div class="fsec"><div class="fcap">Görünüm</div><div class="fcard">'+artRow(cur)+'</div></div>';
   if(s===1)return'<h2 class="wz-h">Ne söylüyor?</h2><p class="wz-p">Kartta görünecek metin. Önemli ifadeyi seçip işaretleyebilirsin.</p><div class="fcard">'+
-    '<textarea id="txt" class="finput" data-p="text" placeholder="Kartın metni…">'+esc(cur.text)+'</textarea>'+
-    '<button type="button" class="frow lnk lead" id="mkBtn"><span class="in-ic">'+I.edit+'</span><span class="fl">Seçili ifadeyi işaretle<small>Metinde bir ifade seç, sonra dokun</small></span></button>'+
-    '<div class="prevbox"><small>Önizleme</small><div class="prev" id="prev">'+mk(cur.text)+'</div></div></div>';
+    edBlock()+'</div>';
   if(s===2)return'<h2 class="wz-h">Seçimler</h2><p class="wz-p">Sola ve sağa kaydırınca ne olsun?</p>'+sideSec('left',0,1)+sideSec('right',1,1);
   return'<h2 class="wz-h">Bağlantılar</h2><p class="wz-p">Kart hikâyede nereye oturuyor?</p><div class="fsec" id="cfWarn"></div>'+
     '<div class="fcard"><button type="button" class="frow lnk" id="inBtn"><span class="fl">Bu karta nereden geçilir<small id="inSm"></small></span><span class="chev">'+I.chev+'</span></button>'+
     nxRow('left','Sola kaydırınca')+nxRow('right','Sağa kaydırınca')+
+    (S.cards.length?'<button type="button" class="frow lnk lead endrow'+(dIndep?' on':'')+'" id="indepBtn"><span class="fl">Başka hikâyenin kartı<small>Hiçbir karttan geçilmez; ayrı bir hikâye başlangıcı</small></span><span class="sw-ck">'+I.check+'</span></button>':'')+
     '<button type="button" class="frow lnk lead endrow'+(isEnd()?' on':'')+'" id="endBtn"><span class="fl">Hikâyenin sonu<small>Devamı olmayan son kart</small></span><span class="sw-ck">'+I.check+'</span></button></div>'+
     '<div class="fhint">Devam kartı yoksa listeden “Yeni kart ekle”yi seçerek hemen oluşturabilirsin.</div>';
 }
@@ -1109,6 +1192,7 @@ function setPath(p,v){var k=p.split('.'),o=cur;while(k.length>1){var n=k.shift()
 function list(v){return v.split(',').map(function(x){return x.trim()}).filter(Boolean)}
 $('#cfBody').addEventListener('click',function(e){
   var t=e.target.closest('button');if(!t||!cur)return;
+  if(t.id==='indepBtn'){dIndep=!dIndep;t.classList.toggle('on',dIndep);updWarn();return}
   if(t.id==='endBtn'){
     if(draft)dEnd=!dEnd;else{S.ends=S.ends||{};if(S.ends[cur.id])delete S.ends[cur.id];else S.ends[cur.id]=1;save()}
     t.classList.toggle('on',isEnd());updWarn();return}
@@ -1118,18 +1202,117 @@ $('#cfBody').addEventListener('click',function(e){
   if(t.dataset.d&&t.parentNode.dataset.e){
     var p=t.parentNode.dataset.e.split('.'),o=cur[p[0]].effects=cur[p[0]].effects||{},v=Math.max(-50,Math.min(50,(o[p[1]]||0)+ +t.dataset.d));
     if(v)o[p[1]]=v;else delete o[p[1]];if(!draft)save();t.parentNode.querySelector('.val').innerHTML=valHTML(v);return}
+  if(t.dataset.ef)return openEf(t.dataset.ef);
   if(t.dataset.nx)return openNext(t.dataset.nx);
-  if(t.id==='mkBtn'){var x=$('#txt'),a=x.selectionStart,b=x.selectionEnd;if(a===b)return toast('Önce metinde bir ifade seç');
-    x.value=x.value.slice(0,a)+'=='+x.value.slice(a,b)+'=='+x.value.slice(b);cur.text=x.value;if(!draft)save();$('#prev').innerHTML=mk(cur.text)}
+  if(t.id==='mkBtn')return edToggle();
 });
 $('#cfBody').addEventListener('pointerdown',function(e){if(e.target.closest('#mkBtn'))e.preventDefault()});
 $('#cfBody').addEventListener('input',function(e){
   var t=e.target;if(!cur)return;
   if(t.dataset.p){setPath(t.dataset.p,t.value);
-    if(t.dataset.p==='text')$('#prev').innerHTML=mk(t.value);
     if(t.dataset.p==='speaker')$('#cfSub').textContent=t.value||(draft?'Yeni kart':'Konuşan yok')}
   if(t.dataset.l){setPath(t.dataset.l,list(t.value))}
 });
+
+
+/* ---------- işaretleyici editör ----------
+   Metin yine "==ifade==" biçiminde saklanır; editörde canlı vurgu olarak görünür. */
+function edEl(){return document.getElementById('txt')}
+function edText(el){
+  var out='';
+  (function w(n,m){
+    n.childNodes.forEach(function(c){
+      if(c.nodeType===3)out+=c.nodeValue.replace(/\u200b/g,'').replace(/\u00a0/g,' ').replace(/={2,}/g,'=');
+      else if(c.nodeName==='BR')out+='\n';
+      else if(c.nodeName==='MARK'){var st=out.length;out+='==';var bg=out.length;w(c,1);if(out.length===bg)out=out.slice(0,st);else out+='=='}
+      else{if(out&&out.slice(-1)!=='\n')out+='\n';w(c,m)}
+    })
+  })(el,0);
+  return out;
+}
+function edEmpty(){var el=edEl();if(el)el.classList.toggle('empty',!el.querySelector('mark')&&!el.textContent.replace(/\u200b/g,''))}
+function edSync(){var el=edEl();if(!el||!cur)return;cur.text=edText(el);if(!draft)save();edEmpty()}
+function edInit(){
+  var el=edEl();if(!el)return;
+  try{el.contentEditable='plaintext-only'}catch(e){}
+  if(el.contentEditable!=='plaintext-only')el.contentEditable='true';
+  edEmpty();updMk();
+}
+function edSel(){var s=getSelection(),el=edEl();if(!el||!s.rangeCount)return null;var r=s.getRangeAt(0);return el.contains(r.commonAncestorContainer)?r:null}
+function markOf(n){var el=edEl();while(n&&n!==el){if(n.nodeName==='MARK')return n;n=n.parentNode}return null}
+function setCaret(node,off){var s=getSelection(),r=document.createRange();r.setStart(node,off);r.collapse(true);s.removeAllRanges();s.addRange(r)}
+function selNode(n){var s=getSelection(),r=document.createRange();r.selectNodeContents(n);s.removeAllRanges();s.addRange(r)}
+function unwrapMark(m){var p=m.parentNode;while(m.firstChild)p.insertBefore(m.firstChild,m);p.removeChild(m)}
+function edToggle(){
+  var el=edEl();if(!el)return;
+  var r=edSel();
+  if(!r){el.focus();var g=document.createRange();g.selectNodeContents(el);g.collapse(false);var s0=getSelection();s0.removeAllRanges();s0.addRange(g);r=g}
+  if(!r.collapsed){
+    var m1=markOf(r.startContainer),m2=markOf(r.endContainer);
+    if(m1&&m1===m2)unwrapMark(m1);                       /* işaretli ifadeyi seçip dokun: kaldır */
+    else{
+      if(m1)r.setStartBefore(m1);if(m2)r.setEndAfter(m2);
+      var f=r.extractContents();[].forEach.call(f.querySelectorAll('mark'),unwrapMark);
+      var mk2=document.createElement('mark');mk2.className='hl';mk2.appendChild(f);r.insertNode(mk2);selNode(mk2);
+    }
+  }else{
+    var m=markOf(r.startContainer);
+    if(m){                                               /* işaretleme kapanır, yazı normale döner */
+      var z=document.createTextNode('\u200b'),pr=m.parentNode;
+      if(!m.textContent.replace(/\u200b/g,'')){pr.insertBefore(z,m);pr.removeChild(m)}
+      else pr.insertBefore(z,m.nextSibling);
+      setCaret(z,1);
+    }else{                                               /* işaretleme açılır, yazılanlar vurgulanır */
+      var mk3=document.createElement('mark'),t=document.createTextNode('\u200b');mk3.className='hl';mk3.appendChild(t);r.insertNode(mk3);setCaret(t,1);
+    }
+  }
+  edSync();updMk();
+}
+function updMk(){
+  var b=$('#mkBtn');if(!b)return;
+  var r=edSel(),on=false,msg='Kalemi aç ya da metni seçip dokun';
+  if(r){var m=markOf(r.startContainer);
+    if(r.collapsed){if(m){on=true;msg='İşaretleme açık · yazdıkların vurgulanır'}}
+    else if(m&&m===markOf(r.endContainer)){on=true;msg='Seçili işareti kaldırmak için dokun'}
+    else msg='Seçili ifadeyi işaretlemek için dokun'}
+  b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false');
+  var h=$('#mkHint');if(h)h.textContent=msg;
+}
+function edBlock(){
+  return'<div class="ed empty" id="txt" data-ph="Kartın metni…" spellcheck="false">'+mk(cur.text)+'</div>'+
+    '<div class="mkbar"><span class="mkhint" id="mkHint"></span><button type="button" class="mkb" id="mkBtn" aria-label="İşaretle" aria-pressed="false">'+I.edit+'</button></div>';
+}
+document.addEventListener('selectionchange',updMk);
+$('#cfBody').addEventListener('input',function(e){if(e.target.id==='txt')edSync()});
+$('#cfBody').addEventListener('paste',function(e){
+  if(!e.target.closest||!e.target.closest('#txt'))return;
+  e.preventDefault();var t=(e.clipboardData||window.clipboardData).getData('text/plain');document.execCommand('insertText',false,t);
+});
+$('#cfBody').addEventListener('keydown',function(e){
+  var el=edEl();if(e.key==='Enter'&&el&&e.target===el&&el.contentEditable!=='plaintext-only'){e.preventDefault();document.execCommand('insertLineBreak')}
+});
+
+/* ---------- seçim etkileri paneli (alttan açılır) ---------- */
+var efSide='left';
+function openEf(d){if(!cur)return;efSide=d;renderEf();sheetOpen('#efSheet')}
+function closeEf(){sheetClose('#efSheet');updSum(efSide);var a=document.activeElement;if(a&&a.blur)a.blur()}
+function renderEf(){
+  var d=efSide,o=cur[d]||(cur[d]={label:'',effects:{},next:[]}),e=o.effects||{};
+  $('#efT').innerHTML=d==='left'?'<span class="sidecap"><i style="background:#5b9bd5"></i>Sola kaydırınca</span>':'<span class="sidecap"><i style="background:#e0503a"></i>Sağa kaydırınca</span>';
+  $('#efSub').textContent=o.label?'“'+o.label+'” seçilince değerler nasıl değişsin?':'Bu seçim değerleri nasıl değiştirsin?';
+  $('#efList').innerHTML='<div class="fcard">'+
+    Object.keys(STATS).map(function(x){return'<div class="frow"><span class="fl">'+STATS[x]+'</span>'+stepHTML(d,x,e[x]||0)+'</div>'}).join('')+
+    '<div class="fcell"><small>Bayrak koy (virgülle ayır)</small><input class="finput" data-l="'+d+'.set" value="'+esc((o.set||[]).join(', '))+'" placeholder="hatirliyor" enterkeyhint="done" autocomplete="off" autocapitalize="none"></div></div>';
+}
+$('#efSheet').addEventListener('click',function(e){
+  if(e.target===this||e.target.id==='efDone')return closeEf();
+  var t=e.target.closest('button');if(!t||!cur)return;
+  if(t.dataset.d&&t.parentNode.dataset.e){
+    var p=t.parentNode.dataset.e.split('.'),o=cur[p[0]].effects=cur[p[0]].effects||{},v=Math.max(-50,Math.min(50,(o[p[1]]||0)+ +t.dataset.d));
+    if(v)o[p[1]]=v;else delete o[p[1]];if(!draft)save();t.parentNode.querySelector('.val').innerHTML=valHTML(v);updSum(p[0]);
+  }
+});
+$('#efSheet').addEventListener('input',function(e){var t=e.target;if(t.dataset.l&&cur){setPath(t.dataset.l,list(t.value));updSum(efSide)}});
 
 /* ---------- bağlantı paneli: kartları bağla (taslakta da çalışır) ---------- */
 var fxMode='',fxId='';
@@ -1316,7 +1499,7 @@ function renderWn(){
     h+='<div class="kinds" style="margin:0 8px 14px">'+Object.keys(KIND).filter(function(k){return cnt[k]}).map(function(k){return'<span class="kc '+KIND[k].c+'"><i>'+I[KIND[k].ic]+'</i>'+cnt[k]+' '+KIND[k].n.toLowerCase()+'</span>'}).join('')+'</div>'+
       order.map(function(id){var c=byId(id);return'<div class="iss"><button class="iss-hd" data-open="'+esc(id)+'"><span class="nm">'+esc(id)+'<small> · '+esc(c.speaker||'Konuşan yok')+'</small></span>'+badIcons(A.bad[id])+'<span class="chev">'+I.chev+'</span></button>'+g[id].map(issRow).join('')+'</div>'}).join('');
   }else h+='<div class="okpill" style="margin:0 8px 14px"><span class="ic">'+I.okc+'</span>Her kart akışa bağlı, çıkmaz ya da eksik bağlantı yok.</div>';
-  h+='<div class="legend" style="margin:14px 8px 4px"><span><i style="background:#5b9bd5"></i>Sol seçim</span><span><i style="background:#e0503a"></i>Sağ seçim</span><span><i style="background:#f2c94c"></i>İkisi de aynı yere</span></div><p class="ssub" style="margin:0 8px">Haritada karta basılı tutunca sırala, sil ve devam kartı ekle seçenekleri açılır.</p>';
+  h+='<div class="legend" style="margin:14px 8px 4px"><span><i style="background:#5b9bd5"></i>Sol seçim</span><span><i style="background:#e0503a"></i>Sağ seçim</span></div><p class="ssub" style="margin:0 8px">Haritada karta basılı tutunca sırala, sil ve devam kartı ekle seçenekleri açılır.</p>';
   $('#wnList').innerHTML=h;
 }
 $('#mapStat').onclick=function(){renderWn();sheetOpen('#wnSheet')};
@@ -1369,13 +1552,19 @@ function nodeMenu(id){
 $('#ndSheet').addEventListener('click',function(e){
   if(e.target===this)return sheetClose('#ndSheet');
   var t=e.target.closest('[data-nd]');if(!t)return;
-  var a=t.dataset.nd,id=ndId;sheetClose('#ndSheet');
+  var a=t.dataset.nd,id=ndId;
+  if(a==='pkMap'){sheetClose('#ndSheet');return setTimeout(startPick,220)}
+  if(a==='pkInd'){sheetClose('#ndSheet');return setTimeout(function(){mkDraft(null,null,null,true)},220)}
+  if(a.indexOf('pk:')===0)return sidePick(a.slice(3));
+  if(a.indexOf('ps:')===0){var q=a.split(':');sheetClose('#ndSheet');return setTimeout(function(){newCard(q[1],q[2])},220)}
+  sheetClose('#ndSheet');
   if(a==='art'){var cc=byId(id);return setTimeout(function(){openPicker(cc&&cc.art,function(v){if(!cc)return;setArt(cc,v);save();refresh();toast(v?'Çizim seçildi':'Çizim kaldırıldı')})},220)}
   if(a==='sort')return setReorder(true);
   if(a==='edit')return openForm(id);
   if(a==='L'||a==='R')return newCard(id,a==='L'?'left':'right');
   if(a==='del')setTimeout(function(){askDelete(id)},220);
 });
+
 /* iki kartın yerini değiştir: gelen/giden bağlar yeni konuma göre otomatik düzelir */
 function swapData(a,b){
   var A=byId(a),B=byId(b);if(!A||!B||A===B)return false;
@@ -1437,7 +1626,7 @@ function refresh_others(){renderCards();renderSpine();renderGame();renderArts()}
       mapMoved=false;fired=false;
       if(reorder&&n&&!drag){e.preventDefault();startDrag(n,e);return}
       startPan(ptrs[e.pointerId],e.pointerId);
-      if(n&&!reorder){st={x:e.clientX,y:e.clientY};var id=n.dataset.open;
+      if(n&&!reorder&&!pickMode){st={x:e.clientX,y:e.clientY};var id=n.dataset.open;
         clearTimeout(lp);lp=setTimeout(function(){fired=true;st=null;panS=null;try{navigator.vibrate&&navigator.vibrate(12)}catch(_){}nodeMenu(id)},450)}
     }else if(cnt===2&&!drag){
       cancelLP();panS=null;mapMoved=true;
@@ -1496,7 +1685,7 @@ document.addEventListener('click',function(e){
     if(fx==='del')return askDelete(fid);
   }
   if(t.dataset.open!=null)return openCard(t.dataset.open);
-  if(t.hasAttribute('data-new'))return newCard();
+  if(t.hasAttribute('data-new'))return newCardAsk();
   if(t.dataset.io)return doIO(t.dataset.io);
   if(t.dataset.f){filt=t.dataset.f;return renderCards()}
   if(t.id==='addBeat'||t.id==='addBeatTop'){S.beats.push({t:'',d:0});save();renderSpine();if(t.id==='addBeatTop')tabGo(2);
@@ -1536,6 +1725,8 @@ function tabGo(i,instant){
   pages[from].animate([{opacity:1},{opacity:.15}],{duration:480,easing:EASE});
   if(i===0)renderMap();
   if(i!==0&&reorder)setReorder(false);
+  if(i!==0&&pickMode)endPick();
+  
 }
 [].forEach.call(tabs,function(b){b.onclick=function(){tabGo(+b.dataset.t)}});
 window.addEventListener('resize',function(){tbInd._x=null;tabPaint(tabIdx,false);renderMap()});
