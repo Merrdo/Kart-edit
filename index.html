@@ -67,9 +67,9 @@ b{font-weight:700;font-variant-numeric:tabular-nums}
 .in{animation:rise .5s var(--ease) backwards;animation-delay:calc(var(--i,0)*40ms)}
 
 /* ---- ana kabuk ---- */
-#home .tpages{position:absolute;left:0;top:0;bottom:var(--tbh);width:400%;display:flex;will-change:transform}
-.tpage{position:relative;flex:0 0 25%;min-width:0;display:flex;flex-direction:column;overflow:hidden;overflow:clip;backface-visibility:hidden}
-.tabbar{position:absolute;left:0;right:0;bottom:0;height:var(--tbh);z-index:6;display:grid;grid-template-columns:repeat(4,1fr);padding:5px 10px var(--pb);padding-bottom:calc(var(--pb) - 8px);background:var(--bg);border-top:1px solid var(--line)}
+#home .tpages{position:absolute;left:0;top:0;bottom:var(--tbh);width:500%;display:flex;will-change:transform}
+.tpage{position:relative;flex:0 0 20%;min-width:0;display:flex;flex-direction:column;overflow:hidden;overflow:clip;backface-visibility:hidden}
+.tabbar{position:absolute;left:0;right:0;bottom:0;height:var(--tbh);z-index:6;display:grid;grid-template-columns:repeat(5,1fr);padding:5px 10px var(--pb);padding-bottom:calc(var(--pb) - 8px);background:var(--bg);border-top:1px solid var(--line)}
 html.kbd .tabbar{opacity:0;pointer-events:none;transition:opacity .2s}
 .tb{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--dim)}
 html.ready .tb{transition:color .35s var(--ease)}
@@ -78,7 +78,7 @@ html.ready .tb{transition:color .35s var(--ease)}
 .tb:active svg{transform:scale(.88)}
 .tb.on{color:var(--accent)}
 .tb.on svg{transform:translateY(-1px)}
-.tb-ind{position:absolute;top:-1px;left:0;width:calc((100% - 20px)/4);height:2px;margin-left:10px;pointer-events:none;will-change:transform}
+.tb-ind{position:absolute;top:-1px;left:0;width:calc((100% - 20px)/5);height:2px;margin-left:10px;pointer-events:none;will-change:transform}
 .tb-ind::after{content:"";display:block;width:26px;height:2px;margin:0 auto;border-radius:0 0 2px 2px;background:var(--accent)}
 
 /* ---- liste kartları ---- */
@@ -148,23 +148,91 @@ mark.hl{color:var(--ink);padding:.12em 7px .1em 0;margin:0 -7px 0 0;border-radiu
 .seedtxt{font-family:var(--serif);font-size:1.02rem}
 
 /* ---- harita ---- */
-.stat{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:13px 16px;margin-bottom:14px;color:var(--dim);font-size:.9rem;line-height:1.4}
-.stat b{color:var(--amber)}
-.stat.ok b{color:#7ccf9d}
-.legend{display:flex;gap:16px;color:var(--dim);font-size:.8rem;font-weight:600;margin:2px 4px 16px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;color:var(--dim);font-size:.8rem;font-weight:600;margin:2px 4px 16px}
 .legend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
 .map{position:relative}
 .map svg{position:absolute;inset:0;pointer-events:none;overflow:visible}
-.map path{fill:none;stroke-width:1.6;stroke-linecap:round;opacity:.75}
-.map.anim path{stroke-dasharray:1;stroke-dashoffset:0;animation:draw .9s var(--ease) both}
+.map path{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.9;vector-effect:non-scaling-stroke}
+.map.anim path{animation:fadeIn .8s var(--ease) both}
+@keyframes fadeIn{from{opacity:0}}
 @keyframes draw{from{stroke-dashoffset:1}}
-.nd{position:absolute;height:50px;border-radius:15px;background:var(--surface2);border:1.5px solid var(--line);padding:6px 10px;text-align:left;overflow:hidden}
+.nd{position:absolute;height:92px;border-radius:15px;background:var(--surface2);border:1.5px solid var(--line);padding:6px 10px;text-align:left;overflow:hidden}
 .map.anim .nd{animation:rise .5s var(--ease) both}
 .nd:active{transform:scale(.96)}
 .nd b{display:block;font-size:.8rem;white-space:nowrap}
 .nd span{display:block;font-size:.72rem;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .nd::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ac)}
-.nd.bad{border-color:var(--amber);border-style:dashed}
+
+
+
+/* ---- uyarı / durum ikonları ---- */
+.t-orphan{--tc:var(--amber)}.t-dead{--tc:var(--danger)}.t-miss{--tc:#ec8a74}
+.nd.bad{border-color:var(--tc,var(--amber));border-style:dashed}
+.nd.bad b{padding-right:20px}
+.nd.has{padding:0;background:#1b2127}
+.nd.has>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.nd.has .cap{position:absolute;left:0;right:0;bottom:0;padding:18px 8px 6px 10px;background:linear-gradient(transparent,rgba(0,0,0,.86));text-align:left}
+.nd.has .cap b{padding-right:0;text-shadow:0 1px 3px rgba(0,0,0,.8)}
+.nd.has .cap span{color:rgba(255,255,255,.72)}
+.nd.has::after{display:none}
+.nd.has .nb{background:rgba(0,0,0,.62);border-radius:50%;padding:3px;width:22px;height:22px;top:5px;right:5px;z-index:2}
+.nd .nb{position:absolute;top:6px;right:6px;width:16px;height:16px;color:var(--tc);font-style:normal}
+.nd .nb svg,.bi svg,.sic svg,.kc svg,.iss-ic svg,.maplbl svg,.okpill svg{width:100%;height:100%;display:block}
+.bi{display:inline-block;width:15px;height:15px;color:var(--tc);flex:none}
+.sic{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin:0 4px 0 0}
+.sic.w{color:var(--amber)}.sic.g{color:#7ccf9d}
+.kinds{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.kc{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px 0 8px;border-radius:14px;background:var(--surface2);font-size:.78rem;font-weight:650;color:var(--ink)}
+.kc i{display:block;width:15px;height:15px;color:var(--tc)}
+.maplbl{position:absolute;left:0;display:inline-flex;align-items:center;gap:6px;height:20px;padding-right:8px;background:var(--bg);color:var(--amber);font-size:.74rem;font-weight:700;z-index:1}
+.maplbl .ic{display:block;width:14px;height:14px}
+.iss{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.iss>*+*{border-top:1px solid var(--line)}
+.iss-hd{width:100%;display:flex;align-items:center;gap:10px;padding:12px 14px 12px 16px;text-align:left}
+.iss-hd:active{background:var(--surface2)}
+.iss-hd .nm{flex:1;min-width:0;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.iss-hd .nm small{color:var(--dim);font-weight:500;font-size:.85rem}
+.iss-row{display:flex;gap:12px;padding:12px 16px 14px}
+.iss-ic{flex:none;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;padding:7px;background:var(--surface2);color:var(--tc)}
+.iss-tx{flex:1;min-width:0}
+.iss-tx b{display:block;font-size:.95rem;color:var(--tc)}
+.iss-tx p{color:var(--dim);font-size:.84rem;line-height:1.4;margin:3px 0 0}
+.iss-tx p b{display:inline;color:var(--ink)}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
+.act{height:36px;padding:0 14px;border-radius:12px;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:.85rem}
+.act:active{transform:scale(.95)}
+.act.s{background:var(--surface2);color:var(--ink)}
+.act.d{background:rgba(255,90,77,.12);color:var(--danger)}
+.okpill{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:16px;background:rgba(63,154,124,.12);color:#7ccf9d;font-weight:650;font-size:.92rem}
+.okpill .ic{display:block;width:22px;height:22px;flex:none}
+.endrow.on .sw-ck{background:var(--accent);border-color:var(--accent);color:#fff}
+.fxi{cursor:default}
+.sd{display:flex;gap:6px;flex:none}
+.sd button{height:36px;min-width:50px;padding:0 12px;border-radius:12px;background:var(--surface2);font-size:.82rem;font-weight:700}
+.sd .l{color:#8fb4d6}.sd .r{color:#ec8a74}
+.sd .l.on{background:var(--blue);color:#fff}.sd .r.on{background:var(--accent);color:#fff}
+.frow.danger .in-ic,.frow.danger .fl{color:var(--danger)}
+.frow.danger .fl small{color:var(--dim)}
+.dbtn.ok.dng{background:var(--danger)}
+
+
+/* ---- uzun basma paneli, sıralama modu ---- */
+.map.reorder .nd{touch-action:none;transition:left .3s var(--ease),top .3s var(--ease),width .3s var(--ease),transform .2s var(--ease),box-shadow .2s}
+.map.reorder .nd.lift{z-index:5;transition:transform .2s var(--ease),box-shadow .2s;transform:scale(1.06);border-color:var(--accent);box-shadow:0 16px 32px -6px rgba(0,0,0,.75)}
+.map.reorder .nd:not(.lift){animation:wob 1.6s ease-in-out infinite}
+@keyframes wob{0%,100%{transform:rotate(0)}25%{transform:rotate(-.9deg)}75%{transform:rotate(.9deg)}}
+.rbar{position:absolute;left:14px;right:14px;bottom:12px;z-index:8;display:none;align-items:center;gap:8px;padding:10px 10px 10px 16px;background:#1b1b1d;border:1px solid rgba(var(--acc-rgb),.5);border-radius:18px;box-shadow:0 12px 32px rgba(0,0,0,.65)}
+html.rmode .rbar{display:flex}
+html.rmode .toast{bottom:calc(var(--tbh) + 86px)}
+.rb-t{flex:1;min-width:0}
+.rb-t b{display:block;font-size:.9rem}
+.rb-t small{display:block;color:var(--dim);font-size:.74rem;line-height:1.3;margin-top:1px}
+.rbar .act:disabled{opacity:.35}
+.opt .oi svg{width:20px;height:20px}
+.opt.dng .oi{color:var(--danger);background:rgba(255,90,77,.12)}
+.opt.dng .ot b{color:var(--danger)}
+.okpill.info{background:var(--surface);border:1px solid var(--line);color:var(--dim);font-weight:600;font-size:.86rem;line-height:1.4}
+.okpill.info .ic{width:20px;height:20px;color:var(--blue)}
 
 /* ---- kart formu (tam ekran sayfa) ---- */
 #cardForm{z-index:12;transform:translate3d(100%,0,0);visibility:hidden;transition:transform .42s var(--ease),visibility 0s .42s}
@@ -207,6 +275,131 @@ html.kbd .form-foot{padding-bottom:12px}
 .toast{position:absolute;left:50%;bottom:calc(var(--tbh) + 14px);transform:translate(-50%,20px);background:var(--ink);color:#000;padding:10px 18px;border-radius:20px;font-weight:650;font-size:.9rem;opacity:0;pointer-events:none;transition:.35s var(--ease);z-index:50;white-space:nowrap;max-width:90%}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+:root{--press:rgba(255,255,255,.04);--faint:#7a7a80;--line2:rgba(255,255,255,.22)}
+/* grup tarzı liste */
+.it{position:relative;display:flex;align-items:center;gap:16px;width:calc(100% + 40px);margin:0 -20px;padding:15px 20px;text-align:left;animation:rise .5s var(--ease) backwards;animation-delay:calc(var(--i,0)*40ms)}
+.it+.it::before{content:"";position:absolute;left:20px;right:20px;top:0;height:1px;background:var(--line)}
+.it:active{background:var(--press)}
+.it .bd{flex:1;min-width:0}
+.it .nm{font-size:1.18rem;font-weight:580;letter-spacing:-.015em;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.it .sb{color:var(--dim);font-size:.95rem;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--serif)}
+.it>svg.cv{width:16px;height:16px;color:var(--faint);flex:none}
+.gcv{flex:none;width:60px;height:60px;border-radius:17px;display:grid;place-items:center;font-size:1.5rem;font-weight:800;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.bar{position:absolute;left:0;right:0;bottom:0;padding:12px 20px;z-index:5;background:var(--bg);border-top:1px solid var(--line)}
+/* aşamalı kart oluşturma */
+.wz-prog{display:none;flex:1;gap:6px}.wz-step{display:none;min-width:34px;text-align:right;color:var(--dim);font-size:.85rem;font-weight:650}
+#cardForm.wz .wz-prog{display:flex}#cardForm.wz .wz-step{display:block}#cardForm.wz .top .ttl{display:none}
+.wz-seg{position:relative;flex:1;height:5px;border-radius:3px;background:var(--surface2);overflow:hidden;align-self:center}
+.wz-seg i{position:absolute;inset:0;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease)}
+.wz-seg.on i{transform:scaleX(1)}
+.wz-h{font-size:2.3rem;font-weight:780;letter-spacing:-.04em;line-height:1.1;animation:rise .5s var(--ease) backwards}
+.wz-p{margin:8px 0 24px;color:var(--dim);font-size:1rem;line-height:1.4}
+.wz-title{display:block;width:100%;background:none;border:0;outline:0;padding:0;margin-top:3vh;caret-color:var(--accent);font-size:2.3rem;font-weight:780;letter-spacing:-.04em;line-height:1.12}
+.wz-title::placeholder{color:var(--ph)}
+.wz-row{display:flex;align-items:center}
+.wz-bk{flex:none;width:54px;height:54px;margin-right:10px;border-radius:16px;background:var(--surface2);display:grid;place-items:center;overflow:hidden;transition:width .45s var(--ease),margin .45s var(--ease),opacity .3s}
+.wz-bk svg{width:22px;height:22px}.wz-bk.off{width:0;margin-right:0;opacity:0;pointer-events:none}
+
+/* kart sayfası */
+#cardPage{display:none;z-index:10}
+#cpScroll{position:absolute;inset:0;padding:0}
+.hero{position:relative;overflow:hidden;height:clamp(170px,22vh,220px)}
+.hero.art{background:#1b2127}
+.hero.art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.hero.art::before{content:"";position:absolute;left:0;right:0;top:0;height:130px;background:linear-gradient(rgba(0,0,0,.55),transparent);z-index:1;pointer-events:none}
+.hero .hl{position:absolute;right:-14px;bottom:-78px;font-size:330px;line-height:1;font-weight:800;letter-spacing:-.06em;opacity:.2;pointer-events:none}
+.gbody{position:relative;z-index:3;margin-top:-30px;background:var(--bg);border-radius:30px 30px 0 0;padding:30px 20px 60px;min-height:calc(var(--full-h,100vh) - 150px)}
+.bub{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:22px 22px 24px;margin-top:2px}
+.bub::before{content:"";position:absolute;top:-8px;left:34px;width:16px;height:16px;background:var(--surface);border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg);border-radius:4px 0 0 0}
+.hscrim{position:absolute;left:0;right:0;bottom:0;height:58%;background:linear-gradient(transparent,rgba(0,0,0,.78));z-index:1;pointer-events:none}
+.hero:not(.art) .hscrim{height:70%;background:linear-gradient(transparent,rgba(0,0,0,.45))}
+.hnm{position:absolute;left:20px;right:70px;bottom:44px;z-index:2;font-size:2.15rem;font-weight:800;letter-spacing:-.04em;line-height:1.02;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.55);overflow-wrap:anywhere;pointer-events:none}
+.hnm.none{font-size:1.3rem;font-weight:650;letter-spacing:-.02em;color:rgba(255,255,255,.55)}
+.bsp{display:flex;align-items:center;gap:9px;font-size:.74rem;font-weight:750;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:14px}
+.bsp i{width:8px;height:8px;border-radius:50%;background:var(--bc,var(--accent));flex:none}
+.bsp.set{color:var(--ink)}
+.btx{font-family:var(--serif);font-size:1.55rem;line-height:1.36;letter-spacing:-.012em;color:var(--ink);overflow-wrap:anywhere}
+.btx.none{font-family:inherit;font-size:1rem;color:var(--dim);letter-spacing:0}
+.gt{font-size:1.9rem;font-weight:750;letter-spacing:-.035em;line-height:1.1;overflow-wrap:anywhere}
+.cpmeta{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}.cpmeta span{background:var(--surface2);border-radius:8px;padding:4px 10px;font-size:.8rem;font-weight:650;color:var(--dim)}
+.cptx{font-family:var(--serif);font-size:1.15rem;line-height:1.55;margin-top:18px;color:rgba(247,247,245,.92)}.cptx.none{font-family:inherit;color:var(--dim)}
+.gbody .iss{margin-top:18px}
+.stats3{display:flex;margin-top:24px}.stats3 .st{flex:1;min-width:0;padding:2px 14px;border-left:1px solid var(--line)}.stats3 .st:first-child{padding-left:0;border-left:0}
+.stats3 .st b{display:block;font-size:1.12rem;font-weight:650}.stats3 .st span{display:block;color:var(--dim);font-size:.9rem;margin-top:3px}
+.sech{display:flex;align-items:baseline;gap:8px;margin:32px 0 4px}.sech h2{font-size:1.5rem;font-weight:700;letter-spacing:-.025em}
+.cpch{margin:10px 0 6px;padding:2px 0 2px 14px;border-left:3px solid var(--blue)}.cpch.right{border-color:var(--accent)}
+.cpch b{display:block;font-size:1.15rem}.cpch span{display:block;color:var(--dim);font-size:.92rem;margin-top:3px}
+.cpnone{color:var(--dim);margin-top:10px}
+.fbtn{position:absolute;top:var(--pt);z-index:6;background:rgba(18,18,20,.72);box-shadow:0 8px 20px -8px rgba(0,0,0,.5)}
+.ghead{position:absolute;left:0;right:0;top:0;height:calc(var(--pt) + 50px);z-index:5;pointer-events:none;--p:0;opacity:var(--p);background:var(--bg);border-bottom:1px solid var(--line)}
+.ghead span{position:absolute;left:76px;right:76px;top:var(--pt);height:42px;line-height:42px;text-align:center;font-size:1.02rem;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mtool{position:absolute;top:0;left:0;right:0;z-index:7;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:calc(var(--pt) - 8px) 10px 0;pointer-events:none}
+.mtool>*{pointer-events:auto}
+.mtool .icon-btn{background:rgba(24,24,26,.82);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line)}
+.mtool .icon-btn.acc{background:var(--accent);border-color:transparent}
+.mcnt{margin-right:auto;pointer-events:none;color:var(--dim);font-size:.72rem;font-weight:650;background:rgba(24,24,26,.6);border-radius:10px;padding:4px 9px}
+.mcnt:empty{display:none}
+.icon-btn.sm{width:38px;height:38px;position:relative}.icon-btn.sm svg{width:19px;height:19px}
+.icon-btn.sm.w{color:var(--amber)}.icon-btn.sm.g{color:#7ccf9d}
+.mbadge{position:absolute;top:-3px;right:-3px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--amber);color:#000;font-size:.68rem;font-weight:800;font-style:normal;display:grid;place-items:center}
+.mtool{transition:opacity .3s var(--ease)}
+.tabbar{transition:transform .35s var(--ease),opacity .25s}
+#home .tpages{transition:bottom .35s var(--ease)}
+html.mfull .tabbar{transform:translateY(105%);opacity:0;pointer-events:none}
+html.mfull #home .tpages{bottom:0}
+html.mfull .mtool{opacity:0;pointer-events:none}
+html.mfull .mtool>*{pointer-events:none}
+html.mfull .toast{bottom:calc(var(--pb) + 14px)}
+.icon-btn.sm.mfx{position:absolute;top:calc(var(--pt) - 8px);right:10px;z-index:9;opacity:0;pointer-events:none;transform:scale(.8);transition:opacity .25s var(--ease),transform .3s var(--ease);background:rgba(24,24,26,.85);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line)}
+html.mfull .mfx.show{opacity:1;pointer-events:auto;transform:none}
+/* ---- tasarım sayfası (oyundaki kart çizimleri) ---- */
+.agrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 14px}
+.atile{display:block;width:100%;text-align:left;min-width:0}
+.aimg{position:relative;aspect-ratio:1;border-radius:24px;overflow:hidden;background:#1b2127;border:1px solid var(--line);box-shadow:0 16px 30px -16px rgba(0,0,0,.9);transition:transform .2s var(--ease)}
+.aimg img{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.aimg b{position:absolute;left:9px;top:9px;min-width:26px;height:26px;padding:0 8px;border-radius:13px;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-size:.74rem;display:grid;place-items:center}
+.atile:active .aimg{transform:scale(.96)}
+.anm{margin-top:10px;padding:0 4px;font-weight:650;font-size:.95rem;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aprev{width:min(54vw,230px);aspect-ratio:1;margin:2px auto 18px;border-radius:26px;overflow:hidden;background:#1b2127;border:1px solid var(--line);box-shadow:0 18px 36px -14px rgba(0,0,0,.9)}
+.aprev img{display:block;width:100%;height:100%;object-fit:cover}
+.empty .primary{margin-top:22px}
+.pkgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 10px;padding:0 8px 8px}
+.pkgrid .aimg{border-radius:18px}
+.pkgrid .anm{font-size:.8rem;margin-top:7px}
+.pk.on .aimg{border:2px solid var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.pk.on .anm{color:var(--accent)}
+.pk.none .aimg{display:grid;place-items:center;color:var(--dim);background:var(--surface)}
+.pk.none .aimg svg{width:30px;height:30px}
+.in-ic.th{width:34px;height:34px;border-radius:10px;overflow:hidden;background:#1b2127}
+.in-ic.th img{width:100%;height:100%;object-fit:cover;display:block}
+.in-ic.th svg{width:22px;height:22px}
+
+/* ---- yatay akış haritası: yakınlaştırılabilir tuval ---- */
+#mapBody{position:relative;padding:0;overflow:hidden;overflow:clip;touch-action:none;cursor:grab;overscroll-behavior:none}
+#mapBody:active{cursor:grabbing}
+#world{position:absolute;left:0;top:0;transform-origin:0 0}
+#mapBody .empty{padding-top:calc(var(--pt) + 14vh)}
+.nd{padding:8px 11px}
+.nd .tx{white-space:normal;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;margin-top:4px;font-family:var(--serif);font-size:.76rem;line-height:1.32;color:rgba(247,247,245,.78)}
+.nd.has .tx{-webkit-line-clamp:2;color:rgba(255,255,255,.85)}
+.nd .sp{margin-top:1px}
+#mapBody[data-z="0"] .nd .sp,#mapBody[data-z="0"] .nd .tx,#mapBody[data-z="1"] .nd .tx{display:none}
+#mapBody[data-z="0"] .nd b{font-size:1.7rem;letter-spacing:-.03em;margin-top:6px}
+#mapBody[data-z="0"] .nd.has .cap{padding-top:30px}
+.elb{position:absolute;transform:translateY(-50%);padding:3px 8px;border-radius:10px;background:var(--bg);border:1px solid var(--line);font-size:.72rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;z-index:1}
+.elb.l{color:#8fb4d6;border-color:rgba(91,155,213,.45)}.elb.r{color:#ec8a74;border-color:rgba(224,80,58,.45)}.elb.n{color:#f2c94c;border-color:rgba(242,201,76,.45)}
+#mapBody:not([data-z="2"]) .elb{display:none}
+.bk{position:absolute;display:flex;gap:4px;transform:translateX(-100%);pointer-events:none;z-index:2}
+.bk span{font-size:.64rem;font-weight:750;padding:2px 6px;border-radius:7px;background:rgba(0,0,0,.74);color:#cfcfd2;border:1px solid var(--line);white-space:nowrap}
+.bk .l{color:#8fb4d6}.bk .r{color:#ec8a74}
+.zc{position:absolute;left:12px;bottom:12px;z-index:7;display:flex;align-items:center;gap:2px;padding:4px;border-radius:24px;background:rgba(24,24,26,.84);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line)}
+.zc button{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:1.4rem;line-height:1}
+.zc button:active{background:var(--surface2);transform:scale(.92)}
+.zc button svg{width:18px;height:18px}
+.zc .pct{min-width:50px;text-align:center;font-size:.8rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--dim)}
+html.rmode .zc{display:none}
+html.mfull .zc{bottom:calc(var(--pb) + 8px)}
 </style>
 </head>
 <body>
@@ -216,9 +409,11 @@ html.kbd .form-foot{padding-bottom:12px}
   <section class="view" id="home">
     <div class="tpages" id="tpages">
       <div class="tpage" role="tabpanel" aria-label="Harita">
-        <div class="top"><div class="ttl"><h1>Harita</h1><div class="sub" id="subMap"></div></div>
-          <button class="icon-btn acc" data-new aria-label="Yeni kart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
+        <div class="mtool"><span class="mcnt" id="subMap"></span><button class="icon-btn sm" id="mapFull" aria-label="Tam ekran"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button><button class="icon-btn sm" id="mapStat" aria-label="Durum ve uyarılar"></button><button class="icon-btn sm acc" data-new aria-label="Yeni kart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
         <div class="scroll" id="mapBody"></div>
+        <div class="zc" id="zc"><button id="zOut" aria-label="Uzaklaştır">−</button><span class="pct" id="zPct">100%</span><button id="zIn" aria-label="Yakınlaştır">+</button><button id="zFit" aria-label="Tümünü sığdır"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div>
+        <button class="icon-btn sm mfx" id="mapFullExit" aria-label="Tam ekrandan çık"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button>
+        <div class="rbar" id="rbar"><span class="rb-t"><b>Sıralama açık</b><small>Kartı tutup başka kartın üstüne sürükle: yerleri anında değişir, bağlar otomatik düzelir</small></span><button class="act s" id="rbUndo" disabled>Geri al</button><button class="act" id="rbDone">Bitti</button></div>
       </div>
       <div class="tpage" role="tabpanel" aria-label="Kartlar">
         <div class="top"><div class="ttl"><h1>Kartlar</h1><div class="sub" id="subCards"></div></div>
@@ -234,6 +429,11 @@ html.kbd .form-foot{padding-bottom:12px}
         <div class="top"><div class="ttl"><h1>Oyun</h1><div class="sub" id="subGame"></div></div></div>
         <div class="scroll" id="gameBody"></div>
       </div>
+      <div class="tpage" role="tabpanel" aria-label="Tasarım">
+        <div class="top"><div class="ttl"><h1>Tasarım</h1><div class="sub" id="subArt"></div></div>
+          <button class="icon-btn acc" data-io="arts" aria-label="Çizimleri oyun dosyasından al"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 19.5h14"/></svg></button></div>
+        <div class="scroll" id="artBody"></div>
+      </div>
     </div>
     <nav class="tabbar" id="tabbar" role="tablist" aria-label="Sayfalar">
       <i class="tb-ind" id="tbInd"></i>
@@ -241,7 +441,16 @@ html.kbd .form-foot{padding-bottom:12px}
       <button type="button" class="tb" role="tab" data-t="1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6.5" y="3.5" width="11" height="17" rx="3"/><path d="M3 7v10M21 7v10"/></svg><span>Kartlar</span></button>
       <button type="button" class="tb" role="tab" data-t="2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h12l-3 3.5 3 3.5H6"/></svg><span>Omurga</span></button>
       <button type="button" class="tb" role="tab" data-t="3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></svg><span>Oyun</span></button>
+      <button type="button" class="tb" role="tab" data-t="4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="9" cy="9.5" r="1.7"/><path d="M4 17l5-4.5 3.5 3L15 13l5 4.5"/></svg><span>Tasarım</span></button>
     </nav>
+  </section>
+
+  <!-- Kart sayfası: hero + gövde (grup sayfası tarzı) -->
+  <section class="view" id="cardPage" aria-label="Kart">
+    <div class="scroll" id="cpScroll"><div class="hero" id="cpHero"></div><div class="gbody" id="cpBody"></div></div>
+    <div class="ghead" id="cpHead"><span id="cpHeadT"></span></div>
+    <button class="icon-btn fbtn" id="cpBack" style="left:20px" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="icon-btn fbtn" id="cpEdit" style="right:20px" aria-label="Kartı düzenle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 00-4-4L4 16v4z"/></svg></button>
   </section>
 
   <!-- Kart düzenleyici: tam ekran sayfa -->
@@ -249,10 +458,11 @@ html.kbd .form-foot{padding-bottom:12px}
     <div class="top">
       <button class="icon-btn" id="cfBack" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
       <div class="ttl"><h1 id="cfTitle"></h1><div class="sub" id="cfSub"></div></div>
+      <div class="wz-prog" id="cfProg"><span class="wz-seg"><i></i></span><span class="wz-seg"><i></i></span><span class="wz-seg"><i></i></span><span class="wz-seg"><i></i></span></div><span class="wz-step" id="cfStep"></span>
     </div>
     <div class="scroll" id="cfBody"></div>
     <div class="form-foot">
-      <button class="primary" id="cfDone">Bitti</button>
+      <div class="wz-row"><button class="wz-bk off" id="cfPrev" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><button class="primary" id="cfDone">Bitti</button></div>
       <button class="ghost" id="cfDel">Kartı sil</button>
     </div>
   </section>
@@ -264,6 +474,46 @@ html.kbd .form-foot{padding-bottom:12px}
       <p class="ssub" id="nxSub"></p>
       <div class="sht-list" id="nxList"></div>
       <button class="primary sec" id="nxDone">Tamam</button>
+    </div>
+  </div>
+
+  <!-- Harita: karta basılı tutunca açılan panel -->
+  <div class="sht" id="ndSheet">
+    <div class="sht-card">
+      <h2 id="ndT"></h2>
+      <p class="ssub" id="ndSub"></p>
+      <div class="sht-list" id="ndList"></div>
+    </div>
+  </div>
+
+  <div class="sht" id="pkSheet"><div class="sht-card">
+    <h2>Çizim seç</h2><p class="ssub" id="pkSub"></p>
+    <div class="sht-list" id="pkList"></div>
+    <button class="primary sec" id="pkDone">Vazgeç</button>
+  </div></div>
+
+  <div class="sht" id="arSheet"><div class="sht-card">
+    <div class="sht-list" style="margin:0">
+      <div class="aprev" id="arPrev"></div>
+      <div class="fsec" style="margin-bottom:14px"><div class="fcard"><div class="fcell"><small>Çizim adı</small><input class="finput" id="arName" placeholder="Örn. Memur" autocomplete="off" enterkeyhint="done"></div></div></div>
+      <div class="fsec" style="margin-bottom:8px"><div class="fcard">
+        <button class="frow lnk lead" id="arCopy"><span class="in-ic" data-ic="copy"></span><span class="fl">SVG kodunu kopyala<small>Çizimin birebir kodu</small></span></button>
+        <button class="frow lnk lead" id="arSave"><span class="in-ic" data-ic="down"></span><span class="fl">SVG dosyası olarak indir<small>Başka yerde kullanmak için</small></span></button>
+        <button class="frow lnk lead danger" id="arDel"><span class="in-ic" data-ic="trash"></span><span class="fl">Çizimi sil<small>Yalnızca editörden kalkar, oyun dosyan etkilenmez</small></span></button>
+      </div></div>
+    </div>
+    <button class="primary sec" id="arDone">Tamam</button>
+  </div></div>
+
+  <div class="sht" id="wnSheet"><div class="sht-card"><h2>Durum</h2><p class="ssub" id="wnSub"></p><div class="sht-list" id="wnList"></div><button class="primary sec" id="wnDone">Tamam</button></div></div>
+
+  <!-- Düzeltme paneli: kartları bağla -->
+  <div class="sht" id="fxSheet">
+    <div class="sht-card">
+      <h2 id="fxT"></h2>
+      <p class="ssub" id="fxSub"></p>
+      <div class="sht-list" id="fxList"></div>
+      <button class="primary sec" id="fxDone">Tamam</button>
     </div>
   </div>
 
@@ -285,6 +535,15 @@ var ARCS={ana:['Ana hikaye','#e0503a'],yan:['Yan görev','#4f86b8'],dal:['Dal','
 var KEY='hikaye-masasi-v1';
 var $=function(s){return document.querySelector(s)};
 var I={
+  info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>',
+  sort:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20V4M7 4L4 7M7 4l3 3M17 4v16M17 20l-3-3M17 20l3-3"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
+  warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4L3 19.5h18z"/><path d="M12 10v4.5M12 17.5h.01"/></svg>',
+  okc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16.5 9.5"/></svg>',
+  unlink:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l2.6-2.6a4 4 0 0 0-5.7-5.7l-.9.9"/><path d="M14 10a4 4 0 0 0-5.7 0l-2.6 2.6a4 4 0 0 0 5.7 5.7l.9-.9"/><path d="M4 4l16 16"/></svg>',
+  stop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></svg>',
+  q:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/><path d="M9.7 9.6a2.4 2.4 0 1 1 3.4 2.2c-.7.4-1.1.9-1.1 1.7M12 17h.01"/></svg>',
+  trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5M14 11v5"/></svg>',
   chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>',
   check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
   x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
@@ -299,7 +558,8 @@ function seed(){
 }
 var S;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!S||!S.cards)S=seed();
-S.beats=S.beats||[];S.ending=S.ending||'';
+S.beats=S.beats||[];S.ending=S.ending||'';S.arts=S.arts||[];
+if(S.ends==null){S.ends={};if(S.cards.length)S.ends[S.cards[S.cards.length-1].id]=1}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function esc(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function mk(t){return esc(t).replace(/==([^=]+)==/g,'<mark class="hl">$1</mark>')}
@@ -310,47 +570,218 @@ function arcOf(c){return ARCS[c.arc]||ARCS.ana}
 function toast(m){var t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(function(){t.classList.remove('on')},1800)}
 
 /* ---------- analiz ---------- */
+var KIND={orphan:{n:'Kopuk',c:'t-orphan',ic:'unlink'},dead:{n:'Çıkmaz',c:'t-dead',ic:'stop'},miss:{n:'Eksik bağlantı',c:'t-miss',ic:'q'}};
 function analyze(){
-  var depth={},q=[],first=S.cards[0],bad={},issues=[];
+  var depth={},q=[],first=S.cards[0],bad={},issues=[],inc={},ends=S.ends||{};
   if(first){depth[first.id]=0;q.push(first.id)}
   while(q.length){var id=q.shift(),c=byId(id);if(!c)continue;nexts(c).forEach(function(n){if(byId(n)&&depth[n]==null){depth[n]=depth[id]+1;q.push(n)}})}
+  S.cards.forEach(function(c){nexts(c).forEach(function(n){if(n!==c.id&&byId(n))(inc[n]=inc[n]||[]).push(c.id)})});
+  function add(c,t,x){var i={id:c.id,t:t};for(var k in x)i[k]=x[k];issues.push(i);(bad[c.id]=bad[c.id]||{})[t]=1}
   S.cards.forEach(function(c){
-    if(depth[c.id]==null){bad[c.id]=1;issues.push({id:c.id,m:'Hiçbir yerden ulaşılmıyor'})}
-    ['left','right'].forEach(function(d){((c[d]||{}).next||[]).forEach(function(n){if(!byId(n)){bad[c.id]=1;issues.push({id:c.id,m:'"'+n+'" diye bir kart yok'})}})});
-    if(!nexts(c).length&&c!==S.cards[S.cards.length-1]){bad[c.id]=1;issues.push({id:c.id,m:'Devamı yok'})}
+    if(depth[c.id]==null)add(c,'orphan',{from:inc[c.id]||[]});
+    ['left','right'].forEach(function(d){((c[d]||{}).next||[]).forEach(function(n){if(!byId(n))add(c,'miss',{side:d,ref:n})})});
+    if(!nexts(c).filter(function(n){return byId(n)}).length&&!ends[c.id])add(c,'dead');
   });
   return{depth:depth,bad:bad,issues:issues};
 }
-
-/* ---------- harita ---------- */
-var mapAnim=true;
-function renderMap(){
-  var A=analyze(),rows=[],un=[],W=Math.max(240,($('#mapBody').clientWidth||innerWidth)-40),H=50,G=46;
-  S.cards.forEach(function(c){var d=A.depth[c.id];if(d==null)un.push(c);else(rows[d]=rows[d]||[]).push(c)});
-  if(un.length)rows.push(un);
-  var pos={},html='',y=0;
-  rows.forEach(function(r,ri){
-    r=r||[];if(!r.length)return;
-    var w=Math.min(158,(W-(r.length-1)*10)/r.length),x0=(W-(r.length*w+(r.length-1)*10))/2;
-    r.forEach(function(c,i){pos[c.id]={x:x0+i*(w+10),y:y,w:w};
-      html+='<button class="nd'+(A.bad[c.id]?' bad':'')+'" data-open="'+esc(c.id)+'" style="left:'+pos[c.id].x+'px;top:'+y+'px;width:'+w+'px;--ac:'+arcOf(c)[1]+';animation-delay:'+(ri*70+i*40)+'ms"><b>'+esc(c.id)+'</b><span>'+esc(c.speaker||'')+'</span></button>'});
-    y+=H+G});
-  var svg='';
-  S.cards.forEach(function(c){var p=pos[c.id];if(!p)return;
-    ['left','right'].forEach(function(d){((c[d]||{}).next||[]).forEach(function(n,k){var t=pos[n];if(!t)return;
-      var x1=p.x+p.w*(d==='left'?.3:.7),y1=p.y+H,x2=t.x+t.w/2,y2=t.y,m=(y1+y2)/2;
-      svg+='<path pathLength="1" d="M'+x1+' '+y1+'C'+x1+' '+m+' '+x2+' '+m+' '+x2+' '+y2+'" stroke="'+(d==='left'?'#5b9bd5':'#e0503a')+'" style="animation-delay:'+(300+k*60)+'ms"/>'})})});
-  var n=A.issues.length,h='';
-  h+='<div class="stat in '+(n?'':'ok')+'">'+(n?'<b>'+n+' uyarı</b><span>Aşağıdan karta dokunup düzelt.</span>':'<b>Her şey yolunda</b><span>Her kart ulaşılabilir ve devamı var.</span>')+'</div>';
-  if(n){h+='<div class="fsec in" style="--i:1"><div class="fcard">'+A.issues.slice(0,8).map(function(s){return'<button class="frow lnk warnrow" data-open="'+esc(s.id)+'"><span class="fl">'+esc(s.id)+'<small>'+esc(s.m)+'</small></span><span class="chev">'+I.chev+'</span></button>'}).join('')+'</div>'+(n>8?'<div class="fhint">+'+(n-8)+' uyarı daha</div>':'')+'</div>'}
-  if(!S.cards.length){h+='<div class="empty"><h2>Henüz kart yok</h2>Sağ üstteki + ile ilk kartı ekle.</div>'}
-  else{
-    h+='<div class="legend"><span><i style="background:#5b9bd5"></i>Sol seçim</span><span><i style="background:#e0503a"></i>Sağ seçim</span></div>'+
-    '<div class="map'+(mapAnim?' anim':'')+'" style="height:'+Math.max(y-G,60)+'px"><svg width="'+W+'" height="'+y+'">'+svg+'</svg>'+html+'</div>';
-  }
-  $('#mapBody').innerHTML=h;mapAnim=false;
-  $('#subMap').textContent=S.cards.length+' kart'+(n?' · '+n+' uyarı':'');
+function primary(b){return b.miss?'miss':b.dead?'dead':'orphan'}
+function badIcons(b){return b?Object.keys(KIND).filter(function(k){return b[k]}).map(function(k){return'<span class="bi '+KIND[k].c+'">'+I[KIND[k].ic]+'</span>'}).join(''):''}
+function issInfo(i){
+  if(i.t==='orphan')return{t:'Hikâyeden kopuk',d:i.from.length?'Buna sadece akışa bağlı olmayan kartlardan geçiliyor ('+i.from.map(function(x){return esc(x)}).join(', ')+'). Oyuncu bu karta ulaşamaz.':'Hiçbir karttan buraya geçilmiyor. Oyuncu bu karta hiç ulaşamaz.'};
+  if(i.t==='dead')return{t:'Çıkmaz',d:'Sola da sağa da kaydırınca gidilecek kart yok. Oyun burada tıkanır.'};
+  return{t:'Eksik bağlantı',d:(i.side==='left'?'Sol':'Sağ')+' seçim <b>'+esc(i.ref)+'</b> kartına gidiyor ama böyle bir kart yok.'};
 }
+function issRow(i){
+  var m=issInfo(i),K=KIND[i.t],id=esc(i.id),a;
+  if(i.t==='orphan')a='<button class="act" data-fx="in" data-id="'+id+'">Akıştan bir karta bağla</button><button class="act d" data-fx="del" data-id="'+id+'">Kartı sil</button>';
+  else if(i.t==='dead')a='<button class="act" data-fx="out" data-id="'+id+'">Devam kartı seç</button><button class="act s" data-fx="end" data-id="'+id+'">Bu bir son kart</button>';
+  else a='<button class="act" data-fx="mk" data-id="'+id+'" data-ref="'+esc(i.ref)+'">'+esc(i.ref)+' kartını oluştur</button><button class="act s" data-fx="rm" data-id="'+id+'" data-side="'+i.side+'" data-ref="'+esc(i.ref)+'">Bağlantıyı kaldır</button>';
+  return'<div class="iss-row '+K.c+'"><span class="iss-ic">'+I[K.ic]+'</span><div class="iss-tx"><b>'+m.t+'</b><p>'+m.d+'</p><div class="acts">'+a+'</div></div></div>';
+}
+function blank(id){return{id:id,speaker:'',text:'',arc:'ana',left:{label:'',effects:{},next:[]},right:{label:'',effects:{},next:[]}}}
+
+
+function artById(id){return(S.arts||[]).filter(function(a){return a.id===id})[0]}
+var artCache={};
+function artSrc(a){var k=a.id+':'+a.svg.length;return artCache[k]||(artCache[k]=svgURL(a.svg))}
+I.img='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="9" cy="9.5" r="1.7"/><path d="M4 17l5-4.5 3.5 3L15 13l5 4.5"/></svg>';
+/* ---------- harita ---------- */
+I.edit='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h5l10-10-5-5L4 15z"/><path d="M12.5 6.5l5 5"/></svg>';
+var mapAnim=true,reorder=false,drag=null,undoStack=[],NW=200,NH=108,CG=150,GY=22,DH=8,PADY=24;
+var C_L='#5b9bd5',C_R='#e0503a',C_N='#f2c94c',KMIN=.1,KMAX=2.6;
+var V={x:0,y:0,k:.6,init:0},T={x:0,y:0,k:.6},vAnim=0,Lc=null,mapMoved=false;
+/* bir sütundaki öğeleri istenen yüksekliklerine en yakın şekilde, üst üste binmeden dizer */
+function placeCol(des,hs,gap){
+  var n=des.length,off=[],o=0,i,B=[],ys=[];
+  for(i=0;i<n;i++){off[i]=o;o+=hs[i]+gap}
+  for(i=0;i<n;i++){
+    B.push({s:i,c:1,sum:des[i]-off[i]});
+    while(B.length>1&&B[B.length-2].sum/B[B.length-2].c>B[B.length-1].sum/B[B.length-1].c){var b=B.pop(),a=B[B.length-1];a.sum+=b.sum;a.c+=b.c}
+  }
+  B.forEach(function(b){var m=b.sum/b.c;for(var k=0;k<b.c;k++)ys[b.s+k]=m+off[b.s+k]});
+  return ys;
+}
+/* Yatay akış şeması: soldan sağa. Her kart en uzun yola göre bir sütuna oturur.
+   Birden çok sütun atlayan bağlar boş bir şeritten geçer, geri dönen bağlar kartın üstünde küçük etiket olur. */
+function layout(){
+  var A=analyze(),idx={},lv={},back={},st={},order=[],root=S.cards[0],q,ci;
+  S.cards.forEach(function(c,i){idx[c.id]=i});
+  function side(c,d){var a=[];((c[d]||{}).next||[]).forEach(function(n){if(n!==c.id&&byId(n)&&a.indexOf(n)<0)a.push(n)});return a}
+  function kids(c){var a=side(c,'left');side(c,'right').forEach(function(n){if(a.indexOf(n)<0)a.push(n)});return a}
+  function dfs(id){st[id]=1;kids(byId(id)).forEach(function(n){if(st[n]===1)back[id+'>'+n]=1;else if(!st[n])dfs(n)});st[id]=2;order.push(id)}
+  if(root){
+    dfs(root.id);lv[root.id]=0;
+    for(q=order.length-1;q>=0;q--){var id=order[q];if(lv[id]==null)lv[id]=0;
+      kids(byId(id)).forEach(function(n){if(!back[id+'>'+n])lv[n]=Math.max(lv[n]||0,lv[id]+1)})}
+  }
+  var items={},cols=[],E=[],backs={},un=[];
+  function item(key,card,col,o){var it={key:key,c:card,col:col,o:o,x:0,y:0,h:card?NH:DH};items[key]=it;(cols[col]=cols[col]||[]).push(it);return it}
+  S.cards.forEach(function(c){if(lv[c.id]!=null)item(c.id,c,lv[c.id],idx[c.id]);else un.push(c)});
+  S.cards.forEach(function(c){
+    if(lv[c.id]==null)return;
+    var Ls=side(c,'left'),Rs=side(c,'right'),
+        lo=Ls.filter(function(n){return Rs.indexOf(n)<0}),both=Ls.filter(function(n){return Rs.indexOf(n)>-1}),ro=Rs.filter(function(n){return Ls.indexOf(n)<0}),
+        cats=(lo.length?1:0)+(both.length?1:0)+(ro.length?1:0),pos3=cats===1?[.5]:cats===2?[.3,.7]:[.25,.5,.75],pi=0,F={},
+        ll=(c.left||{}).label||'',rl=(c.right||{}).label||'';
+    if(lo.length)F.l=pos3[pi++];if(both.length)F.b=pos3[pi++];if(ro.length)F.r=pos3[pi++];
+    function add(d,n,k,col,fp,lab){
+      if(lv[n]==null||lv[n]<=lv[c.id]||back[c.id+'>'+n]){(backs[c.id]=backs[c.id]||[]).push({d:d,n:n});return}
+      var chain=[c.id],r;
+      for(r=lv[c.id]+1;r<lv[n];r++){var key='~'+c.id+'>'+n+':'+d+':'+r;item(key,null,r,idx[c.id]+.5);chain.push(key)}
+      chain.push(n);
+      E.push({chain:chain,col:col,fp:fp,k:k,d:d,src:c.id,dst:n,lab:lab});
+    }
+    lo.forEach(function(n,k){add('left',n,k,C_L,F.l,ll)});
+    both.forEach(function(n,k){add('both',n,k,C_N,F.b,ll===rl?ll:(ll&&rl?ll+' / '+rl:ll||rl))});
+    ro.forEach(function(n,k){add('right',n,k,C_R,F.r,rl)});
+  });
+  function exitY(it,fp){return it.c?it.y+NH*fp:it.y+DH/2}
+  var incoming={};
+  E.forEach(function(e){for(var i=1;i<e.chain.length;i++)(incoming[e.chain[i]]=incoming[e.chain[i]]||[]).push({e:e,i:i})});
+  for(ci=0;ci<cols.length;ci++){
+    var col=cols[ci];if(!col||!col.length)continue;
+    var b=col.map(function(it){
+      var a=(incoming[it.key]||[]).map(function(r){return exitY(items[r.e.chain[r.i-1]],r.e.fp)});
+      return{it:it,m:a.length?a.reduce(function(u,v){return u+v},0)/a.length:null}});
+    b.sort(function(p,q2){return(p.m==null?1e9:p.m)-(q2.m==null?1e9:q2.m)||p.it.o-q2.it.o});
+    var des=[],hs=[];
+    b.forEach(function(o,k){hs[k]=o.it.h;des[k]=o.m!=null?o.m-o.it.h/2:(k?des[k-1]+hs[k-1]+GY:0)});
+    var ys=placeCol(des,hs,GY);
+    cols[ci]=b.map(function(o,k){o.it.y=ys[k];o.it.x=ci*(NW+CG);return o.it});
+  }
+  var minY=1e9,maxY=-1e9,k2;
+  for(k2 in items){var it=items[k2];minY=Math.min(minY,it.y);maxY=Math.max(maxY,it.y+it.h)}
+  if(minY===1e9){minY=0;maxY=0}
+  var sh=PADY-minY;for(k2 in items)items[k2].y+=sh;
+  var mainH=maxY-minY+PADY*2,mainW=Math.max(0,cols.length*(NW+CG)-CG),pos={},labels=[],h=mainH,w=mainW;
+  /* girişlerin hedef kenara yayılması */
+  var byDst={};E.forEach(function(e){var key=e.chain[e.chain.length-1];(byDst[key]=byDst[key]||[]).push(e)});
+  Object.keys(byDst).forEach(function(key){
+    var t=items[key],a=byDst[key];
+    a.sort(function(u,v){return exitY(items[u.chain[u.chain.length-2]],u.fp)-exitY(items[v.chain[v.chain.length-2]],v.fp)||u.k-v.k});
+    var m=a.length;a.forEach(function(e,i){e.ey=m===1?t.y+NH/2:t.y+NH*(.24+.52*i/(m-1))})});
+  /* kopuk kartlar altta ayrı bir bölgede */
+  if(un.length){
+    var rs=Math.max(3,Math.floor((Math.max(mainW,3*(NW+24))+24)/(NW+24))),y0=(cols.length?mainH+30:PADY)+30;
+    labels.push(y0-34);
+    un.forEach(function(c,i){var it={key:c.id,c:c,x:(i%rs)*(NW+24),y:y0+Math.floor(i/rs)*(NH+GY),h:NH,col:0,o:idx[c.id]};items[c.id]=it});
+    h=y0+Math.ceil(un.length/rs)*(NH+GY)+PADY;w=Math.max(w,Math.min(un.length,rs)*(NW+24)-24);
+  }
+  S.cards.forEach(function(c){var it=items[c.id];if(it)pos[c.id]={x:it.x,y:it.y,w:NW,h:NH}});
+  E.forEach(function(e){
+    var s=items[e.chain[0]],x=s.x+NW,y=s.y+NH*e.fp,d='M'+x+' '+y;
+    for(var i=1;i<e.chain.length;i++){
+      var t=items[e.chain[i]],ty=t.c?e.ey:t.y+DH/2,tx=t.x,m=(x+tx)/2;
+      d+='C'+m+' '+y+' '+m+' '+ty+' '+tx+' '+ty;
+      if(!t.c){x=tx+NW;y=ty;d+='H'+x}else{x=tx;y=ty}
+    }
+    e.d_=d;
+  });
+  return{A:A,pos:pos,items:items,E:E,backs:backs,labels:labels,w:Math.max(w,NW),h:Math.max(h,NH+PADY*2)};
+}
+function edgesSVG(L){
+  var svg=L.E.map(function(e){return'<path d="'+e.d_+'" stroke="'+e.col+'"/>'}).join('');
+  var mc={};
+  L.A.issues.forEach(function(s){if(s.t!=='miss')return;var p=L.pos[s.id];if(!p)return;
+    var k=mc[s.id+s.side]=(mc[s.id+s.side]||0)+1,x=p.x+NW,y=p.y+NH*(s.side==='left'?.3:.7)+(k-1)*12;
+    svg+='<path d="M'+x+' '+y+'h22" stroke="#ff5a4d" style="stroke-dasharray:3 3;animation:none"/><path d="M'+(x+26)+' '+(y-4)+'l8 8M'+(x+34)+' '+(y-4)+'l-8 8" stroke="#ff5a4d" style="animation:none"/>'});
+  return svg;
+}
+function labelsHTML(L){return L.labels.map(function(t){return'<div class="maplbl" style="top:'+t+'px"><span class="ic">'+I.unlink+'</span>Akıştan kopuk kartlar</div>'}).join('')}
+/* bağlantı yanıtları: yeterince yakınlaşınca çizginin başında görünür */
+function linkLabels(L){
+  var seen={},h='';
+  L.E.forEach(function(e){
+    if(!e.lab)return;var s=L.items[e.src],y=s.y+NH*e.fp,key=e.src+'|'+e.fp+'|'+e.lab;if(seen[key])return;seen[key]=1;
+    h+='<div class="elb '+(e.d==='left'?'l':e.d==='right'?'r':'n')+'" style="left:'+(s.x+NW+8)+'px;top:'+y+'px;max-width:'+(CG-26)+'px">'+esc(e.lab)+'</div>'});
+  return h;
+}
+function backsHTML(L){
+  return Object.keys(L.backs).map(function(id){var p=L.pos[id];if(!p)return'';var a=L.backs[id];
+    return'<div class="bk" style="left:'+(p.x+NW-5)+'px;top:'+(p.y+NH-22)+'px">'+a.slice(0,2).map(function(b){return'<span class="'+(b.d==='left'?'l':b.d==='right'?'r':'')+'">↩ '+esc(b.n)+'</span>'}).join('')+(a.length>2?'<span>+'+(a.length-2)+'</span>':'')+'</div>'}).join('');
+}
+function renderMap(){
+  var L=layout(),A=L.A,html='';Lc=S.cards.length?L:null;
+  S.cards.forEach(function(c){var p=L.pos[c.id];if(!p)return;
+    var bd=A.bad[c.id],pk=bd?primary(bd):'',ar=c.art?artById(c.art):null,tx=plain(c.text).replace(/\s+/g,' ').trim(),
+        inner='<b>'+esc(c.id)+'</b><span class="sp">'+esc(c.speaker||'')+'</span><span class="tx">'+esc(tx)+'</span>';
+    html+='<button class="nd'+(ar?' has':'')+(bd?' bad '+KIND[pk].c:'')+'" data-open="'+esc(c.id)+'" style="left:'+p.x+'px;top:'+p.y+'px;width:'+NW+'px;height:'+NH+'px;--ac:'+arcOf(c)[1]+';animation-delay:'+(L.items[c.id].col*60)+'ms">'+
+      (ar?'<img alt="" draggable="false" src="'+artSrc(ar)+'"><div class="cap">'+inner+'</div>':inner)+(bd?'<i class="nb">'+I[KIND[pk].ic]+'</i>':'')+'</button>'});
+  var n=A.issues.length,h='';
+  if(!S.cards.length)h='<div class="empty"><h2>Henüz kart yok</h2>Sağ üstteki + ile ilk kartı ekle.</div>';
+  else h='<div class="map'+(mapAnim?' anim':'')+(reorder?' reorder':'')+'" id="world" style="width:'+L.w+'px;height:'+L.h+'px"><svg width="'+L.w+'" height="'+L.h+'">'+edgesSVG(L)+'</svg>'+labelsHTML(L)+linkLabels(L)+html+backsHTML(L)+'</div>';
+  $('#mapBody').innerHTML=h;mapAnim=false;
+  viewInit();applyView();
+  $('#subMap').textContent=S.cards.length+' kart';paintStat(n);
+}
+/* sürükleme sırasında DOM'u yeniden kurmadan konumları günceller (anlık yer değiştirme) */
+function relayout(skip){
+  var m=$('#world');if(!m)return null;
+  var L=layout();Lc=L;
+  [].forEach.call(m.querySelectorAll('.nd'),function(n){
+    var p=L.pos[n.dataset.open];if(!p||n.dataset.open===skip)return;
+    n.style.left=p.x+'px';n.style.top=p.y+'px'});
+  m.style.width=L.w+'px';m.style.height=L.h+'px';
+  var sv=m.querySelector('svg');sv.setAttribute('width',L.w);sv.setAttribute('height',L.h);sv.innerHTML=edgesSVG(L);
+  [].forEach.call(m.querySelectorAll('.maplbl,.bk,.elb'),function(e){e.remove()});
+  m.insertAdjacentHTML('beforeend',labelsHTML(L)+linkLabels(L)+backsHTML(L));
+  return L;
+}
+/* ---------- yakınlaştırma / kaydırma ---------- */
+function fitT(){
+  var b=$('#mapBody'),vw=b.clientWidth,vh=b.clientHeight,L=Lc,mx=16,mt=80,mb=72;
+  var k=Math.max(KMIN,Math.min(1.2,Math.min((vw-2*mx)/L.w,(vh-mt-mb)/L.h)));
+  return{k:k,x:(vw-L.w*k)/2,y:mt+(vh-mt-mb-L.h*k)/2};
+}
+function viewInit(){
+  var b=$('#mapBody'),vw=b.clientWidth,vh=b.clientHeight;
+  if(V.init||!Lc||!vw||!vh)return;
+  var f=fitT();
+  if(f.k>=.5){V.k=f.k;V.x=f.x;V.y=f.y}
+  else{var p=Lc.pos[S.cards[0].id],k=.6;V.k=k;V.x=16-p.x*k;V.y=vh/2-(p.y+NH/2)*k}
+  T.x=V.x;T.y=V.y;T.k=V.k;V.init=1;
+}
+function applyView(){
+  var w=$('#world'),b=$('#mapBody');
+  if(w)w.style.transform='translate('+V.x+'px,'+V.y+'px) scale('+V.k+')';
+  var z=V.k<.5?0:V.k<.85?1:2;if(b.dataset.z!=z)b.dataset.z=z;
+  var p=$('#zPct');if(p)p.textContent=Math.round(V.k*100)+'%';
+}
+function vTick(){
+  var a=.2,dk=T.k-V.k,dx=T.x-V.x,dy=T.y-V.y;
+  if(Math.abs(dk)<.0007&&Math.abs(dx)<.3&&Math.abs(dy)<.3){V.k=T.k;V.x=T.x;V.y=T.y;applyView();vAnim=0;return}
+  V.k+=dk*a;V.x+=dx*a;V.y+=dy*a;applyView();vAnim=requestAnimationFrame(vTick);
+}
+function vGo(){if(!vAnim)vAnim=requestAnimationFrame(vTick)}
+function vSet(){T.x=V.x;T.y=V.y;T.k=V.k;if(vAnim){cancelAnimationFrame(vAnim);vAnim=0}}
+function zoomAt(f,cx,cy){
+  var wx=(cx-V.x)/V.k,wy=(cy-V.y)/V.k,k=Math.max(KMIN,Math.min(KMAX,T.k*f));
+  T.k=k;T.x=cx-wx*k;T.y=cy-wy*k;vGo();
+}
+function fitView(){if(!Lc)return;var f=fitT();T.k=f.k;T.x=f.x;T.y=f.y;vGo()}
+$('#zIn').onclick=function(){var b=$('#mapBody');zoomAt(1.45,b.clientWidth/2,b.clientHeight/2)};
+$('#zOut').onclick=function(){var b=$('#mapBody');zoomAt(1/1.45,b.clientWidth/2,b.clientHeight/2)};
+$('#zFit').onclick=fitView;
 
 /* ---------- kartlar ---------- */
 var filt='all';
@@ -359,7 +790,7 @@ function renderCards(){
   var h='<div class="filters"><button class="fl-chip'+(filt==='all'?' on':'')+'" data-f="all">Tümü</button>'+keys.map(function(k){return'<button class="fl-chip'+(filt===k?' on':'')+'" data-f="'+k+'">'+ARCS[k][0]+'</button>'}).join('')+'</div>';
   if(!list.length)h+='<div class="empty"><h2>'+(S.cards.length?'Bu türde kart yok':'Henüz kart yok')+'</h2>Sağ üstteki + düğmesiyle yeni kart ekle.</div>';
   h+=list.map(function(o){var c=o.c,L=c.left||{},R=c.right||{},col=arcOf(c)[1];
-    return'<button class="card" data-open="'+esc(c.id)+'"><span class="tile" style="background:'+col+'29;color:'+col+'">'+(o.i+1)+'</span><span class="bd"><span class="name">'+esc(c.id)+' · '+esc(c.speaker||'Konuşan yok')+(A.bad[c.id]?'<i></i>':'')+'</span><p'+(c.text?'':' class="none"')+'>'+(c.text?mk(c.text):'Boş kart')+'</p><span class="chips"><span class="chip l">← '+esc(L.label||'—')+'</span><span class="chip r">'+esc(R.label||'—')+' →</span></span></span></button>'}).join('');
+    return'<button class="card" data-open="'+esc(c.id)+'"><span class="tile" style="background:'+col+'29;color:'+col+'">'+(o.i+1)+'</span><span class="bd"><span class="name">'+esc(c.id)+' · '+esc(c.speaker||'Konuşan yok')+badIcons(A.bad[c.id])+'</span><p'+(c.text?'':' class="none"')+'>'+(c.text?mk(c.text):'Boş kart')+'</p><span class="chips"><span class="chip l">← '+esc(L.label||'—')+'</span><span class="chip r">'+esc(R.label||'—')+' →</span></span></span></button>'}).join('');
   $('#cardsBody').innerHTML=h;
   $('#subCards').textContent=S.cards.length+' kart';
 }
@@ -387,78 +818,263 @@ function renderGame(){
     row('in','Kartları oyundan al','Oyunun index.html dosyasından içeri alır',I.down)+
     row('out','Oyuna işle ve indir','Yalnızca kart bölümü değişir; kod bozulmaz',I.up)+
     row('copy','Kart kodunu kopyala','Elle yapıştırmak istersen',I.copy)+
-    '</div><div class="fhint">Önce oyunun index.html dosyasını seçersin. Çizimler ve oyun kodu olduğu gibi kalır, sadece kart bölümü güncellenir.</div></div>';
+    row('arts','Kart çizimlerini oyundan al','Tasarım sekmesine isimleriyle dizilir',I.down)+
+    '</div><div class="fhint">Önce oyunun index.html dosyasını seçersin. Çizimler ve oyun kodu olduğu gibi kalır, sadece kart bölümü güncellenir.</div></div>'+
+    '<div class="fsec"><div class="fcap">Sıfırla</div><div class="fcard"><button class="frow lnk lead danger" data-io="reset"><span class="in-ic">'+I.trash+'</span><span class="fl">Tüm verileri sıfırla<small>Tüm kartlar, harita, omurga ve sabit son silinir (çizimlerin korunur)</small></span><span class="chev">'+I.chev+'</span></button></div><div class="fhint">Baştan tasarlamak içindir. Geri alınamaz, önce "Oyuna işle ve indir" ile yedek alabilirsin.</div></div>';
   $('#subGame').textContent=S.cards.length+' kart hazır';
 }
-function refresh(){renderMap();renderCards();renderSpine();renderGame()}
+function refresh(){renderMap();renderCards();renderSpine();renderGame();renderArts();if(cpOpen)renderCP();if($("#wnSheet").classList.contains("open"))renderWn()}
 
 /* ---------- alt paneller ---------- */
 function sheetOpen(id){$(id).classList.add('open')}
 function sheetClose(id){$(id).classList.remove('open')}
 var dlgCb=null;
-function ask(t,p,ok,cb){$('#dlgT').textContent=t;$('#dlgP').textContent=p;$('#dlgOk').textContent=ok;dlgCb=cb;sheetOpen('#dlg')}
+function ask(t,p,ok,cb,dng,no){$('#dlgT').textContent=t;$('#dlgP').textContent=p;$('#dlgOk').textContent=ok;$('#dlgOk').classList.toggle('dng',!!dng);$('#dlgNo').textContent=no||'Vazgeç';dlgCb=cb;sheetOpen('#dlg')}
 $('#dlgOk').onclick=function(){sheetClose('#dlg');var f=dlgCb;dlgCb=null;if(f)f()};
 $('#dlgNo').onclick=function(){sheetClose('#dlg');dlgCb=null};
 $('#dlg').addEventListener('click',function(e){if(e.target===this)$('#dlgNo').onclick()});
 
-/* ---------- kart düzenleyici ---------- */
-var cur=null,formOpen=false,pushed=false,nxSide='left';
-function sideSec(d,k){
+/* ---------- kart düzenleyici ----------
+   draft=true: kart henüz S.cards içinde değil; "Kartı kaydet"e basılana kadar eklenmez.
+   dIn: taslak kartın bağlanacağı yerler ("kartId|left" / "kartId|right") */
+var cur=null,formOpen=false,pushed=false,nxSide='left',draft=false,dIn=[],dEnd=false,dInit='',retId=null;
+function isEnd(){return draft?dEnd:!!(S.ends||{})[cur.id]}
+function snap(){return JSON.stringify([cur,dIn.slice().sort(),dEnd])}
+function draftDirty(){return !!(draft&&cur&&snap()!==dInit)}
+function freeId(){var n=S.cards.length+1,id='k'+n;while(byId(id))id='k'+(++n);return id}
+function nm(id,d){return id+(d==='left'?' (sol)':' (sağ)')}
+function sideSec(d,k,nonx){
   var o=cur[d]||(cur[d]={label:'',effects:{},next:[]}),e=o.effects||{};
   var cap=d==='left'?'<span class="sidecap"><i style="background:#5b9bd5"></i>Sola kaydırınca</span>':'<span class="sidecap"><i style="background:#e0503a"></i>Sağa kaydırınca</span>';
   return'<div class="fsec" style="--k:'+k+'"><div class="fcap">'+cap+'</div><div class="fcard">'+
    '<div class="fcell"><small>Seçim etiketi</small><input class="finput" data-p="'+d+'.label" value="'+esc(o.label)+'" placeholder="Örn. Evet" enterkeyhint="done" autocomplete="off"></div>'+
    Object.keys(STATS).map(function(s){return'<div class="frow"><span class="fl">'+STATS[s]+'</span>'+stepHTML(d,s,e[s]||0)+'</div>'}).join('')+
    '<div class="fcell"><small>Bayrak koy (virgülle ayır)</small><input class="finput" data-l="'+d+'.set" value="'+esc((o.set||[]).join(', '))+'" placeholder="hatirliyor" enterkeyhint="done" autocomplete="off" autocapitalize="none"></div>'+
-   '<button class="frow lnk" data-nx="'+d+'"><span class="fl">Sıradaki kartlar<small></small></span><span class="chev">'+I.chev+'</span></button>'+
+   (nonx?'':'<button class="frow lnk" data-nx="'+d+'"><span class="fl">Sıradaki kartlar<small></small></span><span class="chev">'+I.chev+'</span></button>')+
    '</div></div>';
 }
 function stepHTML(d,s,v){return'<div class="stepper" data-e="'+d+'.'+s+'"><button type="button" data-d="-5" aria-label="Azalt">−</button><div class="val">'+valHTML(v)+'</div><button type="button" data-d="5" aria-label="Arttır">+</button></div>'}
 function valHTML(v){return'<b class="'+(v>0?'p':v<0?'n':'z')+'">'+(v>0?'+':'')+v+'</b>'}
 function updNx(d){
-  var b=$('#cfBody [data-nx="'+d+'"]');if(!b)return;
+  var b=$('#cfBody [data-nx="'+d+'"]');if(!b||!cur)return;
   var n=(cur[d]||{}).next||[],bad=n.filter(function(x){return!byId(x)}).length,s=b.querySelector('small');
   s.textContent=n.length?n.join(', ')+(bad?' · '+bad+' kart yok':''):'Seçilmedi';
-  b.classList.toggle('warnrow',!!bad);
+  b.classList.toggle('warnrow',!!bad);updWarn();
 }
-function openForm(id){
-  if(formOpen)return;cur=byId(id);if(!cur)return;
-  formOpen=true;
+function updIn(){
+  var s=$('#inSm');if(!s||!cur)return;var r=[];
+  if(draft)dIn.forEach(function(k){var p=k.split('|');r.push(nm(p[0],p[1]))});
+  else S.cards.forEach(function(c){if(c===cur)return;['left','right'].forEach(function(d){if(((c[d]||{}).next||[]).indexOf(cur.id)>-1)r.push(nm(c.id,d))})});
+  s.textContent=r.length?r.join(', '):'Hiçbir karttan geçilmiyor';
+}
+function updWarn(){
+  var el=$('#cfWarn');if(!el||!cur)return;
+  if(draft){
+    var r=dIn.map(function(k){var p=k.split('|');return esc(p[0])+' kartının '+(p[1]==='left'?'sol':'sağ')+' seçimine'});
+    el.innerHTML='<div class="okpill info"><span class="ic">'+I.info+'</span><span>Yeni kart: “Kartı kaydet”e basana kadar eklenmez; geri dönersen yaptıkların kaybolur.'+
+      (r.length?' Kaydedince '+r.join(', ')+' bağlanacak.':(S.cards.length?' Henüz hiçbir karttan buraya geçilmiyor, aşağıdan bağlayabilirsin.':''))+'</span></div>';
+    return}
+  var mine=analyze().issues.filter(function(i){return i.id===cur.id});
+  el.innerHTML=mine.length?'<div class="iss">'+mine.map(function(i){var m=issInfo(i),K=KIND[i.t];return'<div class="iss-row '+K.c+'"><span class="iss-ic">'+I[K.ic]+'</span><div class="iss-tx"><b>'+m.t+'</b><p>'+m.d+'</p></div></div>'}).join('')+'</div>':'<div class="okpill"><span class="ic">'+I.okc+'</span>Bu kartta sorun yok</div>';
+}
+function showForm(){
+  var was=formOpen;formOpen=true;
   var keys=Object.keys(ARCS),ai=Math.max(0,keys.indexOf(cur.arc||'ana'));
-  $('#cfTitle').textContent=cur.id;$('#cfSub').textContent=cur.speaker||'Konuşan yok';
+  $('#cfTitle').textContent=cur.id;$('#cfSub').textContent=draft?'Yeni kart':(cur.speaker||'Konuşan yok');
+  $('#cfDone').textContent=draft?'Kartı kaydet':'Bitti';$('#cfDel').style.display=draft?'none':'';
   $('#cfBody').innerHTML=
+   '<div class="fsec" id="cfWarn" style="--k:0"></div>'+
    '<div class="fsec" style="--k:0"><div class="fcap">Kart</div><div class="fcard">'+
     '<div class="frow seg-row"><div class="seg" id="arcSeg" style="--n:3;--k:'+ai+'"><i></i>'+keys.map(function(k){return'<button type="button" data-arc="'+k+'" class="'+(k===(cur.arc||'ana')?'on':'')+'">'+ARCS[k][0]+'</button>'}).join('')+'</div></div>'+
-    '<div class="fcell"><small>Konuşan</small><input class="finput" data-p="speaker" value="'+esc(cur.speaker)+'" placeholder="Örn. Boğuk bir ses" enterkeyhint="done" autocomplete="off"></div>'+
+    '<div class="fcell"><small>Konuşan</small><input class="finput" data-p="speaker" value="'+esc(cur.speaker)+'" placeholder="Örn. Boğuk bir ses" enterkeyhint="done" autocomplete="off"></div>'+artRow(cur)+
+    '<button type="button" class="frow lnk lead endrow'+(isEnd()?' on':'')+'" id="endBtn"><span class="fl">Hikâyenin sonu<small>Devamı olmayan son kart; çıkmaz uyarısı vermez</small></span><span class="sw-ck">'+I.check+'</span></button>'+
    '</div></div>'+
+   '<div class="fsec" style="--k:1"><div class="fcap">Bağlantı</div><div class="fcard"><button type="button" class="frow lnk" id="inBtn"><span class="fl">Bu karta nereden geçilir<small id="inSm"></small></span><span class="chev">'+I.chev+'</span></button></div></div>'+
    '<div class="fsec" style="--k:1"><div class="fcap">Metin</div><div class="fcard">'+
     '<textarea id="txt" class="finput" data-p="text" placeholder="Kartın metni…">'+esc(cur.text)+'</textarea>'+
     '<button type="button" class="frow lnk lead" id="mkBtn"><span class="in-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h5l10-10-5-5L4 15z"/><path d="M12.5 6.5l5 5"/></svg></span><span class="fl">Seçili ifadeyi işaretle<small>Metinde bir ifade seç, sonra dokun</small></span></button>'+
     '<div class="prevbox"><small>Önizleme</small><div class="prev" id="prev">'+mk(cur.text)+'</div></div>'+
    '</div></div>'+
    sideSec('left',2)+sideSec('right',3);
-  updNx('left');updNx('right');
-  var f=$('#cardForm');f.inert=false;$('#home').inert=true;
+  if(draft)$('#cfBody').innerHTML=wzBody();paintWz();
+  updNx('left');updNx('right');updIn();
   $('#cfBody').scrollTop=0;resetDel();
-  f.classList.add('open');
-  try{history.pushState({f:1},'');pushed=true}catch(e){pushed=false}
+  if(!was){
+    var f=$('#cardForm');f.inert=false;$('#home').inert=true;
+    f.classList.add('open');
+    try{history.pushState({f:1},'');pushed=true}catch(e){pushed=false}
+  }
+}
+function openForm(id){
+  if(formOpen)return;var c=byId(id);if(!c)return;
+  cur=c;draft=false;dIn=[];dEnd=false;retId=null;showForm();
+}
+/* yeni (taslak) kart. pid+side verilirse kaydedilince o karta bağlanır */
+function mkDraft(pid,side,ret){
+  wzStep=0;wzWarned=0;
+  cur=blank(freeId());draft=true;dIn=pid?[pid+'|'+side]:[];dEnd=false;retId=ret||null;dInit=snap();showForm();
+}
+function newCard(pid,side){if(formOpen)return;mkDraft(pid,side,null)}
+function saveDraft(){
+  var c=cur;S.cards.push(c);
+  dIn.forEach(function(k){var p=k.split('|'),par=byId(p[0]);if(!par)return;
+    var o=par[p[1]]||(par[p[1]]={label:'',effects:{},next:[]}),a=o.next||(o.next=[]);if(a.indexOf(c.id)<0)a.push(c.id)});
+  if(dEnd){S.ends=S.ends||{};S.ends[c.id]=1}
+  draft=false;dIn=[];dEnd=false;
+  save();
+}
+/* formdan "yeni devam kartı": açık kart taslaksa önce kaydedilir, sonra ona bağlı yeni taslak açılır */
+function newFromForm(side){
+  if(!cur)return;var pid=cur.id;sheetClose('#nxSheet');
+  if(draft){saveDraft();toast(pid+' kaydedildi')}
+  mkDraft(pid,side,pid);refresh();
+}
+function discardDraft(){
+  var r=retId;draft=false;dIn=[];dEnd=false;retId=null;
+  if(r&&byId(r)){cur=byId(r);showForm();return}
+  closeForm();
+}
+function requestClose(){
+  if(!formOpen)return;
+  if(draftDirty())return ask('Kart kaydedilmedi','Geri dönersen bu kartta yaptığın tüm işlemler kaybolacak ve kart eklenmeyecek.','Kaydetmeden çık',discardDraft,true,'Düzenlemeye devam et');
+  if(draft)return discardDraft();
+  closeForm();
 }
 function doClose(){
   if(!formOpen)return;formOpen=false;
-  $('#cardForm').classList.remove('open');sheetClose('#nxSheet');
+  $('#cardForm').classList.remove('open');sheetClose('#nxSheet');sheetClose('#fxSheet');
   var a=document.activeElement;if(a&&a.blur)a.blur();
-  $('#home').inert=false;cur=null;
+  $('#home').inert=false;cur=null;draft=false;dIn=[];dEnd=false;retId=null;
   setTimeout(function(){if(!formOpen)$('#cardForm').inert=true},450);
   refresh();
 }
 function closeForm(){
   if(!formOpen)return;
   var p=pushed;pushed=false;doClose();
-  if(p){try{history.back()}catch(e){}}
+  if(p){skipPop=1;try{history.back()}catch(e){skipPop=0}}
 }
-window.addEventListener('popstate',function(){if(formOpen){pushed=false;doClose()}});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){if($('#nxSheet').classList.contains('open'))sheetClose('#nxSheet');else if($('#dlg').classList.contains('open'))$('#dlgNo').onclick();else closeForm()}});
-$('#cfBack').onclick=closeForm;$('#cfDone').onclick=closeForm;
+window.addEventListener('popstate',function(){
+  if(skipPop){skipPop=0;return}
+  if(!formOpen){if(cpOpen){cpPush=false;if(cpStack.length){try{history.pushState({c:1},'');cpPush=true}catch(e){}cpId=cpStack.pop();renderCP(1)}else hideCP()}return}
+  pushed=false;
+  if(draft){try{history.pushState({f:1},'');pushed=true}catch(e){}requestClose();return}
+  doClose();
+});
+window.addEventListener('beforeunload',function(e){if(formOpen&&draftDirty()){e.preventDefault();e.returnValue=''}});
+document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;
+  if($('#dlg').classList.contains('open'))$('#dlgNo').onclick();
+  else if($('#fxSheet').classList.contains('open'))closeFx();
+  else if($('#nxSheet').classList.contains('open'))sheetClose('#nxSheet');
+  else if($('#ndSheet').classList.contains('open'))sheetClose('#ndSheet');
+  else if(formOpen)requestClose();else if(cpOpen)cpBackUI()});
+$('#cfBack').onclick=requestClose;
+$('#cfDone').onclick=function(){
+  if(draft&&wzStep<3){
+    if(wzStep===1&&!(cur.text||'').trim()&&!wzWarned){wzWarned=1;return toast('Metin boş. Geçmek için tekrar dokun')}
+    wzStep++;wzWarned=0;return showForm();
+  }
+  if(draft){
+    var r=retId,id=cur.id;saveDraft();retId=null;toast(id+' eklendi');
+    if(r&&byId(r)){cur=byId(r);showForm();refresh();return}
+  }
+  closeForm();
+};
+
+
+/* ---------- aşamalı kart oluşturma: 1 konuşan · 2 metin · 3 seçimler · 4 bağlantı ---------- */
+var wzStep=0,wzWarned=0;
+function nxRow(d,t){return'<button type="button" class="frow lnk" data-nx="'+d+'"><span class="fl">'+t+'<small></small></span><span class="chev">'+I.chev+'</span></button>'}
+function wzBody(){
+  var s=wzStep,keys=Object.keys(ARCS),ai=Math.max(0,keys.indexOf(cur.arc||'ana'));
+  if(s===0)return'<input class="wz-title" data-p="speaker" maxlength="40" placeholder="Kim konuşuyor?" value="'+esc(cur.speaker)+'" enterkeyhint="next" autocomplete="off">'+
+    '<p class="wz-p" style="margin-top:12px">Karttaki konuşanın adı. Boş bırakabilirsin.</p>'+
+    '<div class="fsec"><div class="fcap">Kart türü</div><div class="fcard"><div class="frow seg-row"><div class="seg" id="arcSeg" style="--n:3;--k:'+ai+'"><i></i>'+keys.map(function(k){return'<button type="button" data-arc="'+k+'" class="'+(k===(cur.arc||'ana')?'on':'')+'">'+ARCS[k][0]+'</button>'}).join('')+'</div></div></div></div>'+'<div class="fsec"><div class="fcap">Görünüm</div><div class="fcard">'+artRow(cur)+'</div></div>';
+  if(s===1)return'<h2 class="wz-h">Ne söylüyor?</h2><p class="wz-p">Kartta görünecek metin. Önemli ifadeyi seçip işaretleyebilirsin.</p><div class="fcard">'+
+    '<textarea id="txt" class="finput" data-p="text" placeholder="Kartın metni…">'+esc(cur.text)+'</textarea>'+
+    '<button type="button" class="frow lnk lead" id="mkBtn"><span class="in-ic">'+I.edit+'</span><span class="fl">Seçili ifadeyi işaretle<small>Metinde bir ifade seç, sonra dokun</small></span></button>'+
+    '<div class="prevbox"><small>Önizleme</small><div class="prev" id="prev">'+mk(cur.text)+'</div></div></div>';
+  if(s===2)return'<h2 class="wz-h">Seçimler</h2><p class="wz-p">Sola ve sağa kaydırınca ne olsun?</p>'+sideSec('left',0,1)+sideSec('right',1,1);
+  return'<h2 class="wz-h">Bağlantılar</h2><p class="wz-p">Kart hikâyede nereye oturuyor?</p><div class="fsec" id="cfWarn"></div>'+
+    '<div class="fcard"><button type="button" class="frow lnk" id="inBtn"><span class="fl">Bu karta nereden geçilir<small id="inSm"></small></span><span class="chev">'+I.chev+'</span></button>'+
+    nxRow('left','Sola kaydırınca')+nxRow('right','Sağa kaydırınca')+
+    '<button type="button" class="frow lnk lead endrow'+(isEnd()?' on':'')+'" id="endBtn"><span class="fl">Hikâyenin sonu<small>Devamı olmayan son kart</small></span><span class="sw-ck">'+I.check+'</span></button></div>'+
+    '<div class="fhint">Devam kartı yoksa listeden “Yeni kart ekle”yi seçerek hemen oluşturabilirsin.</div>';
+}
+function paintWz(){
+  var f=$('#cardForm'),w=draft;f.classList.toggle('wz',w);
+  $('#cfPrev').classList.toggle('off',!(w&&wzStep>0));
+  if(!w)return;
+  [].forEach.call($('#cfProg').children,function(x,i){x.classList.toggle('on',i<=wzStep)});
+  $('#cfStep').textContent=(wzStep+1)+'/4';
+  $('#cfDone').textContent=wzStep<3?'Devam':'Kartı kaydet';
+  if(wzStep===0)setTimeout(function(){var i=$('#cfBody .wz-title');if(i&&formOpen&&draft&&wzStep===0)i.focus({preventScroll:true})},450);
+}
+$('#cfPrev').onclick=function(){if(draft&&wzStep>0){wzStep--;showForm()}};
+
+
+/* ---------- kart sayfası (spor uygulamasındaki grup sayfası gibi): hero + gövde ---------- */
+var cpId=null,cpOpen=false,cpPush=false,cpStack=[],skipPop=0,cpAnim=null,CPE='cubic-bezier(.32,.72,0,1)',CHV=I.chev.replace('<svg ','<svg class="cv" ');
+function cpRow(id,sub){
+  var c=byId(id);
+  if(!c)return'<div class="it"><div class="gcv" style="background:rgba(255,90,77,.14);color:var(--danger)">?</div><div class="bd"><div class="nm">'+esc(id)+'</div><div class="sb">Bu kart yok</div></div></div>';
+  var col=arcOf(c)[1];
+  return'<button class="it" data-cp="'+esc(id)+'"><div class="gcv" style="background:'+col+'29;color:'+col+'">'+(S.cards.indexOf(c)+1)+'</div><div class="bd"><div class="nm">'+esc(c.speaker||'Konuşan yok')+'</div><div class="sb">'+esc(sub||plain(c.text).replace(/\s+/g,' ')||'Boş kart')+'</div></div>'+CHV+'</button>';
+}
+function cpSide(c,d){
+  var o=c[d]||{},e=o.effects||{},ef=Object.keys(STATS).filter(function(k){return e[k]}).map(function(k){return STATS[k]+' '+(e[k]>0?'+':'')+e[k]});
+  if((o.set||[]).length)ef.push('Bayrak: '+o.set.join(', '));
+  return'<div class="sech"><h2>'+(d==='left'?'Sola':'Sağa')+' kaydırınca</h2></div><div class="cpch '+d+'"><b>'+esc(o.label||'Etiket yok')+'</b><span>'+esc(ef.join(' · ')||'Etki yok')+'</span></div>'+
+    (o.next||[]).map(function(n){return cpRow(n)}).join('')+
+    '<button class="it" data-cpnew="'+d+'"><div class="gcv" style="background:var(--accent-soft);color:var(--accent)">+</div><div class="bd"><div class="nm" style="color:var(--accent)">Devam kartı ekle</div></div></button>';
+}
+function renderCP(nav){
+  var c=byId(cpId);
+  if(!c){if(cpStack.length){cpId=cpStack.pop();return renderCP(1)}return hideCP()}
+  var col=arcOf(c)[1],inc=[],mine=analyze().issues.filter(function(i){return i.id===c.id}),en=!!(S.ends||{})[c.id];
+  S.cards.forEach(function(p){if(p===c)return;['left','right'].forEach(function(d){if(((p[d]||{}).next||[]).indexOf(c.id)>-1)inc.push([p.id,d])})});
+  var nl=((c.left||{}).next||[]).length,nr=((c.right||{}).next||[]).length,h=$('#cpHero');
+  var ar=c.art?artById(c.art):null;
+  h.className=ar?'hero art':'hero';h.style.height=heroH()+'px';
+  var hn='<div class="hscrim"></div><div class="hnm'+(c.speaker?'':' none')+'">'+esc(c.speaker||'Konuşan yok')+'</div>';
+  if(ar){h.style.background='';h.innerHTML='<img alt="" draggable="false" src="'+artSrc(ar)+'">'+hn}
+  else{h.style.background='color-mix(in srgb,'+col+' 38%,#000)';
+    h.innerHTML='<div class="hl" style="color:'+col+'">'+(S.cards.indexOf(c)+1)+'</div>'+hn}
+  $('#cpHeadT').textContent=c.speaker||c.id;
+  $('#cpBody').innerHTML='<div class="bub"><div class="btx'+(c.text?'':' none')+'">'+(c.text?mk(c.text):'Bu kartın metni henüz yok.')+'</div></div>'+
+    '<div class="cpmeta"><span style="color:'+col+'">'+arcOf(c)[0]+'</span><span>'+esc(c.id)+'</span>'+(en?'<span>Hikâyenin sonu</span>':'')+'</div>'+
+    (mine.length?'<div class="iss">'+mine.map(function(i){var m=issInfo(i),K=KIND[i.t];return'<div class="iss-row '+K.c+'"><span class="iss-ic">'+I[K.ic]+'</span><div class="iss-tx"><b>'+m.t+'</b><p>'+m.d+'</p></div></div>'}).join('')+'</div>':'')+
+    cpSide(c,'left')+cpSide(c,'right')+
+    '<div class="sech"><h2>Nereden geliyor</h2></div>'+(inc.length?inc.map(function(x){return cpRow(x[0],(x[1]==='left'?'Sol':'Sağ')+' seçimden')}).join(''):'<p class="cpnone">Hiçbir karttan geçilmiyor.</p>');
+  if(nav){$('#cpScroll').scrollTop=0;$('#cpBody').animate([{opacity:0,transform:'translateY(12px)'},{opacity:1,transform:'none'}],{duration:350,easing:CPE})}
+  cpScr();
+}
+function heroH(){var w=$('#stage').clientWidth||innerWidth,H=$('#stage').clientHeight||innerHeight;return Math.round(Math.min(w,H*.6))}
+window.addEventListener('resize',function(){var h=$('#cpHero');if(h&&cpOpen)h.style.height=heroH()+'px'});
+function cpScr(){var hh=$('#cpHero').offsetHeight||170;$('#cpHead').style.setProperty('--p',Math.max(0,Math.min(1,($('#cpScroll').scrollTop-(hh-110))/50)))}
+$('#cpScroll').addEventListener('scroll',cpScr,{passive:true});
+function openCard(id){
+  if(!byId(id))return;
+  if(cpOpen){cpStack.push(cpId);cpId=id;return renderCP(1)}
+  if(cpAnim){cpAnim.cancel();cpAnim=null}
+  cpId=id;cpStack=[];cpOpen=true;renderCP(1);
+  var v=$('#cardPage');v.style.display='flex';
+  v.animate([{transform:'translateX(100%)'},{transform:'none'}],{duration:380,easing:CPE});
+  try{history.pushState({c:1},'');cpPush=true}catch(e){cpPush=false}
+}
+function hideCP(){
+  if(!cpOpen)return;cpOpen=false;cpStack=[];var p=cpPush;cpPush=false;
+  var v=$('#cardPage'),a=cpAnim=v.animate([{transform:'none'},{transform:'translateX(100%)'}],{duration:320,easing:CPE,fill:'forwards'});
+  a.onfinish=function(){if(cpAnim!==a)return;cpAnim=null;v.style.display='none';a.cancel()};
+  if(p){skipPop=1;try{history.back()}catch(e){skipPop=0}}
+}
+function cpBackUI(){if(cpStack.length){cpId=cpStack.pop();renderCP(1)}else hideCP()}
+$('#cardPage').addEventListener('click',function(e){
+  var t=e.target.closest('button');if(!t)return;
+  if(t.dataset.cp){cpStack.push(cpId);cpId=t.dataset.cp;return renderCP(1)}
+  if(t.dataset.cpnew)return newCard(cpId,t.dataset.cpnew);
+  if(t.id==='cpBack')return cpBackUI();
+  if(t.id==='cpEdit')openForm(cpId);
+});
 
 /* silme: iki dokunuşla */
 var delT=0;
@@ -466,56 +1082,81 @@ function resetDel(){clearTimeout(delT);var b=$('#cfDel');b.classList.remove('con
 $('#cfDel').onclick=function(){
   var b=this;
   if(!b.classList.contains('confirm')){b.classList.add('confirm');b.textContent='Silmek için tekrar dokun';delT=setTimeout(resetDel,3000);return}
-  var c=cur;resetDel();S.cards=S.cards.filter(function(x){return x!==c});save();closeForm();toast('Kart silindi');
+  var c=cur;resetDel();removeCard(c.id);save();closeForm();toast('Kart silindi');
 };
 
-/* sıradaki kartlar seçici */
+/* sıradaki kartlar seçici (taslakta da çalışır) */
 function openNext(d){
   nxSide=d;var sel=cur[d].next||(cur[d].next=[]);
   $('#nxSub').textContent=(d==='left'?'Sola':'Sağa')+' kaydırınca hangi karta geçilsin?';
   var bad=sel.filter(function(n){return!byId(n)}),others=S.cards.filter(function(c){return c!==cur});
-  $('#nxList').innerHTML=bad.map(function(n){return'<button class="opt on bad" data-pick="'+esc(n)+'"><span class="oi">?</span><span class="ot"><b>'+esc(n)+'</b><small>Bu kart yok · kaldırmak için dokun</small></span><span class="ck">'+I.check+'</span></button>'}).join('')+
-   (others.length?others.map(function(c){return'<button class="opt'+(sel.indexOf(c.id)>-1?' on':'')+'" data-pick="'+esc(c.id)+'"><span class="oi">'+esc(c.id)+'</span><span class="ot"><b>'+esc(c.speaker||'Konuşan yok')+'</b><small>'+esc(plain(c.text)||'Boş kart')+'</small></span><span class="ck">'+I.check+'</span></button>'}).join(''):'<p class="ssub">Başka kart yok. Önce yeni bir kart ekle.</p>');
+  $('#nxList').innerHTML='<button class="opt" data-newc="1"><span class="oi">'+I.plus+'</span><span class="ot"><b>Yeni kart ekle</b><small>'+(draft?'Bu kart kaydedilir, yeni kart ona bağlanır':'Yeni kartı oluştur, bu seçime bağla')+'</small></span></button>'+
+   bad.map(function(n){return'<button class="opt on bad" data-pick="'+esc(n)+'"><span class="oi">?</span><span class="ot"><b>'+esc(n)+'</b><small>Bu kart yok · kaldırmak için dokun</small></span><span class="ck">'+I.check+'</span></button>'}).join('')+
+   others.map(function(c){return'<button class="opt'+(sel.indexOf(c.id)>-1?' on':'')+'" data-pick="'+esc(c.id)+'"><span class="oi">'+esc(c.id)+'</span><span class="ot"><b>'+esc(c.speaker||'Konuşan yok')+'</b><small>'+esc(plain(c.text)||'Boş kart')+'</small></span><span class="ck">'+I.check+'</span></button>'}).join('');
   sheetOpen('#nxSheet');
 }
 $('#nxDone').onclick=function(){sheetClose('#nxSheet')};
 $('#nxSheet').addEventListener('click',function(e){
   if(e.target===this)return sheetClose('#nxSheet');
+  if(e.target.closest('[data-newc]'))return newFromForm(nxSide);
   var t=e.target.closest('[data-pick]');if(!t||!cur)return;
   var id=t.dataset.pick,a=cur[nxSide].next||(cur[nxSide].next=[]),i=a.indexOf(id);
   if(i>-1){a.splice(i,1);if(t.classList.contains('bad'))t.remove();else t.classList.remove('on')}else{a.push(id);t.classList.add('on')}
-  save();updNx(nxSide);
+  if(!draft)save();updNx(nxSide);
 });
 
-function setPath(p,v){var k=p.split('.'),o=cur;while(k.length>1){var n=k.shift();o=o[n]=o[n]||{}}o[k[0]]=v;save()}
+function setPath(p,v){var k=p.split('.'),o=cur;while(k.length>1){var n=k.shift();o=o[n]=o[n]||{}}o[k[0]]=v;if(!draft)save()}
 function list(v){return v.split(',').map(function(x){return x.trim()}).filter(Boolean)}
-
 $('#cfBody').addEventListener('click',function(e){
   var t=e.target.closest('button');if(!t||!cur)return;
-  if(t.dataset.arc){var keys=Object.keys(ARCS);cur.arc=t.dataset.arc;save();var sg=$('#arcSeg');sg.style.setProperty('--k',keys.indexOf(t.dataset.arc));[].forEach.call(sg.querySelectorAll('button'),function(b){b.classList.toggle('on',b===t)});return}
+  if(t.id==='endBtn'){
+    if(draft)dEnd=!dEnd;else{S.ends=S.ends||{};if(S.ends[cur.id])delete S.ends[cur.id];else S.ends[cur.id]=1;save()}
+    t.classList.toggle('on',isEnd());updWarn();return}
+  if(t.id==='inBtn')return openFix('in',cur.id);
+  if(t.id==='artBtn'){var cc=cur;return openPicker(cc.art,function(id){setArt(cc,id);if(!draft)save();var b=$('#artBtn');if(b&&cur===cc)b.outerHTML=artRow(cc)})}
+  if(t.dataset.arc){var keys=Object.keys(ARCS);cur.arc=t.dataset.arc;if(!draft)save();var sg=$('#arcSeg');sg.style.setProperty('--k',keys.indexOf(t.dataset.arc));[].forEach.call(sg.querySelectorAll('button'),function(b){b.classList.toggle('on',b===t)});return}
   if(t.dataset.d&&t.parentNode.dataset.e){
     var p=t.parentNode.dataset.e.split('.'),o=cur[p[0]].effects=cur[p[0]].effects||{},v=Math.max(-50,Math.min(50,(o[p[1]]||0)+ +t.dataset.d));
-    if(v)o[p[1]]=v;else delete o[p[1]];save();t.parentNode.querySelector('.val').innerHTML=valHTML(v);return}
+    if(v)o[p[1]]=v;else delete o[p[1]];if(!draft)save();t.parentNode.querySelector('.val').innerHTML=valHTML(v);return}
   if(t.dataset.nx)return openNext(t.dataset.nx);
   if(t.id==='mkBtn'){var x=$('#txt'),a=x.selectionStart,b=x.selectionEnd;if(a===b)return toast('Önce metinde bir ifade seç');
-    x.value=x.value.slice(0,a)+'=='+x.value.slice(a,b)+'=='+x.value.slice(b);cur.text=x.value;save();$('#prev').innerHTML=mk(cur.text)}
+    x.value=x.value.slice(0,a)+'=='+x.value.slice(a,b)+'=='+x.value.slice(b);cur.text=x.value;if(!draft)save();$('#prev').innerHTML=mk(cur.text)}
 });
 $('#cfBody').addEventListener('pointerdown',function(e){if(e.target.closest('#mkBtn'))e.preventDefault()});
 $('#cfBody').addEventListener('input',function(e){
   var t=e.target;if(!cur)return;
   if(t.dataset.p){setPath(t.dataset.p,t.value);
     if(t.dataset.p==='text')$('#prev').innerHTML=mk(t.value);
-    if(t.dataset.p==='speaker')$('#cfSub').textContent=t.value||'Konuşan yok'}
+    if(t.dataset.p==='speaker')$('#cfSub').textContent=t.value||(draft?'Yeni kart':'Konuşan yok')}
   if(t.dataset.l){setPath(t.dataset.l,list(t.value))}
 });
 
-/* ---------- yeni kart ---------- */
-function newCard(){
-  var n=S.cards.length+1,id='k'+n;while(byId(id))id='k'+(++n);
-  S.cards.push({id:id,speaker:'',text:'',arc:'ana',left:{label:'',effects:{},next:[]},right:{label:'',effects:{},next:[]}});
-  save();refresh();openForm(id);
+/* ---------- bağlantı paneli: kartları bağla (taslakta da çalışır) ---------- */
+var fxMode='',fxId='';
+function fxCard(){return draft&&cur&&cur.id===fxId?cur:byId(fxId)}
+function openFix(m,id){
+  fxMode=m;fxId=id;var c=fxCard();if(!c)return;
+  var A=analyze(),sel=S.cards.filter(function(x){return x!==c&&(m==='out'||A.depth[x.id]!=null)});
+  $('#fxT').textContent=m==='in'?'Hangi karttan buraya geçilsin?':'Buradan hangi karta geçilsin?';
+  $('#fxSub').innerHTML=m==='in'?'<b>'+esc(id)+'</b> kartına ulaşılsın diye akıştaki bir kartın sol ya da sağ seçimine bağla. Sadece akışa bağlı kartlar listeleniyor.':'<b>'+esc(id)+'</b> kartında sola ya da sağa kaydırınca hangi karta geçileceğini seç.';
+  $('#fxList').innerHTML=sel.length?sel.map(function(x){
+    var par=m==='in'?x:c,tg=m==='in'?id:x.id;
+    function on(d){if(m==='in'&&draft&&c===cur)return dIn.indexOf(x.id+'|'+d)>-1?' on':'';return((par[d]||{}).next||[]).indexOf(tg)>-1?' on':''}
+    return'<div class="opt fxi" data-xid="'+esc(x.id)+'"><span class="oi">'+esc(x.id)+'</span><span class="ot"><b>'+esc(x.speaker||'Konuşan yok')+'</b><small>'+esc(plain(x.text)||'Boş kart')+'</small></span><span class="sd"><button type="button" class="l'+on('left')+'" data-sd="left">Sol</button><button type="button" class="r'+on('right')+'" data-sd="right">Sağ</button></span></div>'}).join(''):'<p class="ssub">Bağlanabilecek başka kart yok.</p>';
+  sheetOpen('#fxSheet');
 }
-
+function closeFx(){sheetClose('#fxSheet');refresh();if(formOpen&&cur){updIn();updWarn()}}
+$('#fxDone').onclick=closeFx;
+$('#fxSheet').addEventListener('click',function(e){
+  if(e.target===this)return closeFx();
+  var b=e.target.closest('[data-sd]');if(!b)return;
+  var x=byId(b.closest('.fxi').dataset.xid),c=fxCard();if(!x||!c)return;
+  var d=b.dataset.sd,par=fxMode==='in'?x:c,tg=fxMode==='in'?c.id:x.id;
+  if(fxMode==='in'&&draft&&c===cur){var key=x.id+'|'+d,ix=dIn.indexOf(key);if(ix>-1){dIn.splice(ix,1);b.classList.remove('on')}else{dIn.push(key);b.classList.add('on')}updIn();updWarn();return}
+  var o=par[d]||(par[d]={label:'',effects:{},next:[]}),a=o.next||(o.next=[]),i=a.indexOf(tg);
+  if(i>-1){a.splice(i,1);b.classList.remove('on')}else{a.push(tg);b.classList.add('on')}
+  save();
+});
 /* ---------- oyun dosyası ---------- */
 var ioMode='';
 function code(){return'/* CARDS:BEGIN */\nwindow.CARDS = '+JSON.stringify(S.cards,null,2)+';\n/* CARDS:END */'}
@@ -525,25 +1166,336 @@ function between(h){var b=h.indexOf('/* CARDS:BEGIN */'),e=h.indexOf('/* CARDS:E
 $('#file').addEventListener('change',function(ev){
   var f=ev.target.files[0];ev.target.value='';if(!f)return;
   var r=new FileReader();r.onload=function(){
-    var h=String(r.result),rg=between(h);if(!rg)return toast('Dosyada kart bölümü bulunamadı');
+    var h=String(r.result);if(ioMode==='arts')return importArts(h);
+    var rg=between(h);if(!rg)return toast('Dosyada kart bölümü bulunamadı');
     if(ioMode==='in'){
       try{var t=h.slice(rg[0],rg[1]).replace('/* CARDS:BEGIN */','').replace('/* CARDS:END */','').replace('window.CARDS =','').trim().replace(/;$/,'');
-        var cs=new Function('return '+t)();cs.forEach(function(c){c.arc=c.arc||'ana'});S.cards=cs;save();refresh();toast(cs.length+' kart alındı')}catch(e){toast('Kartlar okunamadı')}
+        var cs=new Function('return '+t)();var oldArt={};S.cards.forEach(function(c){if(c.art)oldArt[c.id]=c.art});cs.forEach(function(c){c.arc=c.arc||'ana';if(!c.art&&oldArt[c.id])c.art=oldArt[c.id]});S.cards=cs;S.ends={};if(cs.length)S.ends[cs[cs.length-1].id]=1;save();refresh();toast(cs.length+' kart alındı')}catch(e){toast('Kartlar okunamadı')}
     }else{
       var out=h.slice(0,rg[0])+code()+h.slice(rg[1]),a=document.createElement('a');
       a.href=URL.createObjectURL(new Blob([out],{type:'text/html'}));a.download='index.html';document.body.appendChild(a);a.click();a.remove();toast('Güncel dosya indirildi')}
   };r.readAsText(f)});
 function doIO(m){
   ioMode=m;
+  if(m==='reset')return ask('Tüm veriler silinsin mi?',S.cards.length+' kart, harita, omurga durakları ve sabit son kalıcı olarak silinir. Boş bir sayfayla baştan başlarsın. Bu işlem geri alınamaz.','Evet, hepsini sil',function(){
+    S={cards:[],beats:[],ending:'',ends:{},arts:S.arts||[]};save();filt='all';mapAnim=true;refresh();toast('Tüm veriler silindi')},true);
   if(m==='copy'){(navigator.clipboard?navigator.clipboard.writeText(code()):Promise.reject()).then(function(){toast('Kopyalandı')},function(){toast('Kopyalanamadı')});return}
   if(m==='in')return ask('Kartların yerine geçsin mi?','Oyundan alınan kartlar şu anki '+S.cards.length+' kartın yerini alır. Önce "Oyuna işle" ile yedek alabilirsin.','Devam et',function(){$('#file').click()});
   $('#file').click();
 }
 
+
+
+/* ---------- çizim seçici (kart formu + haritada basılı tutma) ---------- */
+var pkCb=null;
+function openPicker(curId,cb){
+  var A=S.arts||[];pkCb=cb;
+  $('#pkSub').textContent=A.length?'Kart haritada ve düzenlemede bu çizimle görünür.':'Önce Tasarım sekmesinden oyun dosyanı seçip çizimleri almalısın.';
+  $('#pkList').innerHTML=A.length?'<div class="pkgrid"><button class="pk none atile'+(curId?'':' on')+'" data-pk=""><div class="aimg">'+I.x+'</div><div class="anm">Çizimsiz</div></button>'+
+    A.map(function(a){return'<button class="pk atile'+(a.id===curId?' on':'')+'" data-pk="'+esc(a.id)+'"><div class="aimg"><img alt="" src="'+artSrc(a)+'"></div><div class="anm">'+esc(a.name)+'</div></button>'}).join('')+'</div>':'';
+  sheetOpen('#pkSheet')}
+$('#pkSheet').addEventListener('click',function(e){
+  if(e.target===this)return sheetClose('#pkSheet');
+  var t=e.target.closest('[data-pk]');if(!t)return;
+  var f=pkCb;pkCb=null;sheetClose('#pkSheet');if(f)f(t.dataset.pk)});
+$('#pkDone').onclick=function(){pkCb=null;sheetClose('#pkSheet')};
+function artRow(c){
+  var a=c.art?artById(c.art):null;
+  return'<button type="button" class="frow lnk lead" id="artBtn"><span class="in-ic th">'+(a?'<img alt="" src="'+artSrc(a)+'">':I.img)+'</span><span class="fl">Çizim<small>'+(a?esc(a.name):'Seçilmedi')+'</small></span><span class="chev">'+I.chev+'</span></button>'}
+function setArt(c,id){if(id)c.art=id;else delete c.art}
+
+/* ---------- tasarım: oyundaki kart çizimleri ---------- */
+function svgURL(x){
+  if(!/<svg[^>]*\sxmlns=/i.test(x))x=x.replace(/<svg\b/i,'<svg xmlns="http://www.w3.org/2000/svg"');
+  if(/xlink:/i.test(x)&&!/xmlns:xlink=/i.test(x))x=x.replace(/<svg\b/i,'<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+  return'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(x)}
+function artKey(x){return x.replace(/\s+/g,' ').trim()}
+function artName(el){
+  var a=el.getAttribute('data-name')||(el.closest('[data-name]')||{getAttribute:function(){return''}}).getAttribute('data-name');
+  if(a)return a.trim();
+  var t=el.querySelector('title');if(t&&t.textContent.trim())return t.textContent.trim();
+  var al=el.getAttribute('aria-label');if(al&&al.trim())return al.trim();
+  var n=el;
+  for(var up=0;up<3&&n;up++){
+    var p=n.previousSibling;
+    while(p&&p.nodeType===3&&!p.textContent.trim())p=p.previousSibling;
+    if(p&&p.nodeType===8&&p.textContent.trim())return p.textContent.replace(/[-=*_]{2,}/g,'').trim().slice(0,40);
+    n=n.parentNode}
+  return el.id||''}
+function unesc(s){return s.replace(/\\(u[0-9a-fA-F]{4}|x[0-9a-fA-F]{2}|[\s\S])/g,function(_,c){if(c.length>1)return String.fromCharCode(parseInt(c.slice(1),16));return c==='n'?'\n':c==='t'?'\t':c==='r'?'\r':c})}
+/* oyun dosyasındaki "window.X = { anahtar: "metin", ... }" nesnesinden anahtar/metin çiftlerini okur (kod çalıştırmaz) */
+function scanObj(txt,re){
+  var m=re.exec(txt);if(!m)return null;
+  var i=m.index+m[0].length-1,d=0,j=i,q;
+  for(;j<txt.length;j++){var ch=txt[j];
+    if(ch==='"'||ch==="'"){q=ch;for(j++;j<txt.length&&txt[j]!==q;j++)if(txt[j]==='\\')j++;continue}
+    if(ch==='{')d++;else if(ch==='}'&&--d===0)break}
+  var body=txt.slice(i+1,j),out={__keys:[]},r=/([A-Za-z_$][\w$]*)\s*:\s*(?:"((?:[^"\\]|\\[\s\S])*)"|'((?:[^'\\]|\\[\s\S])*)')/g,x;
+  while((x=r.exec(body))){out[x[1]]=unesc(x[2]!=null?x[2]:x[3]);out.__keys.push(x[1])}
+  return out}
+function parseArts(h){
+  var doc=new DOMParser().parseFromString(h,'text/html'),els=[].slice.call(doc.querySelectorAll('svg')),
+      cand=els.filter(function(e){return e.closest('.art,[data-art]')});
+  if(!cand.length)cand=els.filter(function(e){var v=(e.getAttribute('viewBox')||'').split(/[\s,]+/);return+v[2]>=100});
+  var raw=h.match(/<svg\b[\s\S]*?<\/svg>/gi)||[],
+      txt=[].map.call(doc.querySelectorAll('script'),function(x){return x.textContent}).join('\n'),
+      A=scanObj(txt,/window\.ART\s*=\s*\{/)||{__keys:[]},N=scanObj(txt,/window\.ART_NAMES\s*=\s*\{/)||{},out=[],hatDone=false;
+  cand.forEach(function(e){var i=els.indexOf(e),key=null;
+    if(!hatDone&&!A.hat&&e.closest('.art')){key='hat';hatDone=true}
+    out.push({key:key,name:(key&&N[key])||artName(e),svg:(raw.length===els.length?raw[i]:e.outerHTML).trim()})});
+  A.__keys.forEach(function(k){if(/^\s*<svg/i.test(A[k]))out.push({key:k,name:N[k]||k,svg:A[k].trim()})});
+  return out}
+function importArts(h){
+  var found=parseArts(h);
+  if(!found.length)return toast('Dosyada kart çizimi bulunamadı');
+  var seen={},add=0,upd=0;S.arts.forEach(function(a){seen[artKey(a.svg)]=a});
+  found.forEach(function(f){
+    var k=artKey(f.svg),ex=seen[k]||(f.key?artById(f.key):null);
+    if(ex){
+      var ch=0;
+      if(f.key&&ex.id!==f.key){var cl=artById(f.key);if(!cl||cl===ex){S.cards.forEach(function(c){if(c.art===ex.id)c.art=f.key});ex.id=f.key;ch=1}}
+      if(artKey(ex.svg)!==k&&f.key){ex.svg=f.svg;artCache={};ch=1}
+      if(f.name&&(!ex.name||/^Çizim \d+$/.test(ex.name))&&ex.name!==f.name){ex.name=f.name;ch=1}
+      if(ch)upd++;seen[k]=ex;return}
+    var n=S.arts.length+1,id=f.key&&!artById(f.key)?f.key:'a'+Date.now().toString(36)+n,a={id:id,name:f.name||('Çizim '+n),svg:f.svg};
+    S.arts.push(a);seen[k]=a;add++});
+  save();refresh();
+  toast(add||upd?(add?add+' çizim alındı':'')+(add&&upd?' · ':'')+(upd?upd+' güncellendi':'')+(add&&found.length>add+upd?' · '+(found.length-add-upd)+' zaten vardı':''):'Hepsi zaten ekli');
+  if(add&&tabIdx!==4)tabGo(4)}
+function renderArts(){
+  var A=S.arts||[],b=$('#artBody');
+  $('#subArt').textContent=A.length?A.length+' çizim':'Henüz çizim yok';
+  if(!A.length){b.innerHTML='<div class="empty"><h2>Henüz çizim yok</h2>Oyun dosyanı seçince kart çizimlerin isimleriyle buraya dizilir. Oyun dosyasına hiç dokunulmaz.<button class="primary" data-io="arts">'+I.down+'Oyun dosyasından al</button></div>';return}
+  b.innerHTML='<div class="agrid">'+A.map(function(a,i){
+    return'<button class="atile in" style="--i:'+Math.min(i,10)+'" data-art="'+esc(a.id)+'"><div class="aimg"><img alt="" draggable="false" src="'+svgURL(a.svg)+'"><b>'+(i+1)+'</b></div><div class="anm">'+esc(a.name)+'</div></button>'}).join('')+'</div>'}
+var arCur=null;
+function openArt(id){
+  arCur=S.arts.filter(function(a){return a.id===id})[0];if(!arCur)return;
+  $('#arPrev').innerHTML='<img alt="" src="'+svgURL(arCur.svg)+'">';$('#arName').value=arCur.name;sheetOpen('#arSheet')}
+function closeArt(){
+  if(arCur){var v=$('#arName').value.trim();if(v)arCur.name=v;save();renderArts()}
+  arCur=null;sheetClose('#arSheet');$('#arName').blur()}
+$('#artBody').addEventListener('click',function(e){var t=e.target.closest('[data-art]');if(t)openArt(t.dataset.art)});
+$('#arDone').onclick=closeArt;
+$('#arSheet').addEventListener('click',function(e){if(e.target===this)closeArt()});
+$('#arName').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();this.blur()}});
+$('#arCopy').onclick=function(){if(!arCur)return;(navigator.clipboard?navigator.clipboard.writeText(arCur.svg):Promise.reject()).then(function(){toast('Kod kopyalandı')},function(){toast('Kopyalanamadı')})};
+$('#arSave').onclick=function(){if(!arCur)return;
+  var x=arCur.svg;if(!/<svg[^>]*\sxmlns=/i.test(x))x=x.replace(/<svg\b/i,'<svg xmlns="http://www.w3.org/2000/svg"');
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([x],{type:'image/svg+xml'}));
+  a.download=(($('#arName').value.trim()||arCur.name).replace(/[\\/:*?"<>|]+/g,'')||'cizim')+'.svg';document.body.appendChild(a);a.click();a.remove();toast('SVG indirildi')};
+$('#arDel').onclick=function(){if(!arCur)return;var c=arCur;
+  ask('Çizim silinsin mi?','“'+c.name+'” yalnızca editörden kaldırılır. Oyun dosyandaki çizime dokunulmaz; istersen yeniden alabilirsin.','Sil',function(){
+    S.arts=S.arts.filter(function(a){return a!==c});S.cards.forEach(function(k){if(k.art===c.id)delete k.art});arCur=null;save();sheetClose('#arSheet');refresh();toast('Çizim silindi')},true)};
+[].forEach.call(document.querySelectorAll('#arSheet [data-ic]'),function(e){e.innerHTML=I[e.dataset.ic]});
+renderArts();
+
+/* ---------- kart silme (bağları onarır) ---------- */
+function removeCard(id){
+  var c=byId(id);if(!c)return;
+  var kids=nexts(c).filter(function(n){return n!==id&&byId(n)});
+  S.cards=S.cards.filter(function(x){return x!==c});
+  S.cards.forEach(function(p){['left','right'].forEach(function(d){
+    var o=p[d];if(!o||!o.next||o.next.indexOf(id)<0)return;var out=[];
+    o.next.forEach(function(n){if(n===id){kids.forEach(function(k){if(k!==p.id&&out.indexOf(k)<0)out.push(k)})}else if(out.indexOf(n)<0)out.push(n)});
+    o.next=out})});
+  if(S.ends)delete S.ends[id];
+}
+function askDelete(id){
+  if(!byId(id))return;
+  ask('Kart silinsin mi?',id+' kartı silinir. Bu karta gelen bağlantılar, silinen kartın devam kartlarına aktarılır.','Sil',function(){removeCard(id);save();refresh();toast(id+' silindi')},true);
+}
+
+
+/* ---------- durum / uyarı paneli ---------- */
+function paintStat(n){var b=$('#mapStat');b.style.display=S.cards.length?'':'none';b.className='icon-btn sm '+(n?'w':'g');b.innerHTML=n?I.warn+'<i class="mbadge">'+n+'</i>':I.okc}
+function renderWn(){
+  var A=analyze(),n=A.issues.length,h='';
+  if(n){
+    var cnt={},order=[],g={};A.issues.forEach(function(x){cnt[x.t]=(cnt[x.t]||0)+1;if(!g[x.id]){g[x.id]=[];order.push(x.id)}g[x.id].push(x)});
+    h+='<div class="kinds" style="margin:0 8px 14px">'+Object.keys(KIND).filter(function(k){return cnt[k]}).map(function(k){return'<span class="kc '+KIND[k].c+'"><i>'+I[KIND[k].ic]+'</i>'+cnt[k]+' '+KIND[k].n.toLowerCase()+'</span>'}).join('')+'</div>'+
+      order.map(function(id){var c=byId(id);return'<div class="iss"><button class="iss-hd" data-open="'+esc(id)+'"><span class="nm">'+esc(id)+'<small> · '+esc(c.speaker||'Konuşan yok')+'</small></span>'+badIcons(A.bad[id])+'<span class="chev">'+I.chev+'</span></button>'+g[id].map(issRow).join('')+'</div>'}).join('');
+  }else h+='<div class="okpill" style="margin:0 8px 14px"><span class="ic">'+I.okc+'</span>Her kart akışa bağlı, çıkmaz ya da eksik bağlantı yok.</div>';
+  h+='<div class="legend" style="margin:14px 8px 4px"><span><i style="background:#5b9bd5"></i>Sol seçim</span><span><i style="background:#e0503a"></i>Sağ seçim</span><span><i style="background:#f2c94c"></i>İkisi de aynı yere</span></div><p class="ssub" style="margin:0 8px">Haritada karta basılı tutunca sırala, sil ve devam kartı ekle seçenekleri açılır.</p>';
+  $('#wnList').innerHTML=h;
+}
+$('#mapStat').onclick=function(){renderWn();sheetOpen('#wnSheet')};
+$('#wnDone').onclick=function(){sheetClose('#wnSheet')};
+$('#wnSheet').addEventListener('click',function(e){if(e.target===this||e.target.closest('[data-open]'))sheetClose('#wnSheet')});
+
+
+/* ---------- harita: tam ekran ---------- */
+var mfTimer=null,rootEl=document.documentElement;
+function mfHideExit(){clearTimeout(mfTimer);$('#mapFullExit').classList.remove('show')}
+function mfShowExit(){var b=$('#mapFullExit');b.classList.add('show');clearTimeout(mfTimer);mfTimer=setTimeout(function(){b.classList.remove('show')},3500)}
+function mapFull(on){
+  if(on&&reorder)setReorder(false);
+  rootEl.classList.toggle('mfull',on);mfHideExit();
+  if(on)toast('Boş bir yere dokununca çıkış ikonu gelir')}
+$('#mapFull').onclick=function(){mapFull(true)};
+$('#mapFullExit').onclick=function(){mapFull(false)};
+$('#mapBody').addEventListener('click',function(e){
+  if(!rootEl.classList.contains('mfull')||e.target.closest('.nd')||mapMoved)return;
+  if($('#mapFullExit').classList.contains('show'))mfHideExit();else mfShowExit()});
+
+/* ---------- harita: basılı tut paneli + sıralama ---------- */
+var ndId='';
+function updBar(){var b=$('#rbUndo');if(b)b.disabled=!undoStack.length}
+function setReorder(on){
+  if(!on&&drag)endDrag(true);
+  reorder=on;undoStack=[];document.documentElement.classList.toggle('rmode',on);renderMap();updBar();
+  if(!on)refresh();else toast('Kartı tutup sürükle');
+}
+$('#rbDone').onclick=function(){setReorder(false)};
+$('#rbUndo').onclick=function(){
+  var s=undoStack.pop();if(!s||drag)return;
+  var o=JSON.parse(s);S.cards=o.c;S.ends=o.e;save();relayout();updBar();toast('Geri alındı');
+};
+function nodeMenu(id){
+  var c=byId(id);if(!c)return;ndId=id;
+  $('#ndT').textContent=id+' · '+(c.speaker||'Konuşan yok');
+  $('#ndSub').textContent=plain(c.text)||'Boş kart';
+  function cn(d){var n=(c[d]||{}).next||[];return n.length?'Şu an: '+n.join(', '):'Şu an boş'}
+  function row(a,ic,t,s,cls,col){return'<button class="opt '+(cls||'')+'" data-nd="'+a+'"><span class="oi"'+(col?' style="color:'+col+'"':'')+'>'+ic+'</span><span class="ot"><b>'+t+'</b><small>'+s+'</small></span></button>'}
+  $('#ndList').innerHTML=
+    row('art',I.img,'Çizim seç',(artById(c.art)||{}).name||'Seçilmedi')+
+    row('sort',I.sort,'Sırala','Kartları sürükleyip yer değiştir')+
+    row('L',I.plus,'Sola devam kartı ekle',cn('left'),'','#8fb4d6')+
+    row('R',I.plus,'Sağa devam kartı ekle',cn('right'),'','#ec8a74')+
+    row('edit',I.edit,'Düzenle','Kartın metnini ve seçimlerini aç')+
+    row('del',I.trash,'Sil','Gelen bağlantılar devam kartlarına aktarılır','dng');
+  sheetOpen('#ndSheet');
+}
+$('#ndSheet').addEventListener('click',function(e){
+  if(e.target===this)return sheetClose('#ndSheet');
+  var t=e.target.closest('[data-nd]');if(!t)return;
+  var a=t.dataset.nd,id=ndId;sheetClose('#ndSheet');
+  if(a==='art'){var cc=byId(id);return setTimeout(function(){openPicker(cc&&cc.art,function(v){if(!cc)return;setArt(cc,v);save();refresh();toast(v?'Çizim seçildi':'Çizim kaldırıldı')})},220)}
+  if(a==='sort')return setReorder(true);
+  if(a==='edit')return openForm(id);
+  if(a==='L'||a==='R')return newCard(id,a==='L'?'left':'right');
+  if(a==='del')setTimeout(function(){askDelete(id)},220);
+});
+/* iki kartın yerini değiştir: gelen/giden bağlar yeni konuma göre otomatik düzelir */
+function swapData(a,b){
+  var A=byId(a),B=byId(b);if(!A||!B||A===B)return false;
+  S.ends=S.ends||{};
+  undoStack.push(JSON.stringify({c:S.cards,e:S.ends}));if(undoStack.length>40)undoStack.shift();updBar();
+  function pi(x){return x===a?b:x===b?a:x}
+  S.cards.forEach(function(c){['left','right'].forEach(function(d){var o=c[d];if(o&&o.next)o.next=o.next.map(pi)})});
+  ['left','right'].forEach(function(d){
+    var oa=A[d]||(A[d]={label:'',effects:{},next:[]}),ob=B[d]||(B[d]={label:'',effects:{},next:[]});
+    var t=oa.next||[];oa.next=ob.next||[];ob.next=t});
+  [A,B].forEach(function(c){['left','right'].forEach(function(d){
+    var seen={};c[d].next=c[d].next.filter(function(x){if(x===c.id||seen[x])return false;seen[x]=1;return true})})});
+  var i=S.cards.indexOf(A),j=S.cards.indexOf(B);S.cards[i]=B;S.cards[j]=A;
+  var ea=S.ends[a],eb=S.ends[b];delete S.ends[a];delete S.ends[b];if(ea)S.ends[b]=1;if(eb)S.ends[a]=1;
+  save();return true;
+}
+function wpt(x,y){var r=$('#mapBody').getBoundingClientRect();return{x:(x-r.left-V.x)/V.k,y:(y-r.top-V.y)/V.k}}
+function startDrag(n,e){
+  var w=wpt(e.clientX,e.clientY);
+  drag={n:n,id:n.dataset.open,pid:e.pointerId,cx:e.clientX,cy:e.clientY,ox:w.x-parseFloat(n.style.left),oy:w.y-parseFloat(n.style.top),lock:0,L:layout()};
+  vSet();
+  try{n.setPointerCapture(e.pointerId)}catch(_){}
+  n.classList.add('lift');drag.timer=setInterval(dragTick,16);dragTick();
+}
+function dragTick(){
+  if(!drag)return;var d=drag,br=$('#mapBody').getBoundingClientRect(),m=70,px=0,py=0;
+  if(d.cx<br.left+m)px=Math.min(14,(br.left+m-d.cx)/4);else if(d.cx>br.right-m)px=-Math.min(14,(d.cx-(br.right-m))/4);
+  if(d.cy<br.top+m+50)py=Math.min(14,(br.top+m+50-d.cy)/4);else if(d.cy>br.bottom-130)py=-Math.min(14,(d.cy-(br.bottom-130))/4);
+  if(px||py){V.x+=px;V.y+=py;vSet();applyView()}
+  var w=wpt(d.cx,d.cy),x=w.x-d.ox,y=w.y-d.oy;
+  d.n.style.left=x+'px';d.n.style.top=y+'px';
+  if(Date.now()<d.lock)return;
+  var mx=x+NW/2,my=y+NH/2,tid=null,P=d.L.pos;
+  for(var k in P){if(k===d.id)continue;var q=P[k];if(mx>q.x&&mx<q.x+q.w&&my>q.y&&my<q.y+q.h){tid=k;break}}
+  if(tid&&swapData(d.id,tid)){
+    d.lock=Date.now()+240;d.L=relayout(d.id)||d.L;
+    try{navigator.vibrate&&navigator.vibrate(8)}catch(_){}
+  }
+}
+function endDrag(cancel){
+  if(!drag)return;var d=drag;drag=null;clearInterval(d.timer);
+  try{d.n.releasePointerCapture(d.pid)}catch(_){}
+  d.n.classList.remove('lift');void d.n.offsetWidth;
+  var p=layout().pos[d.id];if(p){d.n.style.left=p.x+'px';d.n.style.top=p.y+'px'}
+  setTimeout(function(){if(!drag&&reorder){renderMap();refresh_others()}},340);
+}
+function refresh_others(){renderCards();renderSpine();renderGame();renderArts()}
+(function(){
+  var mb=$('#mapBody'),ptrs={},lp=0,st=null,fired=false,pinch=null,panS=null,lastTap=0,lastXY=null;
+  function rel(e){var r=mb.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top,cx:e.clientX,cy:e.clientY}}
+  function cancelLP(){clearTimeout(lp);st=null}
+  function ids(){return Object.keys(ptrs)}
+  function startPan(p,id){vSet();panS={x:V.x,y:V.y,px:p.cx,py:p.cy,id:id}}
+  mb.addEventListener('contextmenu',function(e){if(e.target.closest('.nd'))e.preventDefault()});
+  mb.addEventListener('pointerdown',function(e){
+    if(e.pointerType==='mouse'&&e.button>0)return;
+    ptrs[e.pointerId]=rel(e);var cnt=ids().length,n=e.target.closest('.nd');
+    if(cnt===1){
+      mapMoved=false;fired=false;
+      if(reorder&&n&&!drag){e.preventDefault();startDrag(n,e);return}
+      startPan(ptrs[e.pointerId],e.pointerId);
+      if(n&&!reorder){st={x:e.clientX,y:e.clientY};var id=n.dataset.open;
+        clearTimeout(lp);lp=setTimeout(function(){fired=true;st=null;panS=null;try{navigator.vibrate&&navigator.vibrate(12)}catch(_){}nodeMenu(id)},450)}
+    }else if(cnt===2&&!drag){
+      cancelLP();panS=null;mapMoved=true;
+      var a=ptrs[ids()[0]],b=ptrs[ids()[1]],mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+      vSet();pinch={d:Math.max(10,Math.hypot(a.x-b.x,a.y-b.y)),k:V.k,wx:(mx-V.x)/V.k,wy:(my-V.y)/V.k};
+    }
+  });
+  mb.addEventListener('pointermove',function(e){
+    if(!ptrs[e.pointerId])return;ptrs[e.pointerId]=rel(e);
+    if(drag&&e.pointerId===drag.pid){drag.cx=e.clientX;drag.cy=e.clientY;return}
+    if(pinch&&ids().length>=2){
+      var a=ptrs[ids()[0]],b=ptrs[ids()[1]],mx=(a.x+b.x)/2,my=(a.y+b.y)/2,k=Math.max(KMIN,Math.min(KMAX,pinch.k*Math.hypot(a.x-b.x,a.y-b.y)/pinch.d));
+      V.k=k;V.x=mx-pinch.wx*k;V.y=my-pinch.wy*k;vSet();applyView();return}
+    if(st&&Math.hypot(e.clientX-st.x,e.clientY-st.y)>9)cancelLP();
+    if(panS&&e.pointerId===panS.id){
+      var dx=e.clientX-panS.px,dy=e.clientY-panS.py;
+      if(!mapMoved&&Math.hypot(dx,dy)>9){mapMoved=true;cancelLP();try{mb.setPointerCapture(e.pointerId)}catch(_){}}
+      if(mapMoved){V.x=panS.x+dx;V.y=panS.y+dy;vSet();applyView()}
+    }
+  });
+  function up(e,cancel){
+    var was=ptrs[e.pointerId];delete ptrs[e.pointerId];cancelLP();
+    if(drag&&e.pointerId===drag.pid){endDrag(cancel);return}
+    if(pinch){pinch=null;var rest=ids();if(rest.length===1)startPan(ptrs[rest[0]],+rest[0]);else panS=null;return}
+    if(panS&&e.pointerId===panS.id)panS=null;
+    /* boş yere çift dokunuş: yakınlaştır */
+    if(!cancel&&was&&!mapMoved&&!fired&&!e.target.closest('.nd')&&!reorder){
+      var now=Date.now();
+      if(lastXY&&now-lastTap<320&&Math.hypot(was.x-lastXY.x,was.y-lastXY.y)<28){zoomAt(2,was.x,was.y);lastTap=0}
+      else{lastTap=now;lastXY=was}
+    }
+  }
+  mb.addEventListener('pointerup',function(e){up(e,false)});
+  mb.addEventListener('pointercancel',function(e){up(e,true)});
+  mb.addEventListener('wheel',function(e){
+    e.preventDefault();var p=rel(e),u=e.deltaMode===1?16:e.deltaMode===2?100:1,dy=e.deltaY*u,dx=e.deltaX*u;
+    if(e.ctrlKey)zoomAt(Math.exp(-dy*.01),p.x,p.y);
+    else if(dx===0&&Math.abs(dy)>=40&&dy===Math.round(dy))zoomAt(Math.exp(-dy*.0016),p.x,p.y);
+    else{T.x-=dx;T.y-=dy;vGo()}
+  },{passive:false});
+  mb.addEventListener('click',function(e){
+    if(!e.target.closest('.nd'))return;
+    if(fired||mapMoved||reorder){fired=false;e.stopPropagation();e.preventDefault()}
+  },true);
+})();
+
 /* ---------- genel tıklamalar ---------- */
 document.addEventListener('click',function(e){
   var t=e.target.closest('button');if(!t)return;
-  if(t.dataset.open!=null)return openForm(t.dataset.open);
+  if(t.dataset.fx){
+    var fx=t.dataset.fx,fid=t.dataset.id,fc=byId(fid),sd=t.dataset.side,rf=t.dataset.ref;
+    if(fx==='in'||fx==='out')return openFix(fx,fid);
+    if(fx==='end'){S.ends=S.ends||{};S.ends[fid]=1;save();refresh();return toast(fid+' son kart olarak işaretlendi')}
+    if(fx==='rm'){if(fc&&fc[sd])fc[sd].next=(fc[sd].next||[]).filter(function(x){return x!==rf});save();refresh();return toast('Bağlantı kaldırıldı')}
+    if(fx==='mk'){if(!byId(rf))S.cards.push(blank(rf));save();refresh();return openForm(rf)}
+    if(fx==='del')return askDelete(fid);
+  }
+  if(t.dataset.open!=null)return openCard(t.dataset.open);
   if(t.hasAttribute('data-new'))return newCard();
   if(t.dataset.io)return doIO(t.dataset.io);
   if(t.dataset.f){filt=t.dataset.f;return renderCards()}
@@ -561,7 +1513,7 @@ document.addEventListener('input',function(e){
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.tagName==='INPUT')e.target.blur()});
 
 /* ---------- sekmeler ---------- */
-var EASE='cubic-bezier(.32,.72,0,1)',N=4;
+var EASE='cubic-bezier(.32,.72,0,1)',N=5;
 var tpages=$('#tpages'),tbInd=$('#tbInd'),tabs=document.querySelectorAll('#tabbar .tb'),pages=tpages.children,tabIdx=0,tabAnim=null;
 function tabPct(i){return -i*100/N}
 function tabPaint(i,anim){
@@ -572,6 +1524,7 @@ function tabPaint(i,anim){
 }
 function tabGo(i,instant){
   if(i===tabIdx&&!instant)return;
+  if(rootEl.classList.contains('mfull'))mapFull(false);
   var from=tabIdx;if(tabAnim){tabAnim.cancel();tabAnim=null}
   tabIdx=i;tabPaint(i,!instant);pages[i].inert=false;
   tpages.style.transform='translate3d('+tabPct(i)+'%,0,0)';
@@ -582,6 +1535,7 @@ function tabGo(i,instant){
   pages[i].animate([{opacity:.15},{opacity:1}],{duration:480,easing:EASE});
   pages[from].animate([{opacity:1},{opacity:.15}],{duration:480,easing:EASE});
   if(i===0)renderMap();
+  if(i!==0&&reorder)setReorder(false);
 }
 [].forEach.call(tabs,function(b){b.onclick=function(){tabGo(+b.dataset.t)}});
 window.addEventListener('resize',function(){tbInd._x=null;tabPaint(tabIdx,false);renderMap()});
@@ -589,7 +1543,7 @@ window.addEventListener('resize',function(){tbInd._x=null;tabPaint(tabIdx,false)
 (function(){
   var sx,sy,st,on=false;
   tpages.addEventListener('touchstart',function(e){
-    on=e.touches.length===1&&!formOpen&&!e.target.closest('input,textarea,.filters,.map')&&e.touches[0].clientX>24;
+    on=e.touches.length===1&&!formOpen&&!rootEl.classList.contains('mfull')&&!e.target.closest('input,textarea,.filters,#mapBody')&&e.touches[0].clientX>24;
     if(on){sx=e.touches[0].clientX;sy=e.touches[0].clientY;st=Date.now()}
   },{passive:true});
   tpages.addEventListener('touchend',function(e){
@@ -605,7 +1559,7 @@ window.addEventListener('resize',function(){tbInd._x=null;tabPaint(tabIdx,false)
   var sx=null,dx=0,t0=0,W=1;
   strip.addEventListener('touchstart',function(e){if(!formOpen||sx!=null)return;sx=e.touches[0].clientX;dx=0;t0=Date.now();W=f.offsetWidth||innerWidth;f.classList.add('drag')},{passive:true});
   strip.addEventListener('touchmove',function(e){if(sx==null)return;dx=Math.min(W,Math.max(0,e.touches[0].clientX-sx));f.style.transform='translate3d('+dx+'px,0,0)'},{passive:true});
-  function end(cancel){if(sx==null)return;var v=dx/Math.max(1,Date.now()-t0),go=!cancel&&(dx>W*.33||v>.6);sx=null;dx=0;f.classList.remove('drag');f.style.transform='';if(go)closeForm()}
+  function end(cancel){if(sx==null)return;var v=dx/Math.max(1,Date.now()-t0),go=!cancel&&(dx>W*.33||v>.6);sx=null;dx=0;f.classList.remove('drag');f.style.transform='';if(go)requestClose()}
   strip.addEventListener('touchend',function(){end(false)});strip.addEventListener('touchcancel',function(){end(true)});
 })();
 
